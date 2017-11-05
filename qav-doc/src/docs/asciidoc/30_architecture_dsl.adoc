@@ -1,0 +1,272 @@
+
+[[qav-architecture-dsl]]
+= Architecture Definition and Rules
+
+This chapter explains some of the underlying ideas and concepts that lead to the design of QAvalidator.
+
+[[qav-architecture-dsl-intro]]
+== Definitions
+
+QAvalidator's uses a code-centered, static approach to describe software systems.
+Its architecture model is built on the following concepts:
+
+System::
+A _system_ is the sum of all classes and their relations in the given _input scope_.
+An _input scope_ is a set of classes -- usually all the classes of a project, e.g. like a Maven module with all its sub modules.
+
+Architecture and Architecture View::
+There is one or more _architectures_ or _architecture views_ to describe a system.
+An _architecture view_ is a hierarchy of _components_.
+It is possible to have more than one _architecture view_ to express different considerations. Typical examples are the
+technical view with a layered architecture, and a business view with vertical slices per business component.
+  +
+We'll use the terms _architecture_ and _architecture view_ as synonyms.
+
+Component::
+1. A _component_ has one or more interfaces (APIs) and an implementation. The APIs are public, the implementation is a
+   private detail of the component.
+2. A component may _use_ other components.  To be precise: a component may use other components' _APIs_ -- it may never
+   use their _implementations_ directly.
+3. A component may _contain_ other components, forming a _hierarchy_. We also speak of _nested components_.
+
+Class::
+A class is the detailed level to look at a system. A software system is constructed by combining many classes. Classes have relations to other classes: they use them, inherit from them, etc. +
+A class is the atomic element QAvalidator works with. This is an arbitrary decision -- one could also look at methods or instructions. That would make sense e.g. when analyzing data flow etc; however, we're interested in the _structure_ of a system. On the other hand, it's not hard-coded into QAvalidator to look at classes. In fact, QAvalidator works with graphs and trees, and consequently abstracts from the type of the atomic element of analysis.
+
+As we'll see in the sections <<qav-architecture-dsl-example>> and <<qav-architecture-dsl-reference>>,
+QAvalidator directly translates these concepts into its Architecture DSL.
+
+=== Using Graphs to Model Systems, Architectures, and Components
+
+We use plain graphs and hierarchical graphs to model systems, architectures, and components.
+
+Graph::
+A graph consists of _nodes_ (aka: _vertices_) and _edges_ (aka: _dependencies_, _relations_).
+We use _directed graphs_, i.e. the edges have a direction with a source and target.
+
+Hierarchical Graph::
+A _hierarchical graph_ combines a graph and a hierarchical tree by assigning the nodes in the graph to the leaves of the tree.
+
+_(TODO: add a figure.)_
+
+To model a software system with a hierarchical graph, the nodes in the graph represent classes, and the edges in the graph represent relations of different types.
+The graph represents the system _as it really is_, with the real dependencies as they are implemented in the code.
+
+An architecture view is a hierarchy of components. This is the tree part of the hierarchical graph.
+The leaf components have classes assigned which implement them.
+
+The architecture hierarchy can either be used to explain the _intended_ architecture; QAvalidator can be used to check if there is a gap between plan and reality.
+Or QAvalidator can be used the other way around to visualize the structure of the system in a graphical, textual, or interactive way.
+
+There may be one or more architecture views. The architecture views are independent of one another. Apart from being associated with the same nodes in the graph, they don't have anything to do with each other.
+
+
+=== Literature
+
+For some background on this architecture model, see also <<AP11>>.
+
+
+=== Limitations
+
+QAvalidator is strictly focused on the code view. QAvalidator does not, for example, consider runtime properties like
+number of instances of a class, number of calls to a component, or performance properties like CPU or memory usage.
+It also does not describe deployment views of a software system.
+
+[[qav-architecture-dsl-example]]
+== Architecture DSL Example
+
+This is an example architecture definition:
+
+[source,groovy]
+-----
+architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
+
+    excludes "java.lang.**", "java.util.**", "org.slf4j.**"
+
+    component ("Monitor") {
+        // uses "IMail" --> is allowed implicitly, because the components are siblings
+        impl "de.qaware.mail.monitor.**"
+    }
+
+    component ("Mail") {
+        api "IMail" : "de.qaware.mail.api.**"
+        impl "de.qaware.mail.impl.**", "de.qaware.mail.impl2.**"
+
+        component ("MailSender") {
+            api "de.qaware.mail.sender.api.**"
+            impl "de.qaware.mail.sender.impl.JavaMailSender"
+            uses "JavaMail"
+        }
+    }
+
+    component ("3rdParty") {
+        component("JavaMail") {api "javax.mail.**"}
+    }
+}
+-----
+
+[[qav-architecture-dsl-reference]]
+== Architecture Model DSL Reference
+
+This section contains the detailed definition of the Architecture DSL.
+
+The Architecture DSL is a Groovy DSL; this explains most of the syntax we use. Valid Groovy code is possible anywhere.
+
+=== Keywords
+
+These are the QAvalidator Architecture DSL Keywords:
+
+architecture::
+`architecture` has three attributes to be set: The `name` is used in reports, the `prefix` is required for technical
+purpuses (like the DOT export), and the attribute `reflexMLversion` indicates the DSL version being used.
+In curly braces, it accepts the same declarations as _components_. +
+In each architecture file, there may be one or more architecture definitions.
+
+component::
+`component` describes a component as defined in section <<qav-architecture-dsl-intro>>. It has one parameter which is
+the component's name; in curly braces it defines the component's properties: _api_, _impl_, _uses_, _ignore_.
+
+api::
+There is one ore more API per component. Each API has a name; if there is only one API, its name defaults to the
+component's name. The API name must be unique for the system -- not only within that component.
++
+There are two forms to define an API: With name, it's the "colon" syntax with the name of the API, then a colon, and
+then a list of regular expressions defining matching classes.
+(For Groovy guys: This is the _map_ syntax with a String as key, and a List of Strings as value.)
++
+[source, groovy]
+-----
+api "adminApi" : "com.mycompany.comp1.api.admin.*"
+api "userApi"  : "com.mycompany.comp1.api.user.*", "com.mycompany.comp1.api.settings.*"
+-----
++
+Without name, it's just a list of regular expressions defining matching classes. This api will automatically get the
+name of its component.
++
+[source, groovy]
+-----
+api "com.mycompany.comp1.api.admin.*", "com.mycompany.comp1.api.user.*",
+            "com.mycompany.comp1.api.settings.*"
+-----
+
+impl::
+The `impl` keyword defines the component's implementation. It works similar to the `api` keyword, but there is only
+one implementation per component. Therefore, there is no name for an implementation, and the `impl` keyword just takes
+a list of regular expressions, defining all implementation classes.
+
+uses::
+The keyword `uses` defines all APIs this component uses. It receives a list of all API names that it may use.
+It's allowed to define the `uses` keyword more than once. +
+Note that this keyword takes the list of _API names_, not component names. Note also that for components which offer
+only one API, the API name defaults to the component's name.
+
+excludes::
+(Formerly also: `ignore`.)
+The keyword `excludes` allows to define a list of patterns (Ant-style) which match classes that should be ignored in the
+analysis. +
+It is often used to exclude commonly used classes like from the JDK, but also logging frameworks or other common
+libraries, or utility classes used througout the project.
+
+includes::
+If this is defined, only explicitly included file name patterns (Ant-style) which match classes to be included. Everything else will be excluded. If not defined, everything -- except the explicitly excluded files (see keyword `excludes`) -- will be included.
+
+pathSeparator::
+If defined, this String is used for the matching patterns in `api`, `impl`, `includes`, and `excludes` clauses.
+
+=== Code Mapping
+
+As of QAvalidator 1.0, code mapping is done using QAvalidator's flavor of AOP Pointcut syntax.
+It works like this:
+
+* "*" is one package name, i.e. any number of characters except a "."
+* "**" is one or more package names, i.e. any number of characters including a "."
+* If "\*" is the last package names, it's handled like "**".
+  ** _Deprecated rule. This will be removed in one of the next releases, so change your Architecture definition and replace_
+     `my.prefix.\*` _by_ `my.prefix.**`
+* "." in the pattern is a dot, it's not "any character" as in regular expressions.
+
+This is very similar to Ant path matching (in fact, that's the implementation we use; with the "." as default path
+separator, or the separator defined with the keyword `pathSeparator`).
+
+QAvalidator keeps the order of definition in the architecture file. Whenever it matches a class name to an API or
+implementation, it starts at the top, and goes down to the bottom. The first match is the result.
+
+
+== Rules
+
+QAvalidator uses the architecture description to check the dependencies found in the Bytecode.
+
+=== QAvalidator Rules
+
+QAvalidator checks that each dependency in the architecture view is covered by one of the following rules:
+
+1. Is the target of the dependency an API or an implementation of a component? If it's the latter, QAvalidator
+   currently issues a warning. This may be changed to raising an error as soon as QAvalidator allows to define expected
+   accessors to implementations.
+2. Is the dependency allowed because the accessed component lies in the same namespace as the using component? Note
+   that access to nested components is not allowed, only directly visible components may be used.
+   In the example above, `Monitor` may access `IMail` because it's on the same level, but not `MailSender` because
+   it's a nested component of `Mail` and may be an implementation detail. The architect may allow the access be using
+   the `uses` keyword.
+3. Is the dependency explicitly allowed via the `uses` keyword.
+
+Compare the code in the package `de.qaware.qav.core.architecture.checker`:
+The class `ArchitectureChecker` combines the checks of `DependencyChecker` and `AllComponentsImplementedChecker`.
+
+=== Nested Components and Namespaces
+
+The <<fig-namespace1,next figure>> shows an example for a system "S", with a number of hierarchically nested components,
+called "A", "A1", etc.
+The arrows indicate which dependencies are allowed and which are forbidden by the default rules.
+
+[[fig-namespace1]]
+.Namespaces
+image::namespace1.png[]
+
+* 1: A -> B: is allowed, because they have the same parent.
+* 2: A3 -> B1: is forbidden, because they have no common parent. B1 is nested too deeply.
+* 3: A22 -> A3: is allowed, because A22 is a child of A2, and A2 and A3 have the same parent.
+* 4: A1 -> A21: is forbidden, because A21 is a child of A2. It's nested too deeply; its existence is (or at least: may be)
+  an implementation detail of component A2. Therefore, access from A1 is not allowed implicitly.
+* 5: A22 -> B1: same reasoning as number 4.
+
+It's really important to understand the difference in reasoning of number 3 and number 4.
+The essence is that the existence of child components as well as their separation of concerns may be a design or
+implementation decision of the parent component. In the example above, the components A21 and A22 could be collapsed and
+subsumed into A2.
+Therefore the access from outside components is not allowed by default.
+
+Let's now consider another example which shows the effect of the _"uses"_ keyword in the <<fig-namespace2,next figure>>.
+
+[[fig-namespace2]]
+.Explicit USES definition
+image::namespace2.png[]
+
+Now, the relations 2: A3 -> B1 and 5: A22 -> B1 are _allowed_, because the dependency A -> B1 is allowed explicitly by
+the _uses_ keyword. Note that allowing a dependency with the _"uses"_ keyword also allows dependencies from children of
+the _source_ of the dependency.
+
+
+=== Related Work
+
+This section compares the QAvalidator architecture rules against the rules postulated in <<AP11>>.
+
+<<AP11>> defines the following architecture rules:
+
+A) Dependencies are only allowed towards interfaces::
+   This postulation doesn't allow for factories and constructions like Spring 4 configurations.
+   QAvalidator issues a warning.
+
+B) Only dependencies to interfaces in the same namespace are allowed::
+   QAvalidator works slightly different: Dependencies in the same namespace are allowed by default.
+   It's possible to explicitly allow dependencies which are "further away" by using the `uses` keyword.
+
+C) Each component and interface element of a component model has to be reflected to code::
+   There is a strict mapping from code to architecture components. There is also a check that each component has
+   corresponding classes in the code base.
+
+D) Relations between component model elements (components and interfaces) and code elements (types) must be 1-to-N relationships::
+   There is a strict mapping from code to architecture components.
+
+E) Any existing architecture-level dependency must be represented by at least one code-level dependency (no absence)::
+   All explicitly allowed dependency (via the `uses` keyword) are checked against the actual code base.

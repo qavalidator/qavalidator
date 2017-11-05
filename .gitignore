@@ -1,0 +1,14 @@
+
+.idea
+*.iml
+build
+.gradle
+out
+
+target
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Generated documentation
+/qav-doc/src-gen/

@@ -1,0 +1,31 @@
+# standard behaviour:
+* text=auto eol=lf
+
+# Windows files:
+*.bat text=crlf
+
+# ------------------------------------------------------------------
+# Denote all files that are truly binary and should not be modified.
+
+# Java files
+*.jar binary
+*.keystore binary
+*.jks binary
+
+# image files
+*.gif binary
+*.jpg binary
+*.png binary
+
+# deployment artifacts
+*.gz binary
+*.rpm binary
+*.tar binary
+*.tgz binary
+*.zip binary
+
+# fonts
+*.ttf binary
+
+# ------------------------------------------------------------------
+

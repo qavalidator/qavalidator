@@ -1,0 +1,41 @@
+group QavDoc;
+
+plugin(name,description,commands) ::= <<
+
+=== <name>
+
+<if (description)><description><endif>
+<commands; separator="\n\n">
+
+>>
+
+
+command(name,description,parameters,result) ::= <<
+
+==== <name>
+
+<if (description)><description><endif>
+
+<if (parameters)>
+[cols="1a,5a"]
+|===
+|Parameter | Description
+
+<parameters; separator="\n\n">
+|===
+<else>
+No parameters.
+<endif>
+
+<if (result)>
+
+Result::
+  <result>
+<endif>
+>>
+
+
+parameter(name, description) ::= <<
+|<name>
+|<description>
+>>

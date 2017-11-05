@@ -1,0 +1,28 @@
+= QAvalidator App
+
+This is the QAvalidator command line application.
+
+== Build
+
+Do a
+
+  gradlew [clean] build
+
+== Usage
+
+To use QAvalidator from the command line:
+
+[source,bash]
+-----
+$ java -jar qav-app-<version>.jar --analysis=<analysis-file> \
+                                 [--outputDir=<output-dir>] [input-dirs ...]
+-----
+
+To start the Web UI, use the argument `--graph=<dependencyGraph.json>`:
+
+[source,bash]
+-----
+$ java -jar qav-app-<version>.jar --graph=/path/to/dependencyGraph.json
+-----
+
+Then, browse to the Web UI at http://localhost:8080/

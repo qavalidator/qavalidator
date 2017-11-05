@@ -1,0 +1,56 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.qaware.qav</groupId>
+    <artifactId>qav-maven-plugin-test</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>QAvalidator :: Maven Plugin Test POM</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <qav.version>1.0.0-SNAPSHOT</qav.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-core</artifactId>
+                <version>${maven-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>de.qaware.qav</groupId>
+                <artifactId>qav-core</artifactId>
+                <version>${qav.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>de.qaware.qav</groupId>
+                <artifactId>qav-maven-plugin</artifactId>
+                <version>${qav.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>qav</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <failOnError>true</failOnError>
+                    <analysisFilename>qa/my-own.qav</analysisFilename>
+                    <useDefaultInputDirs>false</useDefaultInputDirs>
+                    <outputDir>target/qav-report</outputDir>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+

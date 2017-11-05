@@ -1,0 +1,242 @@
+
+[[release-notes]]
+= Release Notes
+
+== Release 1.2.6 -- 04.11.2017
+
+Changes::
+* Changed the way to start the QAvalidator Server for the Web UI:
+  ** The server may be started via Maven Plugin or Gradle Plugin. Refer to the documentation for details on the configuration.
+  ** The stand-alone app now also starts the server. So use `qav-app` instead of `qav-server`.
+  ** There is no standalone `qav-server` executable JAR file anymore.
+* Minor changes to the Maven plugin configuration. See the documentation for details.
+
+
+== Release 1.2.5 -- 21.09.2017
+
+Breaking Changes::
+
+* https://github.com/qaware/QAvalidator/issues/45[#45]: Re-implement the Maven Input Reader.
+  This changes the command `inputMaven` which now only takes one argument: the directory where to look for a `pom.xml` file.
+
+Changes::
+
+* https://github.com/qaware/QAvalidator/issues/44[#44]: Add Typescript input reader.
+  This reader reads an analysis export file from the Typescript analyzer.
+
+
+== Release 1.2.4 -- 11.09.2017
+
+Changes::
+
+* Dependencies:
+** Set the minimum required SonarQube version to 5.6.3
+** Spring Boot: 1.4.2 -> 1.5.6
+** Spring: 4.3.4 -> 4.3.10
+** Spring Data: 1.12.5 -> 1.13.6
+** Jackson: 2.8.7 -> 2.8.9
+** Slf4j: 1.7.21 -> 1.7.25
+** Logback: 1.1.7 -> 1.1.11
+
+* Refactoring: Split the code base into way more Gradle modules. See <<qav-dev-project-structure>> for an up-to-date description of the code structure.
+  There should not be any changes visible to QAvalidator users.
+
+* Release via Bintray to make QAvalidator publicly available.
+
+Deprecations::
+* Analysis DSL:
+  ** The ShortcutQavPlugin moved from `de.qaware.qav.core.analysis.dsl.plugins.ShortcutQavPlugin` to `de.qaware.qav.analysis.plugins.ShortcutQavPlugin`.
+     Replace the `apply` statement in your analysis files accordingly.
+* Architecture DSL / class matching expressions:
+  ** If "\*" is the last package names, it's handled like "\**".
+  This will be removed in one of the next releases, so change your Architecture definition and replace
+     `my.prefix.\*` by `my.prefix.**`
+
+
+== Release 1.2.3 -- 25.07.2017
+
+First release which is published via Bintray.
+
+Breaking Changes::
+
+* Change `NodeNameOutFilter` to accept Ant style path matcher instead of regular expressions. Note that this might be a breaking change.
+* There was a refactoring: if there are import statements like this in analysis files, then replace
+  `import de.qaware.qav.core.graph.api.DependencyType`
+  by
+  `import de.qaware.qav.graph.api.DependencyType`
+
+Changes::
+
+* Fixed a bug; now dependencies to APIs (not only to components) can be declared as explained in the documentation.
+
+== Release 1.2.2 -- 09.03.2017
+
+* Fix Gradle plugin. There was a bug that it couldn't find the architecture DSL base.
+
+== Release 1.2.1 -- 06.03.2017
+
+Breaking changes::
+
+* `ignore`, `includes`, and `excludes` can only be defined on the level of the Architecture -- not on any other component. This is a breaking change, but makes understanding the Architecture DSL easier.
+
+Changes::
+
+* The command `findCycles` now filters away CONTAINS relations. In most cases, those relations are not relevant for the search for cycles.
+
+So an analysis file can be simplified:
+
+[source,groovy]
+-----
+  def packageCycleGraph = findCycles(packageGraph
+                .filter(dependencyTypeEdgeOutFilter(CONTAINS)), "Package")
+-----
+
+can now be:
+
+[source,groovy]
+-----
+  def packageCycleGraph = findCycles(packageGraph, "Package")
+-----
+
+If, for some reason, they really should be part of the search, there is a new optional boolean parameter to not filter away these dependencies:
+
+[source,groovy]
+-----
+  def packageCycleGraph = findCycles(packageGraph
+                .filter(dependencyTypeEdgeOutFilter(CONTAINS)), "Package", true)
+-----
+
+* https://github.com/qaware/QAvalidator/issues/28[#28]: Generalize `ignore` to `includes` / `excludes`.
+  A class will only be considered if its name is included and not excluded:
+  ** it is included if no `includes` pattern is given _or_ it is matched by at least one of the `includes` patterns.
+  ** it is excluded if `excludes` patterns are given, _and_ a least one `excludes` pattern matches the name.
+  ** This replaces the `ignore` command (which still works, but is deprecated in favor of `includes` / `excludes`).
+
+* https://github.com/qaware/QAvalidator/issues/38[#38]: QAvalidator also reads class files from `.jar`, `.war`, and `.ear` files, and unpacks nested archives.
+  Note that it's necessary to give an `includes` pattern both for the archive files (otherwise they will not be opened), and for the class file entries to read.
+
+Example:
+
+[source,groovy]
+-----
+inputJava baseDir: "build/libs/qav-app-1.2.2-SNAPSHOT.jar",  // <1>
+          includes: ["**/*.class", "**/qav-*.jar"]           // <2>
+-----
+
+1. the archive file is given as input directory
+2. the `includes` patterns allow for all `.class` files, and for all `.jar` files file which start with `qav-*` in any directory within a jar. This also holds for further nested archives.
+
+If the archive is given on the command line as non-option argument, the default behaviour is to use all `.class` files, and to open all nested archive files. This may not always be the desired behaviour, as it also analyzes all the packaged third-party libraries. It will often be a good idea to filter the jar files which are unpacked.
+
+Another option is to define a directory as `baseDir`, and find one or more archive files in there:
+
+[source,groovy]
+-----
+inputJava baseDir: "build/libs",                                     // <1>
+          includes: ["**/de/qaware/qav/**/*.class", "**/qav-*.jar"]  // <2>
+-----
+
+The advantage is that if the archive names change, the directory can be the same (1), and the archive files can be found with an `includes` pattern (2). In this example, the classes in the input are restricted to match only classes under `de.qaware.qav.**`.
+
+* https://github.com/qaware/QAvalidator/issues/41[#41]: Visualization: add labels to the edges.
+  The edge labels give the the number of base relations (at the middle of an edge),
+  the number of different base relation sources (at the start of an edge),
+  and the number of different base relation targets (ad the end of an edge).
+  This is the new default behaviour; so e.g. this command will add labels to the edges:
+
+[source,groovy]
+-----
+  writeDot(architectureTView, "architectureTView", architecture("T-View"))
+-----
+
+If the labels are not desired, they can be switched off with a new, optional parameter like this:
+
+[source,groovy]
+-----
+  writeDot(architectureTView, "architectureTView", architecture("T-View"), false)
+-----
+
+Deprecations::
+
+* The DSL command `ignore` is now deprecated; it is replaced by `excludes`. If no `includes` is given, it behaves the same as `excludes`. See above.
+
+== Release 1.2.0 -- 02.03.2017
+
+Breaking changes:
+
+* https://github.com/qaware/QAvalidator/issues/30[#30], https://github.com/qaware/QAvalidator/issues/32[#32]: Reworked tagging of nodes in architecture views.
+  ** Retired the `reportLeftOvers` feature, and retired the convention to have a "Rest" component.
+     The command `createArchitectureView` reports unmapped classes.
+  ** Fixed tagging of architecture components.
+     The command `createArchitectureView` now tags all class nodes in the given graph and all of the architecture component nodes which belong to those given class with the given tag. This makes it easier to deal with the resulting graph, especially when the architecture view is created on only a subset of the full graph (e.g. only on the input scope). -- However, this implies changes to the way we detect unimplemented components.
+  ** Added new command to the analysis DSL: `checkDependencyRules` checks if every dependency in the given architecture view is covered by a rule in the architecture definition. This rule has been checked by the command `checkArchitectureRules` -- however, if the architecture view is built on only a subset of the input graph, there will be unmapped components which would (wrongly, depending on the perspective), be reported as unimplemented components. To avoid confusion, the rules may now be checked separately.
+
+Changes:
+
+* https://github.com/qaware/QAvalidator/issues/31[#31]: the Sonar plugin reports each cycle separately, so that the QAcontract plugin can show the number of cycles.
+* https://github.com/qaware/QAvalidator/issues/33[#33]: Updated the Analysis DSL documentation. Improved documentation on Maven multi-module builds.
+* https://github.com/qaware/QAvalidator/issues/34[#34]: Improved error messages.
+* https://github.com/qaware/QAvalidator/issues/37[#37]: The default locations for the analysis filename now includes three places which are checked in this order:
+ `qa/analysis.groovy` (as it used to be), `src/qa/analysis.groovy` (new), and `classpath:/default_analysis.groovy` (as it used to be). If an analysis file name is defined in Gradle, Maven, or on the command line, that file must exist, and QAvalidator will not try its fallbacks. If no filename is specified, then QAvalidator will try the defaults.
+* https://github.com/qaware/QAvalidator/issues/39[#39]: The command `createPackageArchitectureView` now accepts an optional argument which defines the maximum depth of the package hierarchy.
+  If this new argument is not given, it defaults to 0 which means "unlimited" and is the previous behaviour.
+
+Fixed Bugs:
+
+* https://github.com/qaware/QAvalidator/issues/36[#36]: Fixed: `JavaScopeReader` did not find references to attributes in other classes.
+* Fixed a bug: dependency on implementation is now recognized correctly.
+
+Deprecations:
+
+* The command `reportLeftOvers` is deprecated. See above.
+
+
+== Release 1.1.1 -- 06.02.2017
+
+* https://github.com/qaware/QAvalidator/issues/23[#23]: The release process now deploys the fat executable JARs to Nexus.
+* https://github.com/qaware/QAvalidator/issues/24[#24]: Added documentation.
+* https://github.com/qaware/QAvalidator/issues/24[#24]: Simplified the default analysis. It now only analyses the input scope, checks for package cycles, and produces some output; it uses only `inputClassesGraph`, no longer `allClassesGraph`.
+* https://github.com/qaware/QAvalidator/issues/24[#24]: Simplified the analysis DSL. The third parameter to command `createArchitectureView` is now optional.
+* https://github.com/qaware/QAvalidator/issues/26[#26]: Fixed bug in analysis engine: finds relations to annotations on attribute level, ignores primitive types (and arrays of those)
+* https://github.com/qaware/QAvalidator/issues/27[#27]: Fixed tagging of architecture components.
+* https://github.com/qaware/QAvalidator/issues/29[#29]: Documentation: removed duplicated generation of DSL command docs.
+
+Deprecations:
+
+* Command `printNodes`: only pass two arguments; do not pass the list of nodes.
+  So far, the old version is still there but writes a warning message.
+
+
+== Release 1.1.0 -- 04.02.2017
+
+* https://github.com/qaware/QAvalidator/issues/16[#16]: Improved Maven configuration.
+* https://github.com/qaware/QAvalidator/issues/14[#14]: NEW: Gradle Plugin
+* https://github.com/qaware/QAvalidator/issues/18[#18]: Now the component name "Rest" which is used by convention to collect all left-over classes is no longer hard-coded. NOTE: This requires to filter away that node before calling `checkArchitectureRules`. +
+ Do something like: +
+ `checkArchitectureRules(architectureTView.filter(nodeNameOutFilter("Rest")), architecture("T-View"))`
+* https://github.com/qaware/QAvalidator/issues/21[#21]:
+  Minor change to the code mapping (see <<qav-architecture-dsl-reference>>): uses `AntPathMatcher` implementation. This should not break common architecture definitions.
+* https://github.com/qaware/QAvalidator/issues/22[#22]: Fixed a bug which prevented QAvalidator to see dependencies to type parameters in generic types.
+* https://github.com/qaware/QAvalidator/issues/22[#22]: Improved cycle detection. Now unrelated cycles are identified separately. Base relations are logged.
+
+== Release 1.0.0 -- 21.12.2016
+
+* First official QAvalidator release.
+* NEW: a plugin for SonarQube.
+
+== Release 0.9.1 -- 12.12.2016
+
+* Change default for `allClassesGraph`: only filters out `java.lang.\*` (used to filter `java.util.*`, `java.io.\*`, and `org.slf4j.*`)
+
+== Release 0.9 -- 12.12.2016
+
+* Analysis Engine:
+** reads Java `.class` files
+** reads Maven `pom.xml` files
+* Output:
+** produces GraphViz `.dot` files
+** produces `.graphml` files for use with yEd
+** writes a log file for SonarQube
+* UI:
+** allows to navigate the graph
+** uses Lucene queries to find nodes based on their properties

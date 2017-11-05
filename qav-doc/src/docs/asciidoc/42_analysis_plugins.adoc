@@ -1,0 +1,57 @@
+
+[[qav-analysis-dsl-input-scope]]
+== Input Scope
+
+QAvalidator works on _input scopes_ which define the system to analyze.
+
+As of version 1.0, QAvalidator can read Java (`.class` files) and Maven POMs as input.
+
+For all upcoming analysis steps, it is not relevant where the initial graph comes from. From then on, QAvalidator uses
+nodes and edges, attributes on them (like types) etc. for its analysis.
+All analysis is language-agnostic; apart from the `JavaQavPlugin` which reads `.class` files, there is nothing
+Java-specific in QAvalidator.
+
+One feature is that new languages may be added by implementing a new input scope reader.
+More important is the fact that the _architecture model_ employed by QAvalidator is not language-specific.
+
+include::{gendocdir}/JavaQavPlugin.adoc[]
+
+include::{gendocdir}/MavenQavPlugin.adoc[]
+
+
+== Creating and Working with Architecture Views on a Graph
+
+An architecture view is a hierarchy of components above a certain input. It is a tree where the inner nodes are
+architecture components, and the leaves are the elements of the input scope (see section <<qav-analysis-dsl-input-scope>>).
+
+There may be an arbitrary number of architecture views on an input graph. Different architecture views are independent
+from each other. See section <<qav-architecture-dsl-intro>> for a definition of an "architecture view".
+
+include::{gendocdir}/ArchitectureQavPlugin.adoc[]
+
+== Manipulation
+
+include::{gendocdir}/GraphFilterQavPlugin.adoc[]
+
+
+[[qav-analysis-dsl-validation]]
+== Validation
+
+include::{gendocdir}/AnalysisQavPlugin.adoc[]
+
+
+[[qav-analysis-dsl-export]]
+== Export and Visualization
+
+include::{gendocdir}/IOQavPlugin.adoc[]
+
+
+== SonarQube and Monitoring the Quality Contract
+
+include::{gendocdir}/SonarMessagesQavPlugin.adoc[]
+
+
+== Typical Analysis Steps
+
+include::{gendocdir}/ShortcutQavPlugin.adoc[]
+

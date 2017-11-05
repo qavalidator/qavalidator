@@ -1,0 +1,84 @@
+
+= Developer Documentation
+
+This is the documentation for version {project-version}.
+
+The intended audience of this chapter are developers who want to enhance or contribute to QAvalidator.
+
+* <<qav-dev-core-ideas, Core ideas>>
+* <<qav-dev-project-structure, Project Structure>>
+
+[[qav-dev-core-ideas]]
+== QAvalidator Core Ideas
+
+* The analysis is defined in the QAvalidator Analysis DSL.
+* Architecture definitions are defined using the QAvalidator Architecture DSL.
+* The QAvalidator Core is more like an executer framework for analysis steps.
+** Analysis is done in plugins. QAvalidator comes with a number of plugins. New plugins can be easily defined. So if there is functionality missing, it's often a good idea to write a new plugin.
+
+=== DependencyGraph
+
+To understand the QAvalidator code, the most important data structure is the `DependencyGraph`.
+
+* The input scope is read and put into the `DependencyGraph`.
+* Any architecture view is a tree. It is put into the same `DependencyGraph` as the input scope. The nodes are differentiated by the `type` attribute.
+* This graph can be filtered by attributes on the nodes or on the edges.
+* A graph (the original or a filtered graph) can be used for further analysis steps, or it can be e.g. exported to a `\*.dot` or `*.graphml` file, or to our own `*.json` format. It can be analyzed, e.g. it can be checked for cycles.
+
+=== Defining the Analysis DSL and Running an Analysis
+
+The class `QavAnalysisDSL` is the base class for analysis DSL scripts. I.e. this class defines the vocabulary of the analysis DSL. It does so in two ways: Methods defined in this class are available to every analysis DSL script. And it allows to register plugins, which can add more methods and dynamically enhance the analysis DSL.
+
+The `QavAnalysisReader` reads a QAvalidator Analysis DSL file, and triggers the analysis.
+The `QavAnalysisRunner` runs all analysis steps.
+
+=== Defining the Architecture DSL
+
+The QAvalidator Architecture DSL is defined in the class `ArchitectureDSL`.
+The mechanism is simpler than for the analysis DSL, since this DSL can't be dynamically enhanced.
+
+
+[[qav-dev-project-structure]]
+== Project Structure
+
+The project is organized as shown in the next figure.
+
+[[fig-qav-modules]]
+.QAvalidator Modules
+image::qav-modules.svg[]
+
+From bottom to top, these are the modules:
+
+* Utilities:
+  ** _qav-doc-generator_: Generates the QAvalidator Analysis DSL documentation; this is done using annotation processing at compile time.
+  ** _qav-util_: Code that is used both by most parts of QAvalidator; utilities to work with strings or files etc.
+  ** _qav-test-util_: Little helpers that are only used for testing.
+* Documentation:
+  ** _qav-doc_: This documentation.
+* Main Model:
+  ** _qav-graph_: This module contains the `DependencyGraph`, which is the core data model that QAvalidator works with.
+* Processing:
+  ** Input:
+     *** _qav-input-java_: reads Java `.class` files and `.jar` files.
+     *** _qav-input-maven_: reads `pom.xml` files.
+     *** _qav-input-typescript_: reads input produced by the TypeScript analyzer (work in progress).
+     *** _qav-input-gradle_: reads gradle project structure _(planned)_.
+  ** Transformation & Validation:
+     *** _qav-architecture-dsl_: This is the data model for representing an `Architecture`. Also contains the DSL to read an architecture definition from a QAvalidator Architecture DSL file.
+     *** _qav-architecture_: Contains factories, validators, and transformations to work with architectures, architecture components, and architecture sub-graphs.
+  ** Output:
+     *** _qav-visualization_: Exporters to `.dot` (for GraphViz) and to `.graphml` (for yEd).
+  ** Analysis: DSL & Orchestration:
+     *** _qav-analysis-dsl_: This is the DSL to define analysis runs, and to compose analysis steps.
+     *** _qav-analysis-plugins_: Contains the plugins which define language constructs of the QAvalidator Analysis DSL.
+     *** The former is the technical framework to set up the DSL, and the latter is the actual commands; they use the steps provided in input, transformation & validation, and output.
+* Runners:
+  ** _qav-runner_: provides an API to start analysis runs. I.e. it combines everything so that the following runner options are small and easy to implement.
+  ** _qav-gradle-plugin_: start QAvalidator from a Gradle run.
+  ** _qav-maven-plugin_: start QAvalidator from a Maven run.
+  ** _qav-app_: start QAvalidator standalone, from command line.
+* Result Reading:
+  ** _qav-server_: A web application server to view graphs.
+  ** _qav-sonar-plugin_: The SonarQube plugin which reads `qav-sonar.log` files and offers the results as metrics.
+  ** _qav-ui_: The Angular-2 web app, served via _qav-server_.
+

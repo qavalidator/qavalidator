@@ -1,0 +1,25 @@
+name: v1
+    list-key-1: [a, b, c]
+    list-key-2: [1, 2, 3]
+    asdf: true
+    KEY: 5
+OUTGOING -->
+    v2[READ_ONLY]
+    v3[CREATE]
+INCOMING <--
+name: v2
+OUTGOING -->
+INCOMING <--
+    v1[READ_ONLY]
+name: v3
+OUTGOING -->
+INCOMING <--
+    v1[CREATE]
+name: v4
+OUTGOING -->
+    v5[READ_WRITE]
+INCOMING <--
+name: v5
+OUTGOING -->
+INCOMING <--
+    v4[READ_WRITE]

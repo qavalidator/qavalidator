@@ -1,0 +1,80 @@
+= QAvalidator
+
+Welcome to QAvalidator.
+
+== About
+
+QAvalidator is a tool to model your architecture and check the dependencies in your code.
+
+== Build
+
+* The build process is a Gradle build.
+* For the UI, it uses NodeJS and Webpack via Gradle.
+* For the Maven Plugin, use Maven. It's not built within the Gradle build.
+
+Do a
+
+  gradlew [clean] build
+
+on top level to build everything (except the Maven plugin).
+
+Sometimes, the Node stuff has problems with the console. To avoid those, the workaround is:
+
+  gradlew --console plain [... tasks ...]
+
+
+== Release
+
+Preparation::
+* Finish the release notes
+* Make sure the example files and i-tests are up-to-date.
+
+Perform the release::
+To create the release and to upload at into the company's Nexus, use this command:
+
+  gradlew --console plain clean build release -PnexusUsername=USERNAME -PnexusPassword=PASSWORD
+
+Maven Plugin::
+To release the Maven plugin, edit the `pom.xml` and set the new version number.
+Use the standard release plugin:
+
+  cd qav-maven-plugin
+  mvn release:prepare
+  mvn release:perform
+
+Publish to bintray::
+To publish that version to bintray, edit the file `gradle.properties`, set the `version` property back to the just
+released version, and rebuild and upload everything.
+Don't commit that file, just revert it afterwards.
+Use this command:
+
+  gradlew --console plain clean build bintrayUpload -PbintrayUsername=BINTRAY_USER -PbintrayApiKey=BINRAY_API_KEY
+
+To publish the Maven plugin to Bintray, set the `version` property back to the just released version, and use this command;
+don't commit that file, just revert it afterwards.
+
+  cd qav-maven-plugin
+  mvn deploy -P bintray
+
+
+== Documentation
+
+For more information, go to the link:qav-doc/src/docs/asciidoc/qav-doc.adoc[documentation].
+
+
+== Contributing
+
+You are highly welcome to contribute improvements to this project.
+Please report bugs as Github issues.
+Pull Requests are welcome.
+
+
+== Maintainer
+
+Tilman Seifert (@tilmanseifert)
+
+== License
+
+This software is provided under the Apache License, Version 2.0 license.
+
+Copyright (c) 2014 QAware GmbH, https://www.qaware.de

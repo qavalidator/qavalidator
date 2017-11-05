@@ -1,0 +1,86 @@
+= QAvalidator Maven Plugin
+
+This project is the Maven Plugin for _QAvalidator_.
+
+== Usage
+
+This is how to include the Maven Plugin into your build.
+
+[source,xml]
+-----
+    <properties>
+        <qav.version>1.2.1</qav.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>de.qaware.qav</groupId>
+                <artifactId>qav-maven-plugin</artifactId>
+                <version>${qav.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>qav</goal>
+                        </goals>
+                    </execution>
+                    <!-- use this in multi-module builds to avoid that
+                         QAvalidator is being executed for each sub-project -->
+                    <inherited>false</inherited>
+                </executions>
+                <configuration>
+                    <analysisFilename>qa/analysis.groovy</analysisFilename>
+                    <failOnError>false</failOnError>
+                    <useDefaultInputDirs>true</useDefaultInputDirs>
+                    <outputDir>target/qav-report</outputDir>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+-----
+
+The configuration options in the above example are the default values. So if these values match the project's
+settings, they can be skipped.
+
+=== Default Behaviour
+
+Input scope::
+By default, this plugin includes the classes dirs of the project where the plugin is defined, and of all subprojects,
+into consideration. I.e. the analysis definition does not need to contain any `inputJava` statements.
+If you want to define the input scope in the analysis DSL file, using the `inputJava`, then set `useDefaultInputDirs` to `false`.
+
+Analysis::
+* By default, this plugin executes the analysis defined in the `analysisFilename` parameter.
+* If that option is not defined, it uses the default file `qa/analysis.groovy`.
+* If that doesn't exist, `QAvalidator` performs a cycle check on package level.
+
+Output directory::
+By default, the output directory is `target/qav-report` (to be precise: It's `${project.build.directory}/qav-report`).
+To change it, set the configuration option `outputDir` as shown above.
+
+WARNING: From within a Maven build, the outputDir will _always_ be set via the Maven plugin
+(by default or explicitly), and any setting of the output directory in the analysis file will be ignored.
+
+== Build
+
+It is built with Maven, i.e. it's not part of the Gradle build.
+
+
+== Release Notes
+
+
+=== 1.0.1
+
+Breaking Changes:
+
+* Configuration of input directories and output directories is now completely separated.
+  ** `useDefaultDirs` is now `useDefaultInputDirs`. It does not affect the output dirs any longer.
+
+
+=== 1.0.0
+
+Released.
+
+=== 0.9.*
+
+Trial versions.

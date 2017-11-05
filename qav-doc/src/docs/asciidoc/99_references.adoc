@@ -1,0 +1,13 @@
+
+[[bibliography]]
+= Bibliography and Links
+
+[bibliography]
+* [[[AP11]]] Josef Adersberger, Michael Philippsen, _ReflexML: UML-based Architecture-to-code Traceability and Consistency Checking_, ECSA 2011
+* [[[GraphViz]]] GraphViz, http://www.graphviz.org/ _(last checked: 04.02.2016)_
+* [[[JDepend]]] JDepend, http://clarkware.com/software/JDepend.html _(last checked: 30.08.2016)_
+* [[[jQAssistant]]] jQAssistant, https://jqassistant.org/, _(last checked: 29.08.2016)_
+* [[[s101]]] Structure101, http://structure101.com/, _(last checked: 30.08.2016)_
+* [[[Sonargraph]]] Sonargraph, https://www.hello2morrow.com/products/sonargraph _(last checked: 17.02.2016)_
+* [[[SonarQube]]] SonarQube, http://www.sonarqube.org/, _(last checked: 29.08.2016)_
+* [[[yEd]]] yEd, http://www.yworks.com/, _(last checked: 12.12.2016)_

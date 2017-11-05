@@ -1,0 +1,142 @@
+group graphml;
+
+file(gname,nodes,edges) ::= <<
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:y="http://www.yworks.com/xml/graphml"
+    xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+
+    <!-- Created for yEd -->
+    <key for="port" id="d0" yfiles.type="portgraphics"/>
+    <key for="port" id="d1" yfiles.type="portgeometry"/>
+    <key for="port" id="d2" yfiles.type="portuserdata"/>
+    <key for="node" id="d3" attr.name="url" attr.type="string" />
+    <key for="node" id="d4" attr.name="description" attr.type="string" />
+    <key for="node" id="d5" yfiles.type="nodegraphics"/>
+    <key for="graphml" id="d6" yfiles.type="resources"/>
+    <key for="edge" id="d7" attr.name="url" attr.type="string" />
+    <key for="edge" id="d8" attr.name="description" attr.type="string" />
+    <key for="edge" id="d9" yfiles.type="edgegraphics"/>
+
+    <graph id="$gname$" edgedefault="directed">
+        $nodes; separator = "\n"$
+        $edges; separator = "\n"$
+    </graph>
+</graphml>
+>>
+
+
+component(id, name, children) ::= <<
+<node id="$id$" yfiles.foldertype="group">
+    <data key="d3"/>
+    <data key="d4"/>
+    <data key="d5">
+        <y:ProxyAutoBoundsNode>
+            <y:Realizers active="0">
+                <y:GroupNode>
+                    <y:Geometry height="80" width="100" />
+                    <y:Fill color="#CAECFF84" transparent="false"/>
+                    <y:BorderStyle color="#666699" type="dotted" width="1.0"/>
+                    <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#99CCFF" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain"
+                                 hasLineColor="false" height="25" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="80">$name$</y:NodeLabel>
+                    <y:Shape type="roundrectangle"/>
+                    <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+                    <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+                    <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+                </y:GroupNode>
+                <y:GroupNode>
+                    <y:Geometry height="50.0" width="50.0" x="0" y="0"/>
+                    <y:Fill color="#CAECFF84" transparent="false"/>
+                    <y:BorderStyle color="#666699" type="dotted" width="1.0"/>
+                    <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#99CCFF" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain"
+                                 hasLineColor="false" height="25" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="50.0">$name$</y:NodeLabel>
+                    <y:Shape type="roundrectangle"/>
+                    <y:State closed="true" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
+                    <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
+                    <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+                </y:GroupNode>
+            </y:Realizers>
+        </y:ProxyAutoBoundsNode>
+    </data>
+
+    $if (children)$
+    <graph edgedefault="directed" id="$id$:">
+        $children; separator = "\n"$
+    </graph>
+    $endif$
+</node>
+>>
+
+
+rectangle(id, name) ::= <<
+<node id="$id$">
+    <data key="d4" />
+    <data key="d5">
+        <y:ShapeNode>
+            <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+            <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" width="120" height="40"
+                         hasBackgroundColor="false" hasLineColor="false" modelName="custom" textColor="#000000" visible="true">$name$</y:NodeLabel>
+            <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+    </data>
+</node>
+>>
+
+umlClass(id, name, stereotype) ::= <<
+<node id="$id$">
+    <data key="d3"/>
+    <data key="d5">
+        <y:UMLClassNode>
+            <y:Geometry height="60.0" width="120.0" x="0.0" y="0.0"/>
+            <y:Fill color="#28507A" transparent="false"/>
+            <y:BorderStyle color="#000000" type="line" width="1.0"/>
+            <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold"
+                         hasBackgroundColor="false" hasLineColor="false" height="20.0" modelName="custom"
+                         textColor="#000000" visible="true" width="45.0" x="0.0" y="0.0">$name$<y:LabelModel>
+                    <y:SmartNodeLabelModel distance="4.0"/>
+                </y:LabelModel>
+                <y:ModelParameter>
+                    <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+                </y:ModelParameter>
+            </y:NodeLabel>
+            <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="$stereotype$" use3DEffect="true">
+                <y:AttributeLabel> </y:AttributeLabel>
+                <y:MethodLabel/>
+            </y:UML>
+        </y:UMLClassNode>
+    </data>
+</node>
+>>
+
+edge(from, to, color, style, width, edgeLabel) ::= <<
+<edge source="$from$" target="$to$">
+    <data key="d9">
+    <y:PolyLineEdge>
+        <y:LineStyle color="$color$" type="$style$" width="$width$"/>
+        <y:Arrows source="none" target="standard"/>
+        $if (edgeLabel)$
+        $edgeLabel; separator = "\n"$
+        $endif$
+        <y:BendStyle smoothed="false"/>
+    </y:PolyLineEdge>
+    </data>
+</edge>
+>>
+
+edgeLabel(name, color, position) ::= <<
+<y:EdgeLabel
+        alignment="center" configuration="AutoFlippingLabel" distance="2.0"
+        fontFamily="Dialog" fontSize="9" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false"
+        height="15" modelName="custom" preferredPlacement="anywhere" ratio="0.5"
+        textColor="$color$" visible="true"
+        width="10" x="0.0" y="0.0">$name$<y:LabelModel>
+    <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
+    </y:LabelModel>
+    <y:ModelParameter>
+        <y:SmartEdgeLabelModelParameter angle="0.0" distance="30.0" distanceToCenter="true" position="right" ratio="$position$" segment="0"/>
+    </y:ModelParameter>
+    <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co"
+        distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
+</y:EdgeLabel>
+>>

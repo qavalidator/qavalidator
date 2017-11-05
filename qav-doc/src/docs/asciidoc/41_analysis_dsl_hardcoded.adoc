@@ -1,0 +1,101 @@
+
+== Overview and DSL Plugins
+
+The QAvalidator Analysis DSL a Groovy DSL. So valid Groovy code may be used anywhere.
+
+Only some core concepts are implemented with a few hard-coded elements.
+The heavy lifting is done in plugins.
+These are the core concepts and the corresponding language features:
+
+=== Analysis Steps
+
+Analysis is done in steps.
+
+==== analysis
+
+QAvalidator will execute all `analysis` blocks in the order of their appearance.
+It will print their duration and their success.
+Analysis steps will fail if they detect a `violations`, or if there are unexpected errors (aka Exceptions).
+
+An analysis run which has at least one _failed_ analysis step will be considered as _failed_.
+
+[cols="1a,5a"]
+|===
+|Parameter | Description
+
+|description
+|Accepts a brief description of the analysis block
+
+|closure
+|code to execute in that analysis
+|===
+
+=== Error handling
+
+QAvalidator distinguishes between _error_ and _violation_
+(this is similar to a unit test which may be ok, produce an error, or may have failed).
+
+==== error
+
+Throws a new `IllegalStateException` with the given message.
+
+This is meant for technical error which should not happen in the course of the analysis.
+QAvalidator will log the message and the full stack trace to help debugging the analysis script.
+
+[cols="1a,5a"]
+|===
+|Parameter | Description
+
+|message
+|The message, to throw as `IllegalStateException`
+|===
+
+==== violation
+
+Accepts a message (a `String`), and notes it in the `context` (see next section).
+
+This is meant for architecture violations which are detected by the QAvalidator analysis run.
+This is not an error (the analysis run could do all its work), but it's not a success (as the analyzed system contains
+architectural flaws).
+QAvalidator will log the messages, and mark the analysis step as _failed_.
+See section <<qav-analysis-dsl-fail-build>>.
+
+[cols="1a,5a"]
+|===
+|Parameter | Description
+
+|message
+|The message to describe the violation.
+|===
+
+
+=== Common data
+
+The analysis script may use the `context` to store objects, or to pass objects from one step to another.
+
+* QAvalidator uses the context to create the initial graph (`context.dependencyGraph`).
+* The `JavaQavPlugin` uses this graph and creates a node for each class, and an edge for each dependency of every class.
+  All other plugins use this graph to read it, and to work with it.
+* The `ShortcutQavPlugin` also makes heavy use of this feature, and provides prepared data and tools like filters in the context.
+
+=== Plugins
+
+Analysis is implemented in plugins
+
+==== apply
+
+Applying a plugin makes the language features of that plugin available to the analysis script.
+
+The plugins offer a number of features used in many analysis.
+So typically, they will be used to compose new analysis.
+If necessary, new plugins can be added for other or more specific jobs.
+
+[cols="1a,5a"]
+|===
+|Parameter | Description
+
+|plugin
+|Accepts an object which must implement the interface `de.qaware.qav.analysis.dsl.model.QavPlugin`,
+or a String with a fully qualified name of a plugin -- which must also implement the interface `QavPlugin`.
+
+|===

@@ -1,0 +1,67 @@
+{
+    "edges": [
+        {
+            "props": {
+                
+            },
+            "type": "READ_ONLY",
+            "baseDependencies": [
+                
+            ],
+            "from": "v1",
+            "to": "v2"
+        },
+        {
+            "props": {
+                "prop2": "Two",
+                "prop1": 1
+            },
+            "type": "CREATE",
+            "baseDependencies": [
+                {
+                    "props": {
+                        
+                    },
+                    "type": "READ_WRITE",
+                    "baseDependencies": [
+                        
+                    ],
+                    "from": "v4",
+                    "to": "v5"
+                }
+            ],
+            "from": "v1",
+            "to": "v3"
+        },
+        {
+            "props": {
+                
+            },
+            "type": "READ_WRITE",
+            "baseDependencies": [
+                
+            ],
+            "from": "v4",
+            "to": "v5"
+        }
+    ],
+    "nodes": [
+        {
+            "asdf": true,
+            "KEY": 5,
+            "name": "v1"
+        },
+        {
+            "name": "v2"
+        },
+        {
+            "name": "v3"
+        },
+        {
+            "name": "v4"
+        },
+        {
+            "name": "v5"
+        }
+    ]
+}

@@ -1,0 +1,256 @@
+
+= Getting Started
+
+This chapter provides examples that you can copy/paste to get started with QAvalidator.
+
+* Using it: via <<usage-maven,Maven>>, <<usage-gradle,Gradle>>, or <<usage-cli,command line>>
+* An example for the <<getting-started-analysis,QAvalidator AnalysisDSL>>
+
+
+[[usage-maven]]
+== Maven Usage
+
+The simplest way to use QAvalidator is via Maven.
+
+Just include the Maven plugin into your pom.xml:
+
+[source,xml]
+-----
+<properties>
+    <qav.version>1.2.5</qav.version>
+</properties>
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>de.qaware.qav</groupId>
+            <artifactId>qav-maven-plugin</artifactId>
+            <version>${qav.version}</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>qav</goal>
+                    </goals>
+                    <!-- use this in multi-module builds to avoid that
+                         QAvalidator is being executed for each sub-project -->
+                    <inherited>false</inherited>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+-----
+
+Call the QAvalidator run with this command:
+
+  mvn qav:qav
+
+or
+
+  mvn de.qaware.qav:qav-maven-plugin:qav
+
+In this default configuration, QAvalidator checks for the file `qa/analysis.groovy`. If the file exists, QAvalidator uses it.
+If it doesn't, QAvalidator runs the default analysis which performs the following analysis steps:
+
+* QAvalidator reads all the `.class` files from the project where the plugin is defined (and called), and all of its subprojects.
+* It checks for package cycles.
+* It writes its results into the directory `target/qav-report`.
+
+[[getting-started-analysis]]
+== Define Your Own Analysis
+
+Defining the analysis run requires to write a little script using the QAvalidator's Analysis DSL.
+
+We'll use the default analysis and see what it does.
+
+Put this file in `qa/analysis.groovy`.
+
+[source,groovy]
+-----
+apply "de.qaware.qav.analysis.plugins.ShortcutQavPlugin"                 // <1>
+
+analysis("Step 1: Analyze Package Architecture") {                       // <2>
+    def packageGraph = createPackageArchitectureView(inputClassesGraph)  // <3>
+
+    def packageCycleGraph = findCycles(packageGraph, "Package")          // <4>
+
+    // output:
+    printNodes(packageCycleGraph, "packageCycleNodes.txt")               // <5>
+    writeDot(packageGraph, "packageGraph", architecture("Package"))      // <6>
+    writeFile(dependencyGraph, "dependencyGraph.json")                   // <7>
+}
+-----
+
+Here is what happens:
+
+1. The `ShortcutQavPlugin` offers some commands we'll use in this script. Using the `apply` command makes them available.
+2. An analysis run consists of one or more steps. This analysis has only one step. QAvalidator executes them in an order,
+   and tries to recover from errors in each step.
+3. The command `createPackageArchitectureView` creates an architecture tree based on the package hierarchy. In this case, it works on the `inputClassesGraph` which is a graph that represents all classes in the input scope, and no external classes referenced by them.
+ `packageGraph` is now a _filtered graph_ which only contains those nodes which belong to the package architecture (i.e. it does not contain nodes representing the classes).
+4. Finds cycles on the given graph.
+5. Writes out all cycles, i.e. all nodes which belong to a cycle.
+6. Writes out the package graph as DOT file, and tries to generate a `.png` and a `.svg` file by calling `dot`,
+   if graphviz is installed (See <<GraphViz>>). Fails if graphviz is not installed.
+   Also exports a `.graphml` file which can be used with <<yEd>>.
+7. Writes out the graph as JSON file, to be loaded e.g. in the Web UI.
+
+Step 4 will mark the step as "failed" if there are any cycles.
+
+If you also want the QAvalidator Plugin to break you build, add the following in the Maven plugin configuration,
+after the `<executions>` block, within the `<plugin>` definition:
+
+[source,xml]
+-----
+<configuration>
+    <failOnError>true</failOnError>
+</configuration>
+-----
+
+== Maven Configuration
+
+Here is the full configuration with the Maven Plugin. The example here shows the default values. Override them as needed.
+
+[source,xml]
+-----
+<configuration>
+    <analysisFilename>qa/analysis.groovy</analysisFilename>
+    <failOnError>false</failOnError>
+    <useDefaultInputDirs>true</useDefaultInputDirs>
+    <outputDir>target/qav-report</outputDir>
+</configuration>
+-----
+
+If no `analysisFilename` is given, QAvalidator will try these locations:
+
+* `qa/analysis.groovy`
+* `src/qa/analysis.groovy`
+* `classpath:/default_analysis.groovy`
+
+[[usage-gradle]]
+== Gradle Usage
+
+The Gradle Plugin is applied like this:
+
+[source, groovy]
+-----
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "de.qaware.qav:qav-gradle-plugin:1.2.5"
+    }
+}
+
+apply plugin: "de.qaware.qav.gradle.qavalidator"
+
+// these are the default values:
+qavalidator {
+    useDefaultInputDirs = true
+    failOnError = false
+    analysisFilename = "qa/analysis.groovy"
+    outputDir = "build/qav-report"
+}
+-----
+
+The configuration shown above shows the default values.
+
+If no `analysisFilename` is given, QAvalidator will try these locations:
+
+* `qa/analysis.groovy`
+* `src/qa/analysis.groovy`
+* `classpath:/default_analysis.groovy`
+
+Call the QAvalidator run with this command:
+
+  gradlew qavalidator
+
+
+[[usage-cli]]
+== Command Line Usage
+
+There is also a command line tool. It needs the analysis file (mandatory), the output directory (optional), and the
+input directories (also optional) -- if the optional arguments are not given on the command line, they must be defined
+in the analysis file.
+
+[source,bash]
+-----
+$ java -jar qav-app-<version>.jar --analysis=<analysis-file> \
+                                 [--outputDir=<output-dir>] [input-dirs ...]
+-----
+
+[WARNING]
+=====
+Do not omit the "=" sign in the command line parameters, and do not put whitespace around it.
+The input-dirs are non-option arguments.
+=====
+
+If no `analysis` filename is given, QAvalidator will try these locations:
+
+* `qa/analysis.groovy`
+* `src/qa/analysis.groovy`
+* `classpath:/default_analysis.groovy`
+
+
+
+[[usage-hierarchical-projects]]
+== Using with Hierarchical Projects
+
+The QAvalidator Maven plugin handles both single-module and hierarchical multi-module projects.
+Define the plugin and the `qa/analysis.groovy` file in the top-level project that you which to analyze.
+That's the project where you call `mvn qav:qav`.
+The following figure gives an example.
+
+[source,txt]
+-----
+my-app
+|-- qa
+|   \-- analysis.groovy
+|-- my-app-parent
+|   \-- pom.xml  // this is the parent pom for all other sub-projects.
+|-- my-app-api
+|   |-- src/...
+|   \-- pom.xml
+|-- my-app-client
+|   |-- src/...
+|   \-- pom.xml
+|-- my-app-impl
+|   |-- src/...
+|   \-- pom.xml
+|-- my-app-util
+|   |-- src/...
+|   \-- pom.xml
+\-- pom.xml      // define the QAvalidator plugin here
+-----
+
+[TIP]
+=====
+It's a best practice to have a separate parent pom which defines the dependency management etc. If `my-app/pom.xml` is also the parent pom, then all sub-projects also inherit all plugins defined there, so each sub-project will execute those plugins. This is no problem, because QAvalidator is defined as an "aggregator plugin", so it will just skip the child modules.
+=====
+
+Alternatively, it's possible to do separate, disjunct analysis on sub projects.
+Then, you need to define the QAvalidator plugin in the sub projects, as shown in this example:
+
+[source,txt]
+-----
+my-app
+|-- my-app-api
+|   |-- src/...
+|   \-- pom.xml
+|-- my-app-client
+|   |-- src/...
+|   |   |-- qa
+|   |   |   \-- analysis.groovy
+|   \-- pom.xml       // define the QAvalidator plugin here
+|-- my-app-impl
+|   |-- qa
+|   |   \-- analysis.groovy
+|   |-- src/...
+|   \-- pom.xml       // define the QAvalidator plugin here
+|-- my-app-util
+|   |-- src/...
+|   \-- pom.xml
+\-- pom.xml
+-----
+

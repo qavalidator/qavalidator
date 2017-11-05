@@ -1,0 +1,6 @@
+= QAV-Graph
+
+The Dependency Graph is the core data structure for QAvalidator.
+
+This module contains the Dependency Graph and all sorts of useful things around it.
+

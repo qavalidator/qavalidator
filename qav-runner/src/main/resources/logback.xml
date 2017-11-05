@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5p %50.50c{50}:%L - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="de.qaware.qav.core" level="INFO" />
+    <logger name="de.qaware.qav.core.scope.javacode" level="INFO" />
+    <logger name="de.qaware.qav.core.analysis.dsl" level="DEBUG" />
+    <logger name="de.qaware.qav.analysis.dsl.impl.QavAnalysisDSL" level="INFO" />
+    <logger name="de.qaware.qav.util.ProcessUtil" level="ERROR" />
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

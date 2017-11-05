@@ -1,0 +1,11 @@
+= QAvalidator Core
+
+This is the QAvalidator core.
+
+It contains
+
+* The architecture DSL
+* The analysis DSL and the plugins
+* The Dependency Graph and all operations to deal with it
+* The input scope readers for Java `.class` files and Maven POMs.
+

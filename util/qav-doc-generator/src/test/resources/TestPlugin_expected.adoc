@@ -1,0 +1,11 @@
+
+=== TestPlugin
+
+This is a test plugin
+
+==== testCmd1
+
+Desc1
+
+No parameters.
+

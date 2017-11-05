@@ -1,0 +1,42 @@
+
+=== TestPlugin2
+
+This is a test plugin
+
+==== cmd
+
+Desc1
+
+[cols="1a,5a"]
+|===
+|Parameter | Description
+
+|p1
+|parameter 1
+
+|p2
+|parameter 2
+|===
+
+Result::
+  The result.
+
+
+==== cmd
+
+Desc2
+
+[cols="1a,5a"]
+|===
+|Parameter | Description
+
+|p1
+|parameter 1
+
+|p2
+|parameter 2
+
+|p3
+|parameter 3
+|===
+

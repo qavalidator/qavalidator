@@ -1,0 +1,5 @@
+group TEST;
+
+someElement(name) ::= <<
+Hello <name>!
+>>

@@ -1,0 +1,36 @@
+
+= Summary
+
+The intention of QAvalidator is:
+
+* Document the intended architecture.
+* Validate that the intended architecture is always followed.
+  Issue warnings or errors if it isn't.
+* Visualize the architecture -- both the intended architecture and the actual dependencies.
+* Allow to explore the actual relations on architecture level and on code level in an interactive way.
+
+The validation checks are easily possible for each developer on the developer machine, and they can be done in
+the CI builds to give immediate feedback.
+
+The term _"architecture"_ is used in a very code-centered way. QAvalidator is about dependencies on code level.
+
+== QAvalidator Analysis
+
+QAvalidator uses multiple information sources:
+
+1. Java code relationships, taken in a static way from the `.class` files
+2. Maven dependencies as defined in the `pom.xml` files
+3. Manually defined architectures
+
+QAvalidator defines its own DSLs for both the architecture model description and the analysis description.
+Chapters <<qav-architecture-dsl>> and <<qav-analysis-dsl>> explain the details.
+
+There is also a sonar plugin available.
+
+
+== Why should I use it?
+
+1. It's simple. In fact, the most simple setup takes less than five minutes.
+2. It's powerful. You can define any analysis in the DSL, whilst not having to go into the details of the code.
+3. It's flexible. You need your own analysis step? No problem. You can write your own DSL plugins.
+

@@ -1,0 +1,45 @@
+= QAvalidator
+Tilman Seifert (QAware GmbH)
+:imagesdir: ./img
+:gendocdir: ../../../src-gen/generated-docs
+:toc: left
+:sectanchors:
+:icons: font
+:source-highlighter: coderay
+:tools-dir: v:/codebase/qav-doc/src/layout
+:stylesdir: {tools-dir}/stylesheets
+:stylesheet: qaware-asciidoctor.css
+ifdef::backend-pdf[]
+:title-logo-image: image:{tools-dir}/images/qaware-logo.png[pdfwidth=5.0cm,align=right]
+endif::[]
+
+// Get images in PDF right. This is quite a hack: refer to the images copied when creating
+// the HTML5 output. Make sure that the HTML5 backend runs before the PDF backend!
+ifdef::backend-pdf[:imagesdir: ../../../build/html5/img]
+ifndef::imagesdir[:imagesdir: img]
+
+
+// Push titles down one level
+:leveloffset: 1
+
+include::00_summary.adoc[]
+
+:sectnums:
+include::10_quickstart.adoc[]
+
+include::30_architecture_dsl.adoc[]
+
+include::40_analysis_dsl.adoc[]
+
+include::50_ui.adoc[]
+
+include::60_developer_docs.adoc[]
+
+include::80_release_notes.adoc[]
+
+include::81_roadmap.adoc[]
+
+include::90_related_work.adoc[]
+
+:sectnums!:
+include::99_references.adoc[]

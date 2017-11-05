@@ -1,0 +1,121 @@
+
+[[qav-ui]]
+= UI
+
+QAvalidator offers a web UI to browse a dependency graph.
+
+== Start the Web UI
+
+=== Start via Command Line
+
+Start the server from the command line. It needs the graph file as parameter (mandatory).
+
+[source,bash]
+-----
+$ java -jar qav-app-<version>.jar --graph=path/to/dependencyGraph.json \
+                                 [--server.port=8080]
+-----
+
+By default, the server will start on port 8080. With `--server.port=xx`, another port can be assigned.
+
+
+=== Start via Maven Plugin
+
+Alternatively, start it via the Maven build. Add another `execution` block to the plugin configuration. The configuration block accepts two more parameters, `graph` for the graph file to read, and `port` for the server port to use. The example shows the default values.
+
+[source,xml]
+-----
+    <executions>
+        <execution>
+            <id>server</id>
+            <goals>
+                <goal>server</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <graph>target/qav-report/dependencyGraph.json</graph>
+        <port>8080</port>
+    </configuration>
+-----
+
+Alternatively, define the properties on the command line; then no specific configuration is required in the `pom.xml`:
+
+  mvn qav:server -Dserver.port=8080 -Dserver.graph=target/qav-report/dependencyGraph.json
+
+The QAvalidator Server will read the `dependencyGraph.json` file, index it with an in-memory Lucene index to allow for a flexible search, and offer a plain web UI to browse the graph.
+
+Stop the server with `Ctrl-C`.
+
+
+=== Start via Gradle Plugin
+
+You can start the Server via the Gradle plugin.
+The configuration accepts two more parameters; the example shows the default values.
+
+[source,groovy]
+-----
+    qavalidator {
+        port = '8080'
+        graph = 'build/qav-report/dependencyGraph.json'
+    }
+-----
+
+Start the server with this command:
+
+  ./gradlew qavalidatorServer
+
+and stop it with `Ctrl-C`.
+
+
+== Search
+
+The main page shows a search dialog.
+
+If no query is entered, it lists all nodes.
+
+A query uses the Lucene query syntax. To find a node with name "de.qaware.qav", the search query is:
+
+  name:de.qaware.qav
+
+The result will be the node with the name "de.qaware.qav".
+
+To find all nodes starting with "de.qaware.qav", the search query is:
+
+  name:de.qaware.qav*
+
+The result will be a list of nodes.
+
+If searching for a name, the prefix `name:` may be omitted. I.e. searching for `de.qaware.qav*` will yield the same results.
+
+To find all nodes which are architecture nodes (i.e. not class-level nodes), the query is:
+
+  type:architecture
+
+To find all nodes which belong to the input scope (i.e. were read initially, as opposed to classes which are referenced by classes in the input scope):
+
+   scope:input
+
+== The node detail view
+
+Selecting a class navigates to the node detail view.
+
+It shows:
+
+* Node properties
+* The hierarchy: this is "vertical navigation" in the graph
+* Incomonig and outgoing dependencies: this is "horizontal navigation in the graph.
+
+Clicking on a node navigates to that node's detail views.
+
+== The dependency detail view
+
+Clicking on the dependency type in the incomonig and outgoing dependencies part
+navigates to the dependency detail view.
+
+It shows:
+
+* Source, target, and type: for better overview and easy navigation to the source and target nodes.
+* Edge properties. One property, if available, is `lineNo`; it tells the line number in the source file where the class of the target node is referenced.
+* Base dependencies, if applicable: For dependencies on architecture level, the underlying dependencies (the base dependencies) are shown. Again, the "Source" and "Target" nodes are links to their node detail pages, whereas the "Dependency Type" is a link to the edge detail page.
+

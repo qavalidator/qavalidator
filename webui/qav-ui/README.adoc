@@ -1,0 +1,45 @@
+= QAvalidator UI: QAvalidator Web UI
+
+Allows to browse the dependency graph.
+
+== Usage
+
+The following command starts the server:
+
+  java -jar qav-server-VERSION.jar --graph=path/to/dependencyGraph.json
+
+Then, http://localhost:8080/index.html is the entry point to the QAvalidator UI.
+
+== The Build Process
+
+The build supports both a development mode, i.e. being interactive and redeploy the app quickly,
+and a CI mode, i.e. package the app into one jar and deliver it directly from the qav-server project.
+
+=== Development Mode
+
+Use `npm install` if the file `package.json` changed, or if the directory `node_modules` does
+not yet (or not any more) exist.
+
+Use `npm run start` to start a server on http://localhost:3000, and to see redeploys
+immediately after a file changed.
+
+=== CI Mode
+
+Just use `gradlew [clean] build` to produce the `.jar` file.
+It contains a directory `public`, so that the Spring Boot app `qav-server` directly serves the app.
+
+=== Cleanup
+
+`../gradlew clean` deletes the `build` directory.
+
+`../gradlew veryClean` does the same, and also deletes the directories
+`nodejs`, `node_modules`, and `typings`.
+
+
+== Open Issues
+
+The QAvalidator UI project is far from complete. E.g. the following issues should be improved:
+
+* error handling is way too simple
+* unit tests on TypeScript code are missing
+* CSS handling on source level and in the build process should be improved

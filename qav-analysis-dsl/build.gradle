@@ -1,0 +1,80 @@
+
+apply plugin: 'groovy'
+
+compileGroovy {
+    groovyOptions.javaAnnotationProcessing = true
+}
+
+dependencies {
+    compile project(':qav-graph')
+    compile project(':util:qav-util')
+
+    testCompile project(path: ':util:qav-test-util', configuration: 'testOutput')
+
+    compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
+    compile "ch.qos.logback:logback-core:${project.ext.logbackVersion}"
+    compile "ch.qos.logback:logback-classic:${project.ext.logbackVersion}"
+
+    compile "org.codehaus.groovy:groovy-all:${project.ext.groovyVersion}"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier = 'javadoc'
+    from groovydoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives groovydocJar
+}
+
+publishing {
+    publications {
+        qavPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact groovydocJar
+
+            pom.withXml {
+                asNode().appendNode('name', "QAvalidator :: ${project.name}")
+                asNode().appendNode('description', project.description)
+                asNode().appendNode('url', project.websiteUrl)
+
+                asNode().children().last() + project.pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
+    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
+    publications = ['qavPublication']
+    dryRun = false
+    publish = true
+    pkg {
+        repo = project.bintrayRepo
+        name = project.name
+        desc = project.description
+        licenses = ['Apache-2.0']
+        labels = ['qaware', 'architecture', 'validation']
+        websiteUrl = project.websiteUrl
+        issueTrackerUrl = project.issueTrackerUrl
+        vcsUrl = project.scmUrl
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+            desc = project.description
+            released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
+            vcsTag = "v${project.version}"
+            mavenCentralSync {
+                sync = false
+            }
+        }
+    }
+}

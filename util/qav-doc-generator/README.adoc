@@ -1,0 +1,28 @@
+= QAvalidator Documentation Generator
+
+This project contains:
+
+* Documentation annotations for QAvalidator
+* An annotation processor which generates AsciiDoc documentation from these annotations.
+
+This is used to explain the QAvalidator Analysis DSL.
+
+== Open Issues / Improvements
+
+* The Groovy Compiler has a bug: It does not offer the JavaDoc comments to the annotation processor.
+  That's the reason why we have descriptions of the commands and their parameters in annotations instead of using
+  JavaDoc.
+* The output path is hard-coded to `qav-doc/src-gen/generated-docs`;
+  it would be nicer if it could be adjusted using a compiler option or so.
+
+== Release Notes
+
+=== 1.0.1 [work in progress]
+
+* Only create the output directory when the first output is written.
+  Avoids creating output directoris when no output is generated at all, e.g. in the Maven Plugin.
+
+
+=== 1.0.0
+
+* Released.

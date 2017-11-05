@@ -1,0 +1,19 @@
+// do this so that the project name is correct in Jenkins
+// (would be 'workspace' otherwise)
+rootProject.name = 'qavalidator'
+include "util:qav-test-util", "util:qav-util", "util:qav-doc-generator",
+        "qav-graph",
+        // input:
+        "qav-input-java", "qav-input-maven", "qav-input-typescript",
+        // processing:
+        "qav-architecture", "qav-architecture-dsl",
+        "qav-analysis-dsl", "qav-analysis-plugins",
+        // output:
+        "qav-visualization",
+        // runners:
+        "qav-runner",
+        "dist:qav-app", "dist:qav-gradle-plugin",
+        // read the results:
+        "webui:qav-ui", "webui:qav-server",
+        "qav-doc", "qav-sonar-plugin"
+

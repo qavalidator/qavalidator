@@ -1,0 +1,4 @@
+= QAvalidator Util
+
+This is a small util module with classes used both by QAvalidator and the
+`qav-doc-generator` documentation Annotation Processor.

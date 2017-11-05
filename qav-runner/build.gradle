@@ -1,0 +1,78 @@
+
+apply plugin: 'java-library'
+
+dependencies {
+    compile project(':qav-analysis-dsl')
+    compile project(':qav-analysis-plugins')
+    compile project(':util:qav-util')
+
+    testCompile project(path: ':util:qav-test-util', configuration: 'testOutput')
+
+    compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
+    compile "ch.qos.logback:logback-core:${project.ext.logbackVersion}"
+    compile "ch.qos.logback:logback-classic:${project.ext.logbackVersion}"
+
+    compile "org.apache.commons:commons-lang3:${project.ext.commonsLang3Version}"
+    compile "com.google.guava:guava:${project.ext.guavaVersion}"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        qavRunner(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                asNode().appendNode('name', "QAvalidator :: ${project.name}")
+                asNode().appendNode('description', project.description)
+                asNode().appendNode('url', project.websiteUrl)
+
+                asNode().children().last() + project.pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
+    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
+    publications = ['qavRunner']
+    dryRun = false
+    publish = true
+    pkg {
+        repo = project.bintrayRepo
+        name = project.name
+        desc = project.description
+        licenses = ['Apache-2.0']
+        labels = ['qaware', 'architecture', 'validation']
+        websiteUrl = project.websiteUrl
+        issueTrackerUrl = project.issueTrackerUrl
+        vcsUrl = project.scmUrl
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+            desc = project.description
+            released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
+            vcsTag = "v${project.version}"
+            mavenCentralSync {
+                sync = false
+            }
+        }
+    }
+}

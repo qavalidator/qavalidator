@@ -1,0 +1,34 @@
+
+[[related-work]]
+= Other Tools
+
+There are many other tools which claim to help on static analysis and architecture validation.
+Some of them may be worth looking at, while QAvalidator may beat others -- at least for the use case it's intended for.
+
+Structure101::
+  Better for interactive analysis. See <<s101>>.
+
+Sonargraph::
+  See <<Sonargraph>>:
+  They say about themselves: _"Sonargraph-Explorer is a simple but powerful static analysis tool with a focus on metrics
+  and dependency visualization."_
+
+SonarQube::
+  SonarQube <<SonarQube>> offers a view called the "component design".
+  It offers a matrix view on packages and their dependencies.
+  It's a little hard to read and work with; as long as the system is fairly clean (not too tangled), it's ok to find a cycle.
+  SonarCube does not allow to define something like an intended architecture.
+
+jQAssistant::
+  See <<jQAssistant>>, jQAssistant is the new kid on the block for static code analysis.
+  jQAssistant has a similar approach as QAvalidator: It reads the byte code to find dependencies; it also considers the
+  system to form a graph with classes as the nodes, and dependencies as the edges.
+  jQAssistant offers nice analysis options and an interactive way to explore the classes graph.
+  It knows a concept to define rules which declare _unwanted_ dependencies.
+  It does not allow to model the _intended_ architecture.
+
+JDepend::
+  Project seems to be dead. See <<JDepend>>.
+
+
+For a discussion of more tools, see <<AP11>>, chapter 6.

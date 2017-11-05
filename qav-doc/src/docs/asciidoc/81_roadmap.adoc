@@ -1,0 +1,31 @@
+
+[[roadmap]]
+= QAvalidator Backlog and Roadmap
+
+This chapter lists features and improvements which are comping up but not yet planned exactly, as well as ideas for features which are not yet concrete enough.
+
+
+== Features
+
+* create jQAssistant constraints ("concepts") from an architecture, and let jQAssistant do the rest of the work.
+  ** This could nicely integrate with project that do have a jQAssistant configuration, and want to add QAvalidator's architecture description.
+* What-If analysis:
+  ** i.e. virtual refactorings and the analysis of the effects.
+  ** see also the batch-renaming tool at QAware. That input could be used here.
+* More input scopes:
+  ** Analyse JavaScript or TypeScript source code.
+
+
+== Code
+
+* More Java, less Groovy for better static analysis and better refactoring. Only DSL parts in Groovy, rest in Java.
+* Speed up input scope reading: use a Thread pool and Executor Service to parallelize analysis and I/O.
+  ** watch out: the graph implementation is not thread safe.
+
+
+== Storage
+
+* use SOLR for storing the nodes.
+  ** read Graph into SOLR
+  ** also read the Java sources and attach them to the nodes.
+* or: use Neo4j to store the graph.

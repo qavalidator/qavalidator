@@ -1,0 +1,41 @@
+= QAvalidator Gradle Plugin
+
+== Usage
+
+This how to include the plugin:
+
+[source, groovy]
+-----
+buildscript {
+    repositories {
+        mavenLocal() // or whereever you find the plugin
+    }
+    dependencies {
+        classpath "de.qaware.qav:qav-gradle-plugin:1.2.7-SNAPSHOT"
+    }
+}
+
+apply plugin: "de.qaware.qav.gradle.qavalidator"
+-----
+
+This is how to configure the plugin:
+
+[source, groovy]
+-----
+// these are the default values
+qavalidator {
+    useDefaultInputDirs = true
+    failOnError = false
+    analysisFilename = "qa/analysis.groovy"
+    outputDir = "build/qav-report"
+}
+-----
+
+This is how to call it:
+
+  $ gradlew qavalidator
+
+
+== Default Behavior
+
+The configuration shown above shows the default values.

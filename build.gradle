@@ -1,0 +1,194 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        jcenter()
+    }
+    dependencies {
+        // provides configurations for annotation processing, and passes the annotation processor to
+        // the javac "-processorpath" option:
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
+plugins {
+    id "org.sonarqube" version "2.2"
+    id 'net.researchgate.release' version '2.4.1'
+}
+
+sonarqube {
+    properties {
+        property "sonar.host.url", System.env.SONAR_HOST_URL
+        property "sonar.login", System.env.SONAR_AUTH_TOKEN
+        property "sonar.projectName", "QAvalidator"
+        property "sonar.exclusions", "**/*.html,**/*.css,**/*.js"
+    }
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'jacoco'
+
+    // for publishing via Bintray
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
+
+    group = 'de.qaware.qav'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                // set the properties via -P to publish to your company repo
+                repository(url: project.nexusUrl) {
+                    authentication(userName: project.nexusUsername, password: project.nexusPassword)
+                }
+                snapshotRepository(url: project.nexusSnaphotUrl) {
+                    authentication(userName: project.nexusUsername, password: project.nexusPassword)
+                }
+            }
+        }
+    }
+
+    release {
+        failOnCommitNeeded = true
+        failOnPublishNeeded = false
+        failOnSnapshotDependencies = true
+        failOnUnversionedFiles = true
+        failOnUpdateNeeded = true
+        revertOnFail = true
+        preCommitText = '[Gradle Release Plugin] '
+        preTagCommitMessage = '- pre tag commit: '
+        tagCommitMessage = '- creating tag: '
+        newVersionCommitMessage = '- new version commit: '
+        tagTemplate = 'release-${version}'
+        versionPropertyFile = 'gradle.properties'
+        versionProperties = []
+        buildTasks = ['build']
+
+        git {
+            requireBranch = '' // allow releases from any branch
+        }
+    }
+
+    afterReleaseBuild.dependsOn uploadArchives
+
+    ext {
+        // Version numbers
+        springBootVersion = "1.5.8.RELEASE"
+        springVersion = "4.3.12.RELEASE"
+        springDataVersion = "1.13.8.RELEASE"
+        jacksonVersion = "2.8.9"
+
+        groovyVersion = "2.4.10"
+        asmVersion = "5.1"
+
+        jgraphtVersion = "1.0.0"
+        luceneVersion = "6.3.0"
+
+        stringtemplateVersion = "3.2"
+        antVersion ="1.9.7"
+
+        guavaVersion = "20.0"
+        commonsLang3Version = "3.5"
+        commonsIoVersion = "2.5"
+
+        slf4jVersion = "1.7.25"
+        logbackVersion = "1.1.11"
+
+        // Test dependencies
+        googleTestingCompileVersion = '0.10'
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.12'
+        testCompile 'org.hamcrest:hamcrest-integration:1.3'
+        testCompile 'org.mockito:mockito-core:1.10.19' // Mockito 2 only with Spring Boot >= 1.5
+    }
+
+    jacoco {
+        toolVersion = "0.7.7.201606060606"
+        reportsDir = file("$buildDir/customJacocoReportDir")
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.destination "${buildDir}/jacocoHtml"
+        }
+    }
+
+    // This disables the pedantic doclint feature of JDK8
+    if (JavaVersion.current().isJava8Compatible()) {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+
+    /*
+     * common information for Bintray publishing
+     */
+    ext {
+        pomConfig = {
+
+            inceptionYear '2015'
+
+            scm {
+                connection "scm:git:${project.scmUrl}"
+                developerConnection "scm:git:${project.scmUrl}"
+                url project.websiteUrl
+            }
+
+            issueManagement {
+                system 'GitHub'
+                url project.issueTrackerUrl
+            }
+
+            licenses {
+                license([:]) {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            organization {
+                name 'QAware GmbH'
+                url 'https://www.qaware.de'
+            }
+
+            developers {
+                developer {
+                    id 'lreimer'
+                    name 'Mario-Leander Reimer'
+                    email 'mario-leander.reimer@qaware.de'
+                    organization 'QAware GmbH'
+                    organizationUrl 'https://www.qaware.de'
+                    roles { role 'Developer' }
+                }
+                developer {
+                    id 'tilmanseifert'
+                    name 'Tilman Seifert'
+                    email 'tilman.seifert@qaware.de'
+                    organization 'QAware GmbH'
+                    organizationUrl 'https://www.qaware.de'
+                    roles { role 'Developer' }
+                }
+            }
+        }
+    }
+}
+
+task build(description: "no-op task, needed for the release plugin") {}
