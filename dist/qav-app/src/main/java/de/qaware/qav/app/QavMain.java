@@ -18,6 +18,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class QavMain {
 
     /**
+     * property name to set the server port.
+     */
+    private static final String SERVER_PORT = "server.port";
+
+    /**
      * Main method.
      *
      * @param args command line
@@ -27,13 +32,13 @@ public class QavMain {
         boolean startServer = hasArgument("graph", args) || hasArgument("de.qaware.qav.graph.filename", args);
 
         if (runAnalysis || !startServer) {
-            String port = System.getProperty("server.port"); // may be null
-            System.setProperty("server.port", "0");
+            String port = System.getProperty(SERVER_PORT); // may be null
+            System.setProperty(SERVER_PORT, "0");
             SpringApplication.run(QavMain.class, args).close();
             if (port == null) {
-                System.clearProperty("server.port");
+                System.clearProperty(SERVER_PORT);
             } else {
-                System.setProperty("server.port", port);
+                System.setProperty(SERVER_PORT, port);
             }
         }
 
