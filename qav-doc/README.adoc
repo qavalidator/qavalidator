@@ -13,3 +13,10 @@ To get the complete documentation:
 * build this project (e.g. `gradlew build`).
 * find the HTML documentation in `build/html5/qav-doc.html`
 * find the PDF documentation in `build/pdf/qav-doc.pdf`
+
+== Update the Project's Site
+
+To publish the latest documentation at https://qavalidator.github.io,
+use the Gradle task `copyDocToWebsite`.
+To cleanup beforehand, use `cleanDocInWebsite`.
+This updates the AsciiDoc documentation in the project's site project `qavalidator/qavalidator.github.io`. Commit and push that project separately.

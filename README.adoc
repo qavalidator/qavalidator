@@ -56,10 +56,13 @@ don't commit that file, just revert it afterwards.
   cd qav-maven-plugin
   mvn deploy -P bintray
 
+Update the Documentation::
+To publish the latest documentation at https://qavalidator.github.io,
+use the Gradle task `copyDocToWebsite` in `qav-doc`. To cleanup beforehand, use `cleanDocInWebsite`. This updates the AsciiDoc documentation in the project's site project `qavalidator/qavalidator.github.io`. Commit and push that project separately.
 
 == Documentation
 
-For more information, go to the link:qav-doc/src/docs/asciidoc/qav-doc.adoc[documentation].
+For more information, go to the link:https://qavalidator.github.io[documentation which is linked here].
 
 
 == Contributing

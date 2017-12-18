@@ -49,6 +49,21 @@ task packageDocumentation(type: Zip) {
     }
 }
 
+task copyDocToWebsite(type: Copy) {
+    from ("${project.buildDir}/html5") {
+        include "**/*.html"
+        include "**/*.jpg"
+        include "**/*.png"
+        include "**/*.svg"
+    }
+    into "../../qavalidator.github.io/static/doc"
+}
+
+task cleanDocInWebsite(type: Delete) {
+    delete "../../qavalidator.github.io/static/doc"
+}
+
+
 task docSources(type: Jar) {
     classifier = 'sources'
     from("${project.projectDir}/src") {
