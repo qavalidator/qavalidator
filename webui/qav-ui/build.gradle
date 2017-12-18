@@ -38,3 +38,59 @@ task veryClean(type: Delete) {
 }
 
 veryClean.dependsOn(clean)
+
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from 'src'
+    include '**/*.ts', '**/*.html', '**/*.html', '**/*.css', '**/*.ico'
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+publishing {
+    publications {
+        qavUi(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+
+            pom.withXml {
+                asNode().appendNode('name', "QAvalidator :: ${project.name}")
+                asNode().appendNode('description', project.description)
+                asNode().appendNode('url', project.websiteUrl)
+
+                asNode().children().last() + project.pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
+    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
+    publications = ['qavUi']
+    dryRun = false
+    publish = true
+    pkg {
+        repo = project.bintrayRepo
+        name = project.name
+        desc = project.description
+        licenses = ['Apache-2.0']
+        labels = ['qaware', 'architecture', 'validation']
+        websiteUrl = project.websiteUrl
+        issueTrackerUrl = project.issueTrackerUrl
+        vcsUrl = project.scmUrl
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+            desc = project.description
+            released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
+            vcsTag = "v${project.version}"
+            mavenCentralSync {
+                sync = false
+            }
+        }
+    }
+}
