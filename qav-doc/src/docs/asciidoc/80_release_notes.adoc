@@ -6,7 +6,7 @@
 
 Changes::
 * Changed the way to start the QAvalidator Server for the Web UI:
-  ** The server may be started via Maven Plugin or Gradle Plugin. Refer to the documentation for details on the configuration.
+  ** The server may be started via Maven Plugin or Gradle Plugin. Refer to chapter <<qav-ui>> for details on the configuration.
   ** The stand-alone app now also starts the server. So use `qav-app` instead of `qav-server`.
   ** There is no standalone `qav-server` executable JAR file anymore.
 * Minor changes to the Maven plugin configuration. See the documentation for details.
