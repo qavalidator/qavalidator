@@ -46,6 +46,7 @@ public class DocProcessorTest {
     protected void testAnnotationProcessor(String className, String outputName, String expectedOutputFile) throws IOException {
         Compilation compilation = Compiler.javac()
                 .withProcessors(docProcessor)
+                .withOptions("-A" + DocProcessor.GEN_DOC_DIR_OPTION + "=" + GENERATED_DIR)
                 .compile(JavaFileObjects.forResource(className));
 
         CompilationSubject.assertThat(compilation).succeeded();

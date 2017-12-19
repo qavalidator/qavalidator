@@ -4,12 +4,14 @@ import de.qaware.qav.doc.QavCommand;
 import de.qaware.qav.doc.QavPluginDoc;
 import de.qaware.qav.doc.mapper.CommandDocMapper;
 import de.qaware.qav.doc.mapper.PluginDocMapper;
+import de.qaware.qav.util.FileNameUtil;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedOptions;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -27,7 +29,7 @@ import java.util.Set;
  * String docComment = processingEnv.getElementUtils().getDocComment(e);
  * </code>
  * <p>
- * Therefore we use a workaround and added "description" fields etc to the annotation.
+ * Therefore we use a workaround and add "description" fields etc to the annotation.
  *
  * @author QAware GmbH
  */
@@ -37,7 +39,13 @@ import java.util.Set;
                 "de.qaware.qav.doc.QavPluginDoc"
         }
 )
+@SupportedOptions(DocProcessor.GEN_DOC_DIR_OPTION)
 public class DocProcessor extends AbstractProcessor {
+
+    /**
+     * option name to set the "generated-docs" directory.
+     */
+    public static final String GEN_DOC_DIR_OPTION = "genDocDir";
 
     private static final String DEFAULT_OUTPUT_DIR = "../qav-doc/src-gen/generated-docs";
 
@@ -63,6 +71,13 @@ public class DocProcessor extends AbstractProcessor {
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
         messager = processingEnv.getMessager();
+
+        this.outputDir = processingEnv.getOptions().get(GEN_DOC_DIR_OPTION);
+        if (this.outputDir ==  null) {
+            messager.printMessage(Diagnostic.Kind.WARNING, "No genDocDir set. Using default: " + DEFAULT_OUTPUT_DIR);
+            this.outputDir = DEFAULT_OUTPUT_DIR;
+        }
+        this.outputDir = FileNameUtil.getCanonicalPath(this.outputDir);
         docGenerator = new DocGenerator(new DocFileWriter(this::logError, this.outputDir));
     }
 

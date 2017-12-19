@@ -4,6 +4,7 @@ apply plugin: 'net.ltgt.apt'
 
 compileGroovy {
     groovyOptions.javaAnnotationProcessing = true
+    aptOptions.processorArgs = [genDocDir: project(':qav-doc').projectDir.absolutePath + "/src-gen/generated-docs"]
 }
 
 dependencies {
