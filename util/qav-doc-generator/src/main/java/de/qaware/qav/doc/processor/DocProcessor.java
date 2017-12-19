@@ -39,7 +39,7 @@ import java.util.Set;
 )
 public class DocProcessor extends AbstractProcessor {
 
-    private static final String DEFAULT_OUTPUT_DIR = "qav-doc/src-gen/generated-docs";
+    private static final String DEFAULT_OUTPUT_DIR = "../qav-doc/src-gen/generated-docs";
 
     private final CommandDocMapper commandDocMapper = new CommandDocMapper();
     private final PluginDocMapper pluginDocMapper = new PluginDocMapper();

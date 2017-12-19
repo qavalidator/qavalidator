@@ -39,7 +39,7 @@ import static org.junit.Assert.assertThat;
  */
 public class JavaScopeReaderTest {
 
-    public static final String TEST_CLASSES_ROOT = "build/classes/test";
+    public static final String TEST_CLASSES_ROOT = "build/classes/java/test";
     public static final String BUILD_TEST_OUTPUT_DIR = "build/test-output/";
 
     private DependencyGraph dependencyGraph;

@@ -21,7 +21,7 @@ import static org.junit.Assert.fail;
  */
 public class DependencyReaderTest {
 
-    public static final String TEST_CLASSES_ROOT = "build/classes/test";
+    public static final String TEST_CLASSES_ROOT = "build/classes/java/test";
 
     private DependencyGraph dependencyGraph;
     private DependencyReader dependencyReader;

@@ -1,25 +1,16 @@
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-        jcenter()
-    }
-    dependencies {
-        // provides configurations for annotation processing, and passes the annotation processor to
-        // the javac "-processorpath" option:
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-    }
-}
 
 plugins {
-    id "org.sonarqube" version "2.2"
-    id 'net.researchgate.release' version '2.4.1'
+    id "org.sonarqube" version "2.4"
+    id 'net.researchgate.release' version '2.6.0'
+    // provides configurations for annotation processing, and passes the annotation processor to
+    // the javac "-processorpath" option:
+    id "net.ltgt.apt" version "0.13"
+    id "com.jfrog.bintray" version "1.8.0"
 }
 
 sonarqube {
     properties {
+        // environment variable are set by Jenkins:
         property "sonar.host.url", System.env.SONAR_HOST_URL
         property "sonar.login", System.env.SONAR_AUTH_TOKEN
         property "sonar.projectName", "QAvalidator"
@@ -35,7 +26,6 @@ subprojects {
 
     // for publishing via Bintray
     apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
 
     group = 'de.qaware.qav'
 
@@ -91,7 +81,7 @@ subprojects {
         springDataVersion = "1.13.8.RELEASE"
         jacksonVersion = "2.8.9"
 
-        groovyVersion = "2.4.10"
+        groovyVersion = "2.4.12"
         asmVersion = "5.1"
 
         jgraphtVersion = "1.0.0"
@@ -118,7 +108,7 @@ subprojects {
     }
 
     jacoco {
-        toolVersion = "0.7.7.201606060606"
+        toolVersion = "0.7.9"
         reportsDir = file("$buildDir/customJacocoReportDir")
     }
 
@@ -126,7 +116,7 @@ subprojects {
         reports {
             xml.enabled false
             csv.enabled false
-            html.destination "${buildDir}/jacocoHtml"
+            html.destination file("${buildDir}/jacocoHtml")
         }
     }
 

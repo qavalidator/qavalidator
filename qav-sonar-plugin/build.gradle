@@ -1,6 +1,6 @@
 
 plugins {
-    id "com.iadams.sonar-packaging" version "0.1.4"
+    id "com.iadams.sonar-packaging" version "1.0-RC1"
 }
 
 apply plugin: 'java-library'

@@ -31,57 +31,58 @@ import static org.junit.Assert.fail;
  */
 public class FileNameUtilTest {
 
+    private static final String TEST_CLASSES_DIR = "build/classes/java/test/";
 
     @Test
     public void testIdentifyClassFilesWithAntScanner() {
         Map<String, String> parameters = Maps.newHashMap();
-        parameters.put("baseDir", "build/classes/test");
+        parameters.put("baseDir", TEST_CLASSES_DIR);
         parameters.put("includes", "**/*.class");
 
         List<File> files = FileNameUtil.identifyFiles(parameters);
 
         String thisFileName = this.getClass().getCanonicalName().replaceAll("\\.", "/");
-        File thisTestFile = new File("build/classes/test/" + thisFileName + ".class");
+        File thisTestFile = new File(TEST_CLASSES_DIR + thisFileName + ".class");
         assertThat(files.contains(new File(thisTestFile.getPath())), CoreMatchers.is(true));
 
         String aTestFileName = ProcessUtilTest.class.getCanonicalName().replaceAll("\\.", "/");
-        File aTestFile = new File("build/classes/test/" + aTestFileName + ".class");
+        File aTestFile = new File(TEST_CLASSES_DIR + aTestFileName + ".class");
         assertThat(files.contains(new File(aTestFile.getPath())), CoreMatchers.is(true));
     }
 
     @Test
     public void testIdentifyClassFilesWithAntScannerWithExcludes() {
         Map<String, String> parameters = Maps.newHashMap();
-        parameters.put("baseDir", "build/classes/test");
+        parameters.put("baseDir", TEST_CLASSES_DIR);
         parameters.put("includes", "**/*.class");
         parameters.put("excludes", "**/*Test.class");
 
         List<File> files = FileNameUtil.identifyFiles(parameters);
 
         String thisFileName = this.getClass().getCanonicalName().replaceAll("\\.", "/");
-        File thisTestFile = new File("build/classes/test/" + thisFileName + ".class");
+        File thisTestFile = new File(TEST_CLASSES_DIR + thisFileName + ".class");
         assertThat(files.contains(new File(thisTestFile.getPath())), CoreMatchers.is(false));
 
         String aTestFileName = A.class.getCanonicalName().replaceAll("\\.", "/");
-        File aTestFile = new File("build/classes/test/" + aTestFileName + ".class");
+        File aTestFile = new File(TEST_CLASSES_DIR + aTestFileName + ".class");
         assertThat(files.contains(new File(aTestFile.getPath())), CoreMatchers.is(true));
     }
 
     @Test
     public void testIdentifyClassFilesWithAntScannerWithListIncludesExcludes() {
         Map<String, Object> parameters = Maps.newHashMap();
-        parameters.put("baseDir", "build/classes/test");
+        parameters.put("baseDir", TEST_CLASSES_DIR);
         parameters.put("includes", Arrays.asList("**/*ReaderTest.class", "**/*UtilTest.class"));
         parameters.put("excludes", Collections.singletonList("**/Java*.class"));
 
         List<File> files = FileNameUtil.identifyFiles(parameters);
 
         String aTestFileName = JarFileUtilTest.class.getCanonicalName().replaceAll("\\.", "/");
-        File aTestFile = new File("build/classes/test/" + aTestFileName + ".class");
+        File aTestFile = new File(TEST_CLASSES_DIR + aTestFileName + ".class");
         assertThat(files.contains(new File(aTestFile.getPath())), CoreMatchers.is(true));
 
         String bTestFileName = ClassHandler.class.getCanonicalName().replaceAll("\\.", "/");
-        File bTestFile = new File("build/classes/test/" + bTestFileName + ".class");
+        File bTestFile = new File(TEST_CLASSES_DIR + bTestFileName + ".class");
         assertThat(files.contains(new File(bTestFile.getPath())), CoreMatchers.is(false));
     }
 
@@ -112,7 +113,7 @@ public class FileNameUtilTest {
     @Test(expected = IllegalArgumentException.class)
     public void testIdentifyClassFilesWithWrongInput() {
         Map<String, Object> parameters = Maps.newHashMap();
-        parameters.put("baseDir", "build/classes/test");
+        parameters.put("baseDir", TEST_CLASSES_DIR);
         Set<String> input = new HashSet<>();
         input.add("**/*.class");
         parameters.put("includes", input);
