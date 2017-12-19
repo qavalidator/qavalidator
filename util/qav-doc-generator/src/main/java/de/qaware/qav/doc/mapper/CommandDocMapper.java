@@ -1,6 +1,7 @@
 package de.qaware.qav.doc.mapper;
 
 import de.qaware.qav.doc.QavCommand;
+import de.qaware.qav.doc.QavCommand.Param;
 import de.qaware.qav.doc.model.CommandDoc;
 import de.qaware.qav.doc.model.ParameterDoc;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Mapper for {@link QavCommand}, {@link QavCommand.Param} and {@link CommandDoc}.
+ * Mapper for {@link QavCommand}, {@link Param} and {@link CommandDoc}.
  *
  * @author QAware GmbH
  */
