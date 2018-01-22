@@ -2,6 +2,11 @@
 [[release-notes]]
 = Release Notes
 
+== Relase 1.2.7 (work in progress)
+
+New Features::
+* https://github.com/qavalidator/qavalidator/issues/3[#3]: new command `writeGraphLegend` writes a legend (key) for the graphs exported with `writeDot`. This is useful to see the color code for the dependency types. Also change the colors of the arrows to a more coherent color set.
+
 == Release 1.2.6 -- 04.11.2017
 
 Changes::

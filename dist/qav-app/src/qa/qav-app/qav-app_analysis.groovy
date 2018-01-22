@@ -50,6 +50,7 @@ analysis("Step 4: Export as DOT, GraphML, and JSON") {
     // graphical export as DOT (for GraphViz) and GraphML (for yEd)
     writeDot(architectureTView, "architectureTView", architecture("T-View"))
     writeDot(architectureTViewCycleGraph, "architectureTViewCycleGraph", architecture("T-View"))
+    writeGraphLegend()
 
     // this is to import it into qav-server for interactive exploration of the dependency graph
     writeFile(dependencyGraph, "dependencyGraph.json")

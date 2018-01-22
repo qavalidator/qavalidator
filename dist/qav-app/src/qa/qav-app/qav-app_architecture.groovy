@@ -72,7 +72,7 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
 
     component("Visualization") {
         api "de.qaware.qav.visualization.**"
-        uses "Graph.filter", "Graph.API"
+        uses "Graph.filter", "Graph.API", "Graph.factory"
     }
 
 }

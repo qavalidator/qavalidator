@@ -206,17 +206,35 @@ public class GraphMLExporter {
 
         if (createEdgeLabels) {
             if (dependency.hasProperty(Constants.BASE_REL_COUNT)) {
-                edgeST.setAttribute(EDGE_LABEL_ATT, createEdgeLabelST(dependency.getProperty(Constants.BASE_REL_COUNT, 0), Position.MIDDLE, style.getColor()));
+                edgeST.setAttribute(EDGE_LABEL_ATT, createEdgeLabelST(getCounter(dependency, Constants.BASE_REL_COUNT), Position.MIDDLE, style.getColor()));
             }
             if (dependency.hasProperty(Constants.BASE_REL_COUNT_TARGETS)) {
-                edgeST.setAttribute(EDGE_LABEL_ATT, createEdgeLabelST(dependency.getProperty(Constants.BASE_REL_COUNT_TARGETS, 0), Position.HEAD, style.getColor()));
+                edgeST.setAttribute(EDGE_LABEL_ATT, createEdgeLabelST(getCounter(dependency, Constants.BASE_REL_COUNT_TARGETS), Position.HEAD, style.getColor()));
             }
             if (dependency.hasProperty(Constants.BASE_REL_COUNT_SOURCES)) {
-                edgeST.setAttribute(EDGE_LABEL_ATT, createEdgeLabelST(dependency.getProperty(Constants.BASE_REL_COUNT_SOURCES, 0), Position.TAIL, style.getColor()));
+                edgeST.setAttribute(EDGE_LABEL_ATT, createEdgeLabelST(getCounter(dependency, Constants.BASE_REL_COUNT_SOURCES), Position.TAIL, style.getColor()));
             }
         }
 
         return edgeST;
+    }
+
+    /**
+     * Gets the counter label for the arrow head, tail, or middle.
+     * <p>
+     * Usually, this is the counter, i.e. an Integer. However, for the Legend creation, we write the Dependency type's
+     * name, so it's a String. Therefore, this method returns Object.
+     *
+     * @param dependency the dependency
+     * @param key        the property key to read
+     * @return the value of the property, or "0" as default
+     */
+    private Object getCounter(Dependency dependency, String key) {
+        Object counter = dependency.getProperty(key);
+        if (counter == null) {
+            counter = 0;
+        }
+        return counter;
     }
 
     private enum Position {
@@ -236,7 +254,7 @@ public class GraphMLExporter {
         }
     }
 
-    private StringTemplate createEdgeLabelST(Integer counter, Position position, String color) {
+    private StringTemplate createEdgeLabelST(Object counter, Position position, String color) {
         StringTemplate edgeLabelST = templates.getInstanceOf(EDGE_LABEL_ST);
         edgeLabelST.setAttribute("name", counter);
         edgeLabelST.setAttribute("position", position.getPosValue());

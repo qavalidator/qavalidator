@@ -100,4 +100,13 @@ class IOQavPluginTest {
     void testDefaultDir() {
         assert ioQavPlugin.outputDir == "./"
     }
+
+    @Test
+    void testWriteLegend() {
+        ioQavPlugin.setOutputDir("build/test-output/")
+        ioQavPlugin.writeGraphLegend("legend")
+
+        File legendFile = new File("build/test-output", "legend.png")
+        assert legendFile.exists()
+    }
 }

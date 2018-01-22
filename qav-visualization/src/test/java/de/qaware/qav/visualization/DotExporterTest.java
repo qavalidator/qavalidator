@@ -28,7 +28,7 @@ public class DotExporterTest extends AbstractExporterTest {
         String graphML = FileSystemUtil.readFileAsText(fileNameBase + ".dot");
         assertThat(graphML, notNullValue());
         assertThat(graphML, containsString("root.c1.n1"));
-        assertThat(graphML, containsString("_root_c1 -> _root_c2 [ color = \"#000000\", fontcolor = \"#000000\", penwidth = 3.0, style = dashed , label=\"2\", headlabel=\"1\", taillabel=\"2\"];"));
+        assertThat(graphML, containsString("_root_c1 -> _root_c2 [ color = \"#67001f\", fontcolor = \"#67001f\", penwidth = 3.0, style = dashed , label=\"2\", headlabel=\"1\", taillabel=\"2\"];"));
     }
 
     @Test

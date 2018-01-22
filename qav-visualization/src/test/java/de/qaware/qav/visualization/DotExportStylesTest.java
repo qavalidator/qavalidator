@@ -38,7 +38,7 @@ public class DotExportStylesTest {
     public void testGetEdgeStyle()  {
         Dependency dependency = mock(Dependency.class);
         when(dependency.getDependencyType()).thenReturn(DependencyType.CREATE);
-        assertThat(DotExportStyles.getEdgeStyle(dependency), is("color = \"#000000\", fontcolor = \"#000000\", penwidth = 3.0, style = solid"));
+        assertThat(DotExportStyles.getEdgeStyle(dependency), is("color = \"#b2182b\", fontcolor = \"#b2182b\", penwidth = 3.0, style = solid"));
     }
 
     @Test

@@ -1,17 +1,18 @@
 package de.qaware.qav.analysis.plugins.output
 
+import de.qaware.qav.analysis.dsl.model.Analysis
 import de.qaware.qav.analysis.plugins.base.BasePlugin
 import de.qaware.qav.analysis.plugins.output.impl.SonarLogUtil
+import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
-import de.qaware.qav.analysis.dsl.model.Analysis
-import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.graph.api.DependencyGraph
 import de.qaware.qav.graph.api.Node
 import de.qaware.qav.graph.io.GraphReaderWriter
 import de.qaware.qav.graph.io.NodePrinter
 import de.qaware.qav.visualization.Abbreviation
 import de.qaware.qav.visualization.GraphExporter
+import de.qaware.qav.visualization.LegendCreator
 import groovy.util.logging.Slf4j
 import org.apache.commons.io.FileUtils
 
@@ -21,7 +22,7 @@ import org.apache.commons.io.FileUtils
  * @author QAware GmbH
  */
 @QavPluginDoc(name = "IOQavPlugin",
-        description = "QAV Language elements for Input/Output, writing JSON, DOT, or text-format Node infos")
+        description = "QAvalidator Language elements for Input/Output, writing JSON, DOT, or text-format Node infos")
 @Slf4j
 class IOQavPlugin extends BasePlugin {
 
@@ -37,6 +38,7 @@ class IOQavPlugin extends BasePlugin {
         analysis.register("printNodes", this.&printNodes)
         analysis.register("writeFile", this.&writeFile)
         analysis.register("writeDot", this.&writeDot)
+        analysis.register("writeGraphLegend", this.&writeGraphLegend)
         analysis.register("outputDir", this.&setOutputDir)
     }
 
@@ -137,7 +139,7 @@ class IOQavPlugin extends BasePlugin {
      * Also writes a GraphML file with the same base filename, to be used with yEd.
      *
      * @param dependencyGraph the graph
-     * @param filename the filename
+     * @param filenameBase the file name base, used to set up the .dot, .png, and .graphml file names
      * @param architecture the {@link Architecture} to use to show the hierarchy of the nodes
      */
     @QavCommand(name = "writeDot",
@@ -165,8 +167,32 @@ class IOQavPlugin extends BasePlugin {
                             """),
 
             ])
-    void writeDot(DependencyGraph dependencyGraph, String filename, Architecture architecture, boolean createEdgeLabels = true) {
-        GraphExporter.export(dependencyGraph, this.outputDir + "/" + filename, architecture, this.abbreviations, createEdgeLabels)
+    void writeDot(DependencyGraph dependencyGraph, String filenameBase, Architecture architecture, boolean createEdgeLabels = true) {
+        GraphExporter.export(dependencyGraph, this.outputDir + "/" + filenameBase, architecture, this.abbreviations, createEdgeLabels)
+    }
+
+    /**
+     * Writes the graph legend with the given filename base in the directory defined as outputDir.
+     * Then calls dot (GraphViz) to create a .png file from it.
+     * Also writes a GraphML file with the same base filename, to be used with yEd.
+     *
+     * This is useful to see the color code for the dependency types.
+     *
+     * @param filenameBase the filename base, relative to outputDir, defaults to 'legend'
+     */
+    @QavCommand(name = "writeGraphLegend",
+            description = """
+                        Writes the graph legend with the given filename base in the directory defined as outputDir.
+                        Then calls dot (GraphViz) to create a .png file from it.
+                        Also writes a GraphML file with the same base filename, to be used with yEd.
+                        
+                        This is useful to see the color code for the dependency types.
+                    """,
+            parameters = [
+                    @QavCommand.Param(name = "filenameBase", description = "the filename base, relative to outputDir; defaults to `legend`")
+            ])
+    void writeGraphLegend(String filenameBase = "legend") {
+        new LegendCreator().export(this.outputDir + "/" + filenameBase)
     }
 
     /**
