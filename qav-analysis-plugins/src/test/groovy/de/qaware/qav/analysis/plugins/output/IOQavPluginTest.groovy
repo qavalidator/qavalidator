@@ -106,7 +106,7 @@ class IOQavPluginTest {
         ioQavPlugin.setOutputDir("build/test-output/")
         ioQavPlugin.writeGraphLegend("legend")
 
-        File legendFile = new File("build/test-output", "legend.png")
+        File legendFile = new File("build/test-output", "legend.dot")
         assert legendFile.exists()
     }
 }
