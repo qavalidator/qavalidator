@@ -16,6 +16,7 @@ public class LegendCreatorTest {
         String filenameBase = "build/test-output/legend";
         new LegendCreator().export(filenameBase);
 
-        assertThat("Output missing: " + filenameBase, FileSystemUtil.checkFileOrResourceExists(filenameBase + ".png"));
+        String filename = filenameBase + ".dot";
+        assertThat("Output missing: " + filename, FileSystemUtil.checkFileOrResourceExists(filename));
     }
 }
