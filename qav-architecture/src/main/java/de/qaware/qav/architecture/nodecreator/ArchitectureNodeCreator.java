@@ -58,7 +58,8 @@ public final class ArchitectureNodeCreator {
         node.setProperty(Constants.TYPE, "architecture");
         node.setProperty(Constants.ARCHITECTURE, architectureName);
         node.setProperty(architectureName, true);
-        node.setProperty(Constants.USES, component.allUsesComponents());
+        node.setProperty(Constants.USES_API, component.allUsesAPIs());
+        node.setProperty(Constants.USES_IMPL, component.allUsesImpl());
 
         for (Component child : component.getChildren()) {
             Node childNode = createArchitectureNodes(baseGraph, child, architectureName);

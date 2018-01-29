@@ -13,16 +13,16 @@ class ComponentTest {
     void testAllUses() {
         Component component = new Component()
 
-        component.uses["A"] = new ClassSet("A", ["a", "b", "c"])
-        component.uses["B"] = new ClassSet("B", ["c", "d", "e"])
+        component.usesAPI["A"] = new ClassSet("A", ["a", "b", "c"])
+        component.usesAPI["B"] = new ClassSet("B", ["c", "d", "e"])
 
-        assert component.allUsesComponents() == ["a", "b", "c", "c", "d", "e"]
+        assert component.allUsesAPIs() == ["a", "b", "c", "c", "d", "e"]
     }
 
     @Test
     void testAllUsesNoInput() {
         Component component = new Component()
-        assert component.allUsesComponents() == []
+        assert component.allUsesAPIs() == []
     }
 
     @Test

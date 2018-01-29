@@ -160,6 +160,11 @@ It's allowed to define the `uses` keyword more than once. +
 Note that this keyword takes the list of _API names_, not component names. Note also that for components which offer
 only one API, the API name defaults to the component's name.
 
+usesImpl::
+The keyword `usesImpl` defines all implementation parts this component may use.
+It's allowed to define the `usesImpl` keyword more than once.
+This feature exists to be able to define factories which need to create instances of a specific implementation class; it is also useful e.g. for Spring 4 configurations.
+
 excludes::
 (Formerly also: `ignore`.)
 The keyword `excludes` allows to define a list of patterns (Ant-style) which match classes that should be ignored in the

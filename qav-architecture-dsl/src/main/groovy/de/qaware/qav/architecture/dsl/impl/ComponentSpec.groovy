@@ -88,14 +88,32 @@ class ComponentSpec {
 
     void uses(String... patterns) {
         log.debug("component uses: ${patterns}")
-        ClassSet set = getClassSet(component.uses, name)
+        ClassSet set = getClassSet(component.usesAPI, name)
         set.addPatterns(patterns)
     }
 
     void uses(Map<String, String[]> values) {
         log.debug("uses definition: ${values}")
         values.each {usesName, patterns ->
-            ClassSet set = getClassSet(component.uses, usesName)
+            ClassSet set = getClassSet(component.usesAPI, usesName)
+            set.addPatterns(patterns)
+        }
+    }
+
+    /*
+     * keyword "usesImpl"
+     */
+
+    void usesImpl(String... patterns) {
+        log.debug("component usesImpl: ${patterns}")
+        ClassSet set = getClassSet(component.usesImpl, name)
+        set.addPatterns(patterns)
+    }
+
+    void usesImpl(Map<String, String[]> values) {
+        log.debug("usesImpl definition: ${values}")
+        values.each {usesImplName, patterns ->
+            ClassSet set = getClassSet(component.usesImpl, usesImplName)
             set.addPatterns(patterns)
         }
     }

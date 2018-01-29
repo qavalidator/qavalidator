@@ -48,11 +48,12 @@ public final class DependencyMapper {
         if (parentFrom != null && parentTo != null && !parentFrom.equals(parentTo)) {
             Dependency architectureDependency = dependencyGraph.addDependency(parentFrom, parentTo, dep.getDependencyType());
             architectureDependency.addBaseDependency(dep);
-            // if there is at least one base dependency which depends on an Impl class, it's marked as DEPENDS_ON_IMPL
-            boolean isImpl = architectureDependency.getProperty(DEPENDS_ON_IMPL, false)
-                    || baseTo.getProperty(tag + Constants.IMPL_SUFFIX, false);
-            architectureDependency.setProperty(DEPENDS_ON_IMPL, isImpl);
+
+            // the *dependency* goes from component to component.
+            // the architecture definition, however, checks if the *API* (or the Impl) may be accessed.
+            // So we need to note the *API* name or *Impl* name that this dependency goes to.
             architectureDependency.addListProperty(Constants.TARGET_API, baseTo.getProperty(tag + Constants.PARENT_API_SUFFIX));
+            architectureDependency.addListProperty(Constants.TARGET_IMPL, baseTo.getProperty(tag + Constants.PARENT_IMPL_SUFFIX));
         }
     }
 }

@@ -19,7 +19,8 @@ class Component {
     List<Component> children = []
     Map<String, ClassSet> api = [:]
     Map<String, ClassSet> impl = [:]
-    Map<String, ClassSet> uses = [:]
+    Map<String, ClassSet> usesAPI = [:]
+    Map<String, ClassSet> usesImpl = [:]
     String pathSeparator = null
 
     @Override
@@ -30,7 +31,8 @@ class Component {
                 .append("children", children)
                 .append("api", api)
                 .append("impl", impl)
-                .append("uses", uses)
+                .append("usesAPI", usesAPI)
+                .append("usesImpl", usesImpl)
                 .append("pathSeparator", pathSeparator)
                 .toString()
     }
@@ -42,20 +44,34 @@ class Component {
      * @return the name of the API the given class name belongs to, or null if none matches.
      */
     String getApiName(String name) {
-        for (Map.Entry<String, ClassSet> entry : api.entrySet()) {
+        return findMatch(api, name)
+    }
+
+    /**
+     * return the name of the Impl the given class name belongs to, or null if none matches.
+     *
+     * @param name the class name
+     * @return the name of the Impl the given class name belongs to, or null if none matches.
+     */
+    String getImplName(String name) {
+        return findMatch(impl, name)
+    }
+
+    boolean isApi(String name) {
+        return getApiName(name) != null
+    }
+
+    boolean isImpl(String name) {
+        return getImplName(name) != null
+    }
+
+    private String findMatch(Map<String, ClassSet> baseMap, String name) {
+        for (Map.Entry<String, ClassSet> entry : baseMap.entrySet()) {
             if (entry.value.matches(name)) {
                 return entry.key
             }
         }
         return null
-    }
-
-    boolean isApi(String name) {
-        return (api.values().any {it.matches(name)})
-    }
-
-    boolean isImpl(String name) {
-        return (impl.values().any {it.matches(name)})
     }
 
     /**
@@ -75,13 +91,26 @@ class Component {
     }
 
     /**
-     * returns a list of all component names that this {@link Component} is allowed to use.
+     * returns a list of all API names that this {@link Component} is allowed to use.
      *
-     * @return the list of component names
+     * @return the list of API names
      */
-    List<String> allUsesComponents() {
+    List<String> allUsesAPIs() {
         List<String> result = []
-        uses.values()*.getPatterns().each {
+        usesAPI.values()*.getPatterns().each {
+            result.addAll it
+        }
+        result
+    }
+
+    /**
+     * returns a list of all Impl names that this {@link Component} is allowed to use.
+     *
+     * @return the list of implementation names
+     */
+    List<String> allUsesImpl() {
+        List<String> result = []
+        usesImpl.values()*.getPatterns().each {
             result.addAll it
         }
         result

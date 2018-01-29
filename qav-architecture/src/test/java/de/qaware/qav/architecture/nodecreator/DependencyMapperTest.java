@@ -8,7 +8,6 @@ import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
 import org.junit.Test;
 
-import static de.qaware.qav.architecture.nodecreator.DependencyMapper.DEPENDS_ON_IMPL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -22,7 +21,7 @@ import static org.junit.Assert.assertThat;
 public class DependencyMapperTest {
 
     @Test
-    public void testMap() throws Exception {
+    public void testMap() {
         DependencyGraph dependencyGraph = DependencyGraphFactory.createGraph();
 
         Node a = dependencyGraph.getOrCreateNodeByName("X.A");
@@ -33,8 +32,6 @@ public class DependencyMapperTest {
         Node e = dependencyGraph.getOrCreateNodeByName("Y.E");
         Node f = dependencyGraph.getOrCreateNodeByName("Y.E.f");
         Node g = dependencyGraph.getOrCreateNodeByName("Y.E.g");
-
-        g.setProperty("Package-impl", true);
 
         dependencyGraph.addDependency(b, c, DependencyType.CREATE);
         dependencyGraph.addDependency(b, d, DependencyType.CREATE);
@@ -55,7 +52,6 @@ public class DependencyMapperTest {
 
         assertThat(dependencyGraph.getEdge(a, e), notNullValue());
         assertThat(dependencyGraph.getEdge(a, e).getDependencyType(), is(DependencyType.INHERIT));
-        assertThat(dependencyGraph.getEdge(a, e).getProperty(DEPENDS_ON_IMPL), is(true));
 
         assertThat(dependencyGraph.getEdge(x, y), nullValue());
     }

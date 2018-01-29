@@ -55,7 +55,7 @@ public class AllExplicitRulesUsedChecker extends Checker {
             return;
         }
 
-        List<String> uses = node.getProperty(Constants.USES, new ArrayList<String>());
+        List<String> uses = node.getProperty(Constants.USES_API, new ArrayList<String>());
         List<String> usedRules = node.getProperty(Constants.USED_RULES, new ArrayList<String>());
 
         uses.stream()

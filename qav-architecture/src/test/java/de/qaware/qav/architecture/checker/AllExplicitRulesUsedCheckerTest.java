@@ -37,7 +37,7 @@ public class AllExplicitRulesUsedCheckerTest extends AbstractArchitectureChecker
 
         Component component = packageArchitecture.getParentComponent("com.my.a.b");
         assertThat(component, notNullValue());
-        component.getUses().put("newRule", new ClassSet("newRule", Lists.newArrayList("com.my.a.e")));
+        component.getUsesAPI().put("newRule", new ClassSet("newRule", Lists.newArrayList("com.my.a.e")));
         new DependencyChecker(architectureGraph, packageArchitecture);
 
         AllExplicitRulesUsedChecker checker = new AllExplicitRulesUsedChecker(architectureGraph, packageArchitecture);
@@ -50,7 +50,7 @@ public class AllExplicitRulesUsedCheckerTest extends AbstractArchitectureChecker
         init(false, false);
 
         @SuppressWarnings("unchecked")
-        List<String> uses = (List<String>) architectureGraph.getNode("com.my.a").getProperty(Constants.USES);
+        List<String> uses = (List<String>) architectureGraph.getNode("com.my.a").getProperty(Constants.USES_API);
         uses.add("com.my.other");
         new DependencyChecker(architectureGraph, packageArchitecture);
 

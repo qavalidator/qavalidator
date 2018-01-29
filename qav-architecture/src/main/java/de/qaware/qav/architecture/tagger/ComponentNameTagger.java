@@ -71,9 +71,7 @@ public final class ComponentNameTagger {
             if (component != null) {
                 node.setProperty(name + Constants.PARENT_SUFFIX, component.getName());
                 node.setProperty(name + Constants.PARENT_API_SUFFIX, component.getApiName(node.getName()));
-                boolean isImpl = node.getProperty(name + Constants.IMPL_SUFFIX, false)
-                        || component.isImpl(node.getName());
-                node.setProperty(name + Constants.IMPL_SUFFIX, isImpl);
+                node.setProperty(name + Constants.PARENT_IMPL_SUFFIX, component.getImplName(node.getName()));
             } else {
                 LOGGER.warn("Node {} is not mapped to any component", node.getName());
                 node.setProperty(name + Constants.UNMAPPED_SUFFIX, true);

@@ -60,7 +60,7 @@ class ArchitectureDSLTest {
         assert architecture.impl["Test-1"].patterns == [ "my.impl.**", "my.util.**" ]
         assert architecture.impl["test-only"].patterns == [ "my.test.util.**"]
         assert architecture.impl["other-test"].patterns == [ "my.other.test.**"]
-        assert architecture.uses["Test-1"].patterns == [ "3rd-Party" ]
+        assert architecture.usesAPI["Test-1"].patterns == ["3rd-Party" ]
         assert architecture.allComponents.size() == 4
 
         Component[] children = architecture.children
@@ -137,7 +137,7 @@ class ArchitectureDSLTest {
         assert architecture.impl["Test-1"].patterns == [ "my/impl/**", "my/util/**" ]
         assert architecture.impl["test-only"].patterns == [ "my/test/util/**"]
         assert architecture.impl["other-test"].patterns == [ "my/other/test/**"]
-        assert architecture.uses["Test-1"].patterns == [ "3rd-Party" ]
+        assert architecture.usesAPI["Test-1"].patterns == ["3rd-Party" ]
         assert architecture.allComponents.size() == 4
 
         Component[] children = architecture.children

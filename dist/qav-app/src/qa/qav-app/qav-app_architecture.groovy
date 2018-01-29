@@ -24,7 +24,7 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
     component("AnalysisPlugins") {
         api "de.qaware.qav.analysis.plugins.**"
 
-        uses "Graph.filter", "Graph.API"
+        uses "Graph.filter", "Graph.base"
     }
 
     component("ArchitectureDSL") {
@@ -39,15 +39,23 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
         api "de.qaware.qav.architecture.nodecreator.*"
         api "de.qaware.qav.architecture.tagger.*"
 
-        uses "Graph.API"
+        uses "Graph.base"
     }
 
     component("Graph") {
-        component("Graph.API") {api "de.qaware.qav.graph.api.*"}
-        component("Graph.Impl") {impl "de.qaware.qav.graph.impl.*"}
+        component("Graph.base") {
+            api "de.qaware.qav.Graph.base.*"
+            impl "de.qaware.qav.graph.impl.*"
+        }
 
-        component("Graph.alg") {api "de.qaware.qav.graph.alg.*"}
-        component("Graph.factory") {api "de.qaware.qav.graph.factory.*"}
+        component("Graph.alg") {
+            api "de.qaware.qav.graph.alg.*"
+            usesImpl "Graph.base" // Exception from the rule: some algorithms expect a specific graph implementation to work
+        }
+        component("Graph.factory") {
+            api "de.qaware.qav.graph.factory.*"
+            usesImpl "Graph.base" // Factory pattern: the factory has to instantiate a specific implementation class
+        }
         component("Graph.filter") {api "de.qaware.qav.graph.filter.*"}
         component("Graph.io") {api "de.qaware.qav.graph.io.*"}
         component("Graph.index") {api "de.qaware.qav.graph.index.*"}
@@ -58,12 +66,12 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
         component("MavenInput") {api "de.qaware.qav.input.maven.**"}
         component("TypescriptInput") {api "de.qaware.qav.input.typescript.**"}
 
-        uses "Graph.API"
+        uses "Graph.base"
     }
 
     component("Server") {
         api "de.qaware.qav.server.**"
-        uses "Graph.API", "Graph.io", "Graph.index"
+        uses "Graph.base", "Graph.io", "Graph.index"
     }
 
     component("Util") {
@@ -72,7 +80,7 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
 
     component("Visualization") {
         api "de.qaware.qav.visualization.**"
-        uses "Graph.filter", "Graph.API", "Graph.factory"
+        uses "Graph.filter", "Graph.base", "Graph.factory"
     }
 
 }
