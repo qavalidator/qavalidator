@@ -42,11 +42,9 @@ public final class ArchitectureNodeTagger {
         Component parentComponent = architecture.getParentComponent(node.getName());
         if (parentComponent != null) {
             Node parentNode = graph.getNode(parentComponent.getName());
-            if (parentNode != null) {
-                // only recurse if the parent has not yet been visited:
-                if (!parentNode.hasProperty(tag)) {
-                    tagNode(graph, parentNode, architecture, tag);
-                }
+            // only recurse if the parent has not yet been visited:
+            if (parentNode != null && !parentNode.hasProperty(tag)) {
+                tagNode(graph, parentNode, architecture, tag);
             }
         }
     }
