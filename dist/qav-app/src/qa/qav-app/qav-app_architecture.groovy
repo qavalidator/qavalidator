@@ -44,21 +44,21 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
 
     component("Graph") {
         component("Graph.base") {
-            api "de.qaware.qav.Graph.base.*"
-            impl "de.qaware.qav.graph.impl.*"
+            api "de.qaware.qav.graph.api.**"
+            impl "de.qaware.qav.graph.impl.**"
         }
 
         component("Graph.alg") {
-            api "de.qaware.qav.graph.alg.*"
+            api "de.qaware.qav.graph.alg.**"
             usesImpl "Graph.base" // Exception from the rule: some algorithms expect a specific graph implementation to work
         }
         component("Graph.factory") {
-            api "de.qaware.qav.graph.factory.*"
+            api "de.qaware.qav.graph.factory.**"
             usesImpl "Graph.base" // Factory pattern: the factory has to instantiate a specific implementation class
         }
-        component("Graph.filter") {api "de.qaware.qav.graph.filter.*"}
-        component("Graph.io") {api "de.qaware.qav.graph.io.*"}
-        component("Graph.index") {api "de.qaware.qav.graph.index.*"}
+        component("Graph.filter") {api "de.qaware.qav.graph.filter.**"}
+        component("Graph.io") {api "de.qaware.qav.graph.io.**"}
+        component("Graph.index") {api "de.qaware.qav.graph.index.**"}
     }
 
     component("Input") {
