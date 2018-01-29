@@ -39,22 +39,16 @@ analysis("Step 2: Create and analyze T-View architecture graph") {
     // the input scope (leaving out referenced 3rd-party classes).
     architectureTView = createArchitectureView(allClassesGraph, architecture("T-View"))
     architectureTViewOnInput = createArchitectureView(inputClassesGraph, architecture("T-View"), "T-View-on-Input")
-}
 
-analysis("Step 3: Analyze and check for violations") {
     // Check all architecture rules: all relations must be covered in the architecture definition, all components must
     // actually be implemented, and all rules in the architecture file are really used.
     checkArchitectureRules(architectureTView, architecture("T-View"))
-
-    // Find cycles on the component level
-    architectureTViewCycleGraph = findCycles(architectureTView, "T-View")
 }
 
-analysis("Step 4: Export as DOT, GraphML, and JSON") {
+analysis("Step 3: Export as DOT, GraphML, and JSON") {
     // graphical export as DOT (for GraphViz) and GraphML (for yEd)
     writeDot(architectureTView, "architectureTView", architecture("T-View"))
     writeDot(architectureTView.filter(nodeNameOutFilter("Apache Commons", "Guava", "Groovy", "3rdParty")), "architectureTView.short", architecture("T-View"))
-    writeDot(architectureTViewCycleGraph, "architectureTViewCycleGraph", architecture("T-View"))
     writeDot(architectureTViewOnInput, "architectureTViewOnInput", architecture("T-View"))
 
     // this is to import it into qav-server for interactive exploration of the dependency graph
