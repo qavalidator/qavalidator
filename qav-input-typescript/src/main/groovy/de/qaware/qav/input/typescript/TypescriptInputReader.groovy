@@ -11,7 +11,8 @@ import groovy.util.logging.Slf4j
  * Reads an input file from the Typescript dependency analyzer, and writes those classes, methods, and relations
  * into the given {@link DependencyGraph}.
  *
- * The Typescript dependency analyzer creates an XML export file with nodes and edges.
+ * The Typescript dependency analyzer (which is a piece of Typescript software that runs in the Typescript/JavaScript
+ * build process) creates an XML export file with nodes and edges.
  *
  * @author QAware GmbH
  */
@@ -51,6 +52,11 @@ class TypescriptInputReader {
         readDependencies(input)
     }
 
+    /**
+     * Map the XML nodes to QAvalidator nodes.
+     *
+     * @param input the XML nodes
+     */
     private void readNodes(Node input) {
         QavNode rootNode = dependencyGraph.getOrCreateNodeByName(ROOT_NODE_NAME)
 
@@ -60,6 +66,12 @@ class TypescriptInputReader {
         }
     }
 
+    /**
+     * Create QAvalidator nodes. Imported as "QavNode" to avoid confusion with Groovy's XML Node.
+     *
+     * @param entity     the node representing an entity
+     * @param parentNode the parent QAvalidator node
+     */
     private void addEntity(Node entity, QavNode parentNode) {
         String name = entity['@name']
         String nodeName = (parentNode.name == ROOT_NODE_NAME) ? name : "${parentNode.getName()}#${name}"
@@ -88,12 +100,22 @@ class TypescriptInputReader {
         }
     }
 
+    /**
+     * Read the "dependencies" part of the input file.
+     *
+     * @param input the XML input
+     */
     private void readDependencies(Node input) {
         input.dependencies.dependency.each {
             addDependency(it)
         }
     }
 
+    /**
+     * Map the dependencies and write them into the {@link DependencyGraph}.
+     *
+     * @param dependencyNode the XML node representing a dependency
+     */
     private void addDependency(Node dependencyNode) {
         Integer fromId = Integer.parseInt(dependencyNode['@from'] as String)
         QavNode fromNode = nodeMap[fromId]
@@ -106,6 +128,9 @@ class TypescriptInputReader {
         dependency.setProperty("typescript.type", type)
     }
 
+    /**
+     * Map from Typescript analyzer's dependency types to QAvalidator's {@link DependencyType}
+     */
     public static final Map<String, DependencyType> DEPENDENCY_TYPE_MAP = [
             "Import"          : DependencyType.REFERENCE,
             "Extends"         : DependencyType.INHERIT,

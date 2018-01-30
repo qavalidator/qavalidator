@@ -31,6 +31,9 @@ import java.util.List;
 
 /**
  * REST controller to access the Dependency Graph.
+ * <p>
+ * This controller reads the JSON file and keeps it in memory. It creates an in-memory Lucene index to offer a nice and
+ * flexible search interface.
  *
  * @author QAware GmbH
  */
@@ -56,6 +59,8 @@ public class GraphController {
 
     /**
      * Read the graph file.
+     * <p>
+     * Check that the file exists, and create the search index.
      */
     @PostConstruct
     public void init() {
@@ -92,19 +97,25 @@ public class GraphController {
      * Find the node with the given name.
      *
      * @param name the name of the node
-     * @return the node, or null if not found.
+     * @return the node
+     * @throws NotFoundException if the node was not found
      */
     @RequestMapping("/node")
     public NodeDTO getNode(@RequestParam(value = "name") String name) {
         LOGGER.info("Node: {}", name);
 
+        Node result = findNode(name);
+        return NodeMapper.toDTO(result, dependencyGraph);
+    }
+
+    private Node findNode(String name) {
         Node result = dependencyGraph.getNode(name);
         if (result == null) {
-            String message = "Node " + name + " not found.";
+            String message = MessageFormat.format("Node {0} not found", name);
             LOGGER.error(message);
             throw new NotFoundException(message);
         }
-        return NodeMapper.toDTO(result, dependencyGraph);
+        return result;
     }
 
     /**
@@ -120,23 +131,12 @@ public class GraphController {
                                  @RequestParam("to") String to) {
         LOGGER.info("Edge: from {} to {}", from, to);
 
-        Node fromNode = dependencyGraph.getNode(from);
-        Node toNode = dependencyGraph.getNode(to);
-
-        if (fromNode == null) {
-            String message = "Node " + from + " not found.";
-            LOGGER.error(message);
-            throw new NotFoundException(message);
-        }
-        if (toNode == null) {
-            String message = "Node " + to + " not found.";
-            LOGGER.error(message);
-            throw new NotFoundException(message);
-        }
+        Node fromNode = findNode(from);
+        Node toNode = findNode(to);
 
         Dependency edge = dependencyGraph.getEdge(fromNode, toNode);
         if (edge == null) {
-            String message = "No edge from " + from + " to " + to;
+            String message = MessageFormat.format("No edge from {0} to {1}", from, to);
             LOGGER.error(message);
             throw new NotFoundException(message);
         }
@@ -147,8 +147,8 @@ public class GraphController {
     /**
      * Find all nodes, paged.
      *
-     * @param query    query string; optional, defaults to "find all". If given, uses the "AOP Pointcut syntax" to find
-     *                 names.
+     * @param query    query string; optional, defaults to "find all". If given, uses the Lucene query syntax to find
+     *                 names
      * @param pageable page information; optional, defaults to page 0 and size 20
      * @return the result page
      */
