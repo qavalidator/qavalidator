@@ -27,12 +27,6 @@ public class AndFilter implements NodeFilter {
 
     @Override
     public boolean isAccepted(Node node) {
-        for (NodeFilter filter : baseFilters) {
-            if (!filter.isAccepted(node)) {
-                return false;
-            }
-        }
-
-        return true;
+        return baseFilters.stream().allMatch(filter -> filter.isAccepted(node));
     }
 }

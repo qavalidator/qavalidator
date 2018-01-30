@@ -8,7 +8,7 @@ import de.qaware.qav.graph.api.EdgeFilter;
  *
  * @author QAware GmbH
  */
-public class DependencyPropertyInFilter extends PropertyInFilter<Dependency> implements EdgeFilter {
+public class DependencyPropertyInFilter extends AbstractPropertyInFilter<Dependency> implements EdgeFilter {
 
     /**
      * Constructor.

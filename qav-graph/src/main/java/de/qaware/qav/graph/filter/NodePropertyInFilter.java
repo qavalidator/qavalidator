@@ -8,7 +8,7 @@ import de.qaware.qav.graph.api.NodeFilter;
  *
  * @author QAware GmbH
  */
-public class NodePropertyInFilter extends PropertyInFilter<Node> implements NodeFilter {
+public class NodePropertyInFilter extends AbstractPropertyInFilter<Node> implements NodeFilter {
 
     /**
      * Constructor.

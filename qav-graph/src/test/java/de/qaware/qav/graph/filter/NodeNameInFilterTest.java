@@ -42,7 +42,7 @@ public class NodeNameInFilterTest {
         assertThat(filter.isAccepted(new Node("other.Clazz")), is(false));
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testNullInput() {
         assertThat(new NodeNameInFilter("x*").isAccepted(null), is(false));
     }

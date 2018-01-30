@@ -14,14 +14,14 @@ import java.util.Set;
  * @param <T> the graph element type
  * @author QAware GmbH
  */
-public abstract class PropertyExistsFilter<T extends AbstractGraphElement> {
+public abstract class AbstractPropertyExistsFilter<T extends AbstractGraphElement> {
 
     private final Set<String> propertyNames = Sets.newHashSet();
 
     /**
      * Default constructor.
      */
-    public PropertyExistsFilter() {
+    public AbstractPropertyExistsFilter() {
     }
 
     /**
@@ -29,7 +29,7 @@ public abstract class PropertyExistsFilter<T extends AbstractGraphElement> {
      *
      * @param property the property name to check for
      */
-    public PropertyExistsFilter(String property) {
+    public AbstractPropertyExistsFilter(String property) {
         addFilter(property);
     }
 
@@ -39,7 +39,7 @@ public abstract class PropertyExistsFilter<T extends AbstractGraphElement> {
      * @param property property name
      * @return <code>this</code>
      */
-    public final PropertyExistsFilter addFilter(String property) {
+    public final AbstractPropertyExistsFilter addFilter(String property) {
         propertyNames.add(property);
         return this;
     }
@@ -51,12 +51,6 @@ public abstract class PropertyExistsFilter<T extends AbstractGraphElement> {
      * @return <tt>true</tt> if the element will be in, <tt>false</tt> if it is out
      */
     public boolean isAccepted(T graphElement) {
-        for (String key : propertyNames) {
-            if (!graphElement.getProperties().containsKey(key)) {
-                return false;
-            }
-        }
-
-        return true;
+        return propertyNames.stream().allMatch(key -> graphElement.getProperties().containsKey(key));
     }
 }

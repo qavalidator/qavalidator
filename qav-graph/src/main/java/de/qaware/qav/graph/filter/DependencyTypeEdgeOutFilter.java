@@ -28,11 +28,6 @@ public class DependencyTypeEdgeOutFilter implements EdgeFilter {
 
     @Override
     public boolean isAccepted(Dependency edge) {
-        for (DependencyType dependencyType : unwantedTypes) {
-            if (edge.getDependencyType().equals(dependencyType)) {
-                return false;
-            }
-        }
-        return true;
+        return unwantedTypes.stream().noneMatch(unwantedType -> edge.getDependencyType().equals(unwantedType));
     }
 }

@@ -27,12 +27,6 @@ public class OrFilter implements NodeFilter {
 
     @Override
     public boolean isAccepted(Node node) {
-        for (NodeFilter filter : baseFilters) {
-            if (filter.isAccepted(node)) {
-                return true;
-            }
-        }
-
-        return false;
+        return baseFilters.stream().anyMatch(filter -> filter.isAccepted(node));
     }
 }

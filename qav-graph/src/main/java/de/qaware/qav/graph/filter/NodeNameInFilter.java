@@ -50,16 +50,6 @@ public class NodeNameInFilter implements NodeFilter {
 
     @Override
     public boolean isAccepted(Node node) {
-        if (node == null) {
-            return false;
-        }
-
-        for (String p : wildcards) {
-            if (nameMatcher.matches(p, node.getName())) {
-                return true;
-            }
-        }
-
-        return false;
+        return wildcards.stream().anyMatch(p -> nameMatcher.matches(p, node.getName()));
     }
 }

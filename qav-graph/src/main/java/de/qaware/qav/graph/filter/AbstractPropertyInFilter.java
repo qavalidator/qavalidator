@@ -15,14 +15,14 @@ import java.util.Map;
  * @param <T> the graph element type
  * @author QAware GmbH
  */
-public abstract class PropertyInFilter<T extends AbstractGraphElement> {
+public abstract class AbstractPropertyInFilter<T extends AbstractGraphElement> {
 
     private final Map<String, Object> properties = Maps.newHashMap();
 
     /**
      * Default constructor.
      */
-    protected PropertyInFilter() {
+    protected AbstractPropertyInFilter() {
     }
 
     /**
@@ -31,7 +31,7 @@ public abstract class PropertyInFilter<T extends AbstractGraphElement> {
      * @param property property name
      * @param object   value
      */
-    protected PropertyInFilter(String property, Object object) {
+    protected AbstractPropertyInFilter(String property, Object object) {
         addFilter(property, object);
     }
 
@@ -42,7 +42,7 @@ public abstract class PropertyInFilter<T extends AbstractGraphElement> {
      * @param object   value
      * @return <code>this</code>
      */
-    public final PropertyInFilter<T> addFilter(String property, Object object) {
+    public final AbstractPropertyInFilter<T> addFilter(String property, Object object) {
         properties.put(property, object);
         return this;
     }
@@ -54,13 +54,10 @@ public abstract class PropertyInFilter<T extends AbstractGraphElement> {
      * @return <tt>true</tt> if the element will be in, <tt>false</tt> if it is out
      */
     public boolean isAccepted(T graphElement) {
-        for (Map.Entry<String, Object> entry : properties.entrySet()) {
-            Object property = graphElement.getProperty(entry.getKey());
-            if (property == null || !entry.getValue().equals(property)) {
-                return false;
-            }
-        }
-
-        return true;
+        return properties.entrySet().stream()
+                .allMatch(entry -> {
+                    Object property = graphElement.getProperty(entry.getKey());
+                    return property != null && property.equals(entry.getValue());
+                });
     }
 }
