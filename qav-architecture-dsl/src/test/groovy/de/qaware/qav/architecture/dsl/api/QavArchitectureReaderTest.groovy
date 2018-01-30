@@ -28,8 +28,8 @@ class QavArchitectureReaderTest {
 
         try {
             reader.read()
-        } catch(AssertionError e) {
-            assert e.message == "Architecture Test-1 contains errors.. Expression: success. Values: success = false"
+        } catch(IllegalArgumentException e) {
+            assert e.message == "Architecture Test-1 contains errors."
         }
     }
 

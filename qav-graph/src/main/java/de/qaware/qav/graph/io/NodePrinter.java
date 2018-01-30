@@ -30,9 +30,9 @@ public class NodePrinter {
     /**
      * Constructor.
      *
-     * @param dependencyGraph the {@link DependencyGraph} with all the nodes to print out.
-     *                        Uses the {@link DependencyGraph#getBaseGraph()} to print the edges to/from other nodes
-     *                        outside the filtered scope of this graph.
+     * @param dependencyGraph the {@link DependencyGraph} with all the nodes to print out. Uses the {@link
+     *                        DependencyGraph#getBaseGraph()} to print the edges to/from other nodes outside the
+     *                        filtered scope of this graph.
      * @param filename        the file name to write to
      */
     public NodePrinter(DependencyGraph dependencyGraph, String filename) {
@@ -42,8 +42,11 @@ public class NodePrinter {
 
     /**
      * Prints all nodes in the graph: Their name, their properties, and their incoming and outgoing edges.
-     * Uses the {@link DependencyGraph#getBaseGraph()} to print the edges to/from other nodes outside the
-     * filtered scope of this graph.
+     * <p>
+     * Uses the {@link DependencyGraph#getBaseGraph()} to print the edges to/from other nodes outside the filtered scope
+     * of this graph.
+     * <p>
+     * Creates the file, if it didn't exist. Overwrites it if it did.
      */
     public void printNodes() {
         FileWriter fw;
@@ -66,8 +69,10 @@ public class NodePrinter {
 
     /**
      * Prints the given node: Its name, its properties, and its incoming and outgoing edges.
+     * <p>
+     * Omits empty blocks, i.e. only prints properties if there are any etc.
      *
-     * @param node the node.
+     * @param node the node to print
      */
     private void printNode(Node node) {
         if (node == null) {
@@ -90,7 +95,7 @@ public class NodePrinter {
         if (!outEdges.isEmpty()) {
             out.format("    OUTGOING -->%n");
             outEdges.sort(Comparator.comparing(o -> o.getTarget().getName()));
-            outEdges.forEach(dep -> out.format("        %s[%s]%n",dep.getTarget().getName(), dep.getDependencyType().name()));
+            outEdges.forEach(dep -> out.format("        %s[%s]%n", dep.getTarget().getName(), dep.getDependencyType().name()));
         }
 
         List<Dependency> inEdges = new ArrayList<>(dependencyGraph.getBaseGraph().getIncomingEdges(node));

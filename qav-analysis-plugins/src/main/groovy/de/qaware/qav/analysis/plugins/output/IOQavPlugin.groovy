@@ -63,6 +63,7 @@ class IOQavPlugin extends BasePlugin {
      *
      * @param dependencyGraph the graph
      * @param filename the filename; it is relative to the outputDir defined via {@link #setOutputDir(java.lang.String)}
+     * @param printIfEmpty if <tt>true</tt>, writes the file even if the graph is empty
      */
     @QavCommand(name = "printNodes",
             description = """

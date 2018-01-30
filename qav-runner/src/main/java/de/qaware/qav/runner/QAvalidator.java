@@ -49,7 +49,7 @@ public class QAvalidator {
             List<String> failedSteps = (List<String>) qavAnalysisReader.getContext().getProperty("failedSteps");
             result.setFailedSteps(failedSteps);
 
-        } catch (Throwable e) {
+        } catch (Exception e) {
             result.setFailedWithException(true);
             result.setExceptionMessage(e.getMessage());
         }

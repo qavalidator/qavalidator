@@ -47,7 +47,9 @@ class ArchitectureResolver {
                 success &= checkUsesRelation(architecture.implNameToComponent, cmp, classSet)
             }
         }
-        assert success: "Architecture ${architecture.name} contains errors."
+        if (!success) {
+            throw new IllegalArgumentException("Architecture ${architecture.name} contains errors.")
+        }
     }
 
     private boolean checkUsesRelation(Map<String, Component> apiOrImplToComponentMap, Component cmp, ClassSet classSet) {
