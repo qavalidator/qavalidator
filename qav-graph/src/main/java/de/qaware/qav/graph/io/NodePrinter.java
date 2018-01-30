@@ -73,29 +73,31 @@ public class NodePrinter {
         if (node == null) {
             return;
         }
-        writeLine("name: " + node.getName());
+        out.format("name: %s%n", node.getName());
 
         Map<String, Object> properties = node.getProperties();
-        properties.forEach((key, value) -> {
-                    if (!"name".equals(key)) {
-                        writeLine("    " + key + ": " + value);
+        if (properties.size() > 1) { // one property is always there: the name
+            out.format("    Node Properties:%n");
+            properties.forEach((key, value) -> {
+                        if (!"name".equals(key)) {
+                            out.format("        %s: %s%n", key, value);
+                        }
                     }
-                }
-        );
+            );
+        }
 
-        writeLine("OUTGOING -->");
         List<Dependency> outEdges = new ArrayList<>(dependencyGraph.getBaseGraph().getOutgoingEdges(node));
-        outEdges.sort(Comparator.comparing(o -> o.getTarget().getName()));
+        if (!outEdges.isEmpty()) {
+            out.format("    OUTGOING -->%n");
+            outEdges.sort(Comparator.comparing(o -> o.getTarget().getName()));
+            outEdges.forEach(dep -> out.format("        %s[%s]%n",dep.getTarget().getName(), dep.getDependencyType().name()));
+        }
 
-        outEdges.forEach(dep -> writeLine("    " + dep.getTarget().getName() + "[" + dep.getDependencyType().name() + "]"));
-
-        writeLine("INCOMING <--");
         List<Dependency> inEdges = new ArrayList<>(dependencyGraph.getBaseGraph().getIncomingEdges(node));
-        inEdges.sort(Comparator.comparing(o -> o.getSource().getName()));
-        inEdges.forEach(dep -> writeLine("    " + dep.getSource().getName() + "[" + dep.getDependencyType().name() + "]"));
-    }
-
-    private void writeLine(String s) {
-        this.out.println(s);
+        if (!inEdges.isEmpty()) {
+            out.format("    INCOMING <--%n");
+            inEdges.sort(Comparator.comparing(o -> o.getSource().getName()));
+            inEdges.forEach(dep -> out.format("        %s[%s]%n", dep.getSource().getName(), dep.getDependencyType().name()));
+        }
     }
 }

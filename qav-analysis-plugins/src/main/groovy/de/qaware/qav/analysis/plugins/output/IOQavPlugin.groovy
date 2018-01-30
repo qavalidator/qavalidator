@@ -75,10 +75,16 @@ class IOQavPlugin extends BasePlugin {
                     @QavCommand.Param(name = "filename", description = """
                             The filename; it is relative to the `outputDir` defined via the `outputDir` command or
                             in the Maven/Gradle config (explicitly or by default), or on the command line.
+                            """),
+                    @QavCommand.Param(name = "printIfEmpty", description = """
+                            if `true`, prints the (empty) file even if there are no nodes in the graph; 
+                            if `false`, only prints the file if the graph actually contains nodes. Defaults to `true`.
                             """)
             ])
-    void printNodes(DependencyGraph dependencyGraph, String filename) {
-        new NodePrinter(dependencyGraph, this.outputDir + "/" + filename).printNodes()
+    void printNodes(DependencyGraph dependencyGraph, String filename, boolean printIfEmpty = true) {
+        if (!dependencyGraph.getAllNodes().isEmpty() || printIfEmpty) {
+            new NodePrinter(dependencyGraph, this.outputDir + "/" + filename).printNodes()
+        }
     }
 
     /**
