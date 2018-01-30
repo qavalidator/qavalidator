@@ -16,6 +16,7 @@ Breaking Changes::
 New Features::
 * https://github.com/qavalidator/qavalidator/issues/3[#3]: new command `writeGraphLegend` writes a legend (key) for the graphs exported with `writeDot`. This is useful to see the color code for the dependency types. Also change the colors of the arrows to a more coherent color set.
 * https://github.com/qavalidator/qavalidator/issues/4[#4]: introduced new keyword in the Architecture DSL `usesImpl` to allow a dependency on an implementation part instead of an API. This is useful to model factories or Spring 4 configurations (or other exceptions from the rule, if there is a really good excuse).
+* https://github.com/qavalidator/qavalidator/issues/5[#5]: introduced new command `findDependenciesTo`: Finds all nodes which have outgoing dependencies to nodes which match one of the given patterns. If it finds any, it reports a violation.
 * New filters:
 ** `dependencyToFilter`: Accepts all edges which have target nodes accepted by the given base filter.
 ** `nodeNameInFilter`: accepts all nodes which match one of the given patterns

@@ -23,6 +23,11 @@ analysis("Step 1: Analyze Package Architecture") {
     // Find cycles on package level.
     def packageCycleGraph = findCycles(packageGraph, "Package")
 
+    // find unwanted imports
+    // def unwantedGraph = findDependenciesTo(allClassesGraph, "org.apache.tools.**")
+    def unwantedGraph = findDependenciesTo(allClassesGraph, "java.util.Date")
+    printNodes(unwantedGraph, "unwantedImports.txt", false)
+
     // output:
     printNodes(packageCycleGraph, "packageCycleNodes.txt")
     writeDot(packageGraph, "packageGraph", architecture("Package"))

@@ -1,20 +1,24 @@
 package de.qaware.qav.analysis.plugins.analysis
 
 import com.google.common.base.Preconditions
+import de.qaware.qav.analysis.dsl.model.Analysis
+import de.qaware.qav.analysis.plugins.base.BasePlugin
 import de.qaware.qav.architecture.checker.AllComponentsImplementedChecker
 import de.qaware.qav.architecture.checker.AllExplicitRulesUsedChecker
 import de.qaware.qav.architecture.checker.Checker
 import de.qaware.qav.architecture.checker.DependencyChecker
-import de.qaware.qav.analysis.plugins.base.BasePlugin
+import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
-import de.qaware.qav.analysis.dsl.model.Analysis
-import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.graph.alg.api.CycleFinder
 import de.qaware.qav.graph.alg.impl.CycleFinderImpl
 import de.qaware.qav.graph.api.DependencyGraph
 import de.qaware.qav.graph.api.DependencyType
+import de.qaware.qav.graph.api.NodeFilter
 import de.qaware.qav.graph.filter.DependencyTypeEdgeOutFilter
+import de.qaware.qav.graph.filter.NodeHasDependencyToFilter
+import de.qaware.qav.graph.filter.NodeNameInFilter
+import de.qaware.qav.graph.filter.NotFilter
 import groovy.util.logging.Slf4j
 
 /**
@@ -40,6 +44,7 @@ class AnalysisQavPlugin extends BasePlugin {
         analysis.register("findCycles", this.&findCycles)
         analysis.register("checkArchitectureRules", this.&checkArchitectureRules)
         analysis.register("checkDependencyRules", this.&checkDependencyRules)
+        analysis.register("findDependenciesTo", this.&findDependenciesTo)
         analysis.register("reportLeftOvers", this.&reportLeftOvers)
     }
 
@@ -70,8 +75,8 @@ class AnalysisQavPlugin extends BasePlugin {
                     """
     )
     DependencyGraph findCycles(DependencyGraph graph, String scope, boolean filterContains = true) {
-        Preconditions.checkNotNull(graph, "graph");
-        Preconditions.checkNotNull(scope, "scope");
+        Preconditions.checkNotNull(graph, "graph")
+        Preconditions.checkNotNull(scope, "scope")
 
         DependencyGraph relevantGraph = filterContains ? graph.filter(new DependencyTypeEdgeOutFilter(DependencyType.CONTAINS)) : graph
 
@@ -85,7 +90,8 @@ class AnalysisQavPlugin extends BasePlugin {
             analysis.violation("Cycles: ${cycleFinder.cycles.size()} cylces with ${totalNodes} nodes")
         }
 
-        return graph.filter(analysis.filter("cycleFilter"))
+        NodeFilter cycleFilter = analysis.filter("cycleFilter")
+        return graph.filter(cycleFilter)
     }
 
     /**
@@ -160,6 +166,52 @@ class AnalysisQavPlugin extends BasePlugin {
         def msg = "${checker.class.simpleName}: ${checker.violationMessages.size()} VIOLATIONS in architecture view ${architecture.name}: ${checker.violationMessage}"
         analysis.sonarError(msg)
         analysis.violation("Architecture Checker found violations: ${msg}")
+    }
+
+    //
+    // --- unwanted imports
+    //
+
+    /**
+     * Finds all nodes which have outgoing dependencies to nodes which match one of the given patterns.
+     * If it finds any, it reports a violation.
+     *
+     * Returns a filtered graph which contains only the nodes specified by the patterns and those with dependencies to them.
+     *
+     * @param graph the DependencyGraph to analyze
+     * @param patterns the patterns of the target
+     * @return a filtered graph which contains only the nodes specified by the patterns and those with dependencies to them.
+     *
+     * @since 1.2.7
+     */
+    @QavCommand(name = "findDependenciesTo",
+            description = """
+                    WARNING: This is an incubating feature, introduced in 1.2.7. It may change without further notice.
+                    
+                    Finds all nodes which have outgoing dependencies to nodes which match one of the given patterns.
+                    If it finds any, it reports a violation.
+                    
+                    Returns a filtered graph which contains only the nodes specified by the patterns and those with 
+                    dependencies to them.
+            """,
+            parameters = [
+                    @QavCommand.Param(name = "graph", description = "the DependencyGraph to analyze"),
+                    @QavCommand.Param(name = "patterns", description = "the patterns of the target")
+            ],
+            result = "a filtered graph which contains only the nodes specified by the patterns and those with dependencies to them."
+    )
+    DependencyGraph findDependenciesTo(DependencyGraph graph, String... patterns) {
+        NodeNameInFilter targetFilter = new NodeNameInFilter(patterns)
+        NodeHasDependencyToFilter nodeHasDependencyToFilter = new NodeHasDependencyToFilter(graph, targetFilter)
+
+        DependencyGraph unwantedGraph = graph.filter(nodeHasDependencyToFilter)
+
+        if (!unwantedGraph.getAllNodes().isEmpty()) {
+            DependencyGraph unwantedSourceNodes = unwantedGraph.filter(new NotFilter(targetFilter))
+            analysis.violation("There are unwanted imports from ${unwantedSourceNodes.getAllNodes().size()} classes.")
+        }
+
+        return unwantedGraph
     }
 
     /**
