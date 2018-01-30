@@ -6,19 +6,21 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Pattern matching for fully qualified class names.
+ * <p>
+ * This is based on the Ant path matcher, see {@link AntPathMatcher}.
  *
  * @author QAware GmbH
  */
 public class QavNameMatcher {
 
-    private AntPathMatcher antPathMatcher;
     private final String pathSeparator;
+    private final AntPathMatcher antPathMatcher;
 
     /**
      * Constructor. Use the default {@link #pathSeparator} with "."
      */
     public QavNameMatcher() {
-        this.pathSeparator = ".";
+        this(".");
     }
 
     /**
@@ -28,6 +30,7 @@ public class QavNameMatcher {
      */
     public QavNameMatcher(String pathSeparator) {
         this.pathSeparator = pathSeparator;
+        this.antPathMatcher = new AntPathMatcher(pathSeparator);
     }
 
     /**
@@ -47,13 +50,6 @@ public class QavNameMatcher {
             pattern += "*";
         }
 
-        return getAntPathMatcher().match(pattern, name);
-    }
-
-    private AntPathMatcher getAntPathMatcher() {
-        if (antPathMatcher == null) {
-            antPathMatcher = new AntPathMatcher(pathSeparator);
-        }
-        return antPathMatcher;
+        return antPathMatcher.match(pattern, name);
     }
 }
