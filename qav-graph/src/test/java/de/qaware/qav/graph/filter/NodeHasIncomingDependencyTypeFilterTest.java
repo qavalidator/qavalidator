@@ -10,14 +10,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Tests for the {@link DependencyTypeNodeFilter}
+ * Tests for the {@link NodeHasIncomingDependencyTypeFilter}
  *
  * @author QAware GmbH
  */
-public class DependencyTypeNodeFilterTest {
+public class NodeHasIncomingDependencyTypeFilterTest {
 
     @Test
-    public void testIsAccepted() throws Exception {
+    public void testIsAccepted() {
         DependencyGraph graph = DependencyGraphFactory.createGraph();
 
         Node n1 = graph.getOrCreateNodeByName("v1");
@@ -26,8 +26,8 @@ public class DependencyTypeNodeFilterTest {
         graph.addDependency(n1, n2, DependencyType.READ_ONLY);
         graph.addDependency(n1, n3, DependencyType.CREATE);
 
-        DependencyTypeNodeFilter filter = new DependencyTypeNodeFilter(graph, DependencyType.CREATE);
-        assertThat(filter.isAccepted(n1), is(true));
+        NodeHasIncomingDependencyTypeFilter filter = new NodeHasIncomingDependencyTypeFilter(graph, DependencyType.CREATE);
+        assertThat(filter.isAccepted(n1), is(false));
         assertThat(filter.isAccepted(n2), is(false));
         assertThat(filter.isAccepted(n3), is(true));
     }

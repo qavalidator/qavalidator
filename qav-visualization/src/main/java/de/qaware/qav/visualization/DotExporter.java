@@ -8,7 +8,7 @@ import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
-import de.qaware.qav.graph.filter.OutgoingDependencyTypeFilter;
+import de.qaware.qav.graph.filter.NodeHasOutgoingDependencyTypeFilter;
 import de.qaware.qav.util.FileNameUtil;
 import de.qaware.qav.util.FileSystemUtil;
 import de.qaware.qav.util.ProcessUtil;
@@ -113,7 +113,7 @@ public class DotExporter {
 
     private void writeClusters() {
         // step 1: create StringTemplates for clusters.
-        DependencyGraph architectureGraph = dependencyGraph.filter(new OutgoingDependencyTypeFilter(dependencyGraph, DependencyType.CONTAINS));
+        DependencyGraph architectureGraph = dependencyGraph.filter(new NodeHasOutgoingDependencyTypeFilter(dependencyGraph, DependencyType.CONTAINS));
         for (Node node : architectureGraph.getAllNodes()) {
             StringTemplate clusterST = createClusterST(node);
             clusterMap.put(node.getName(), clusterST);

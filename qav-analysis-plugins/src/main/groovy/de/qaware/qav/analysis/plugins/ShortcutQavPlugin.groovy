@@ -1,5 +1,6 @@
 package de.qaware.qav.analysis.plugins
 
+import de.qaware.qav.analysis.dsl.model.Analysis
 import de.qaware.qav.analysis.plugins.analysis.AnalysisQavPlugin
 import de.qaware.qav.analysis.plugins.analysis.ArchitectureQavPlugin
 import de.qaware.qav.analysis.plugins.analysis.GraphFilterQavPlugin
@@ -10,13 +11,12 @@ import de.qaware.qav.analysis.plugins.input.TypescriptQavPlugin
 import de.qaware.qav.analysis.plugins.output.IOQavPlugin
 import de.qaware.qav.analysis.plugins.output.SonarMessagesQavPlugin
 import de.qaware.qav.doc.QavPluginDoc
-import de.qaware.qav.analysis.dsl.model.Analysis
 import groovy.util.logging.Slf4j
 
 /**
- * QAV language shortcuts for standard usage.
+ * QAvalidator language shortcuts for standard usage.
  *
- * @author Fabian Huch fabian.huch@qaware.de
+ * @author QAware GmbH
  */
 @QavPluginDoc(name = "ShortcutQavPlugin",
         description = """
@@ -64,11 +64,11 @@ class ShortcutQavPlugin extends BasePlugin {
      */
     void initializeAnalysis() {
         analysis.addFilter("ignoreJavaLang", analysis.nodeNameOutFilter("java.lang.*"))
-        analysis.addFilter("classes", analysis.propertyInFilter("type", "class"))
-        analysis.addFilter("modules", analysis.propertyInFilter("type", "module"))
-        analysis.addFilter("inputScope", analysis.propertyInFilter("scope", "input"))
-        analysis.addFilter("mavenScope", analysis.propertyInFilter("scope", "maven"))
-        analysis.addFilter("cycleFilter", analysis.propertyInFilter(context.IN_CYCLE, true))
+        analysis.addFilter("classes", analysis.nodePropertyInFilter("type", "class"))
+        analysis.addFilter("modules", analysis.nodePropertyInFilter("type", "module"))
+        analysis.addFilter("inputScope", analysis.nodePropertyInFilter("scope", "input"))
+        analysis.addFilter("mavenScope", analysis.nodePropertyInFilter("scope", "maven"))
+        analysis.addFilter("cycleFilter", analysis.nodePropertyInFilter(context.IN_CYCLE, true))
 
         context.allClassesGraph = context.dependencyGraph.filter(analysis.and(analysis.filter("classes"),
                 analysis.filter("ignoreJavaLang")))

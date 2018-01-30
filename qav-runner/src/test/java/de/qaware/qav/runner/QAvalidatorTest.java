@@ -24,7 +24,7 @@ public class QAvalidatorTest {
 
         QAvalidatorConfig config = new QAvalidatorConfig();
         config.setAnalysisFilename("classpath:/default_analysis.groovy");
-        config.setInputDirs(Lists.newArrayList("./build/classes/main"));
+        config.setInputDirs(Lists.newArrayList("./build/classes/java/main"));
         config.setOutputDir("./build/result-default-architecture");
 
         QAvalidatorResult result = new QAvalidator().runAnalysis(config);

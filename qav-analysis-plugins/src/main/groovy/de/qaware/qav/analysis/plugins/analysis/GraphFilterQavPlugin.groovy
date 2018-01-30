@@ -1,9 +1,9 @@
 package de.qaware.qav.analysis.plugins.analysis
 
+import de.qaware.qav.analysis.dsl.model.Analysis
 import de.qaware.qav.analysis.plugins.base.BasePlugin
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
-import de.qaware.qav.analysis.dsl.model.Analysis
 import de.qaware.qav.graph.api.DependencyGraph
 import de.qaware.qav.graph.api.DependencyType
 import de.qaware.qav.graph.api.NodeFilter
@@ -41,39 +41,22 @@ class GraphFilterQavPlugin extends BasePlugin {
         analysis.register("addFilter", this.&addFilter)
         analysis.register("filter", this.&getFilter)
 
-        analysis.register("propertyExistsFilter", this.&propertyExistsFilter)
-        analysis.register("propertyInFilter", this.&propertyInFilter)
-        analysis.register("nodeNameOutFilter", this.&nodeNameOutFilter)
-        analysis.register("dependencyTypeNodeFilter", this.&dependencyTypeNodeFilter)
-        analysis.register("outgoingDependencyTypeFilter", this.&outgoingDependencyTypeFilter)
-
-        analysis.register("dependencyTypeEdgeOutFilter", this.&dependencyTypeEdgeOutFilter)
-        analysis.register("dependencyPropertyInFilter", this.&dependencyPropertyInFilter)
         analysis.register("dependencyPropertyExistsFilter", this.&dependencyPropertyExistsFilter)
+        analysis.register("dependencyPropertyInFilter", this.&dependencyPropertyInFilter)
+        analysis.register("dependencyToFilter", this.&dependencyToFilter)
+        analysis.register("dependencyTypeEdgeOutFilter", this.&dependencyTypeEdgeOutFilter)
+
+        analysis.register("nodeHasDependencyToFilter", this.&nodeHasDependencyToFilter)
+        analysis.register("nodeHasIncomingDependencyTypeFilter", this.&nodeHasIncomingDependencyTypeFilter)
+        analysis.register("nodeHasOutgoingDependencyTypeFilter", this.&nodeHasOutgoingDependencyTypeFilter)
+        analysis.register("nodeNameInFilter", this.&nodeNameInFilter)
+        analysis.register("nodeNameOutFilter", this.&nodeNameOutFilter)
+        analysis.register("nodePropertyExistsFilter", this.&nodePropertyExistsFilter)
+        analysis.register("nodePropertyInFilter", this.&nodePropertyInFilter)
 
         analysis.register("and", this.&andFilter)
         analysis.register("or", this.&orFilter)
         analysis.register("not", this.&notFilter)
-    }
-
-    /**
-     * Registers a new filter under the given name.
-     *
-     * @param name the name
-     * @param filter the filter
-     * @return the filter.
-     */
-    @QavCommand(
-            name = "addFilter",
-            description = "Registers a new filter under the given name.",
-            parameters = [
-                    @QavCommand.Param(name = "name", description = "the name"),
-                    @QavCommand.Param(name = "filter", description = "the filter")
-            ],
-            result = "Returns the filter."
-    )
-    NodeFilter addFilter(String name, NodeFilter filter) {
-        this.filters[name] = filter
     }
 
     /**
@@ -98,158 +81,40 @@ class GraphFilterQavPlugin extends BasePlugin {
     }
 
     /**
-     * Creates a new {@link de.qaware.qav.graph.filter.NodePropertyExistsFilter}.
-     * This is an "IN" filter.
+     * Registers a new filter under the given name.
      *
-     * @param propertyName the name of the property which must exist to accept the node
-     * @return The new filter
+     * @param name the name
+     * @param filter the filter
+     * @return the filter.
      */
-    @QavCommand(name = "propertyExistsFilter",
-            description = "Creates a new {@link NodePropertyExistsFilter}. This is an _IN_ filter.",
-            parameters = @QavCommand.Param(name = "propertyName", description = "The name of the property which must exist to accept the node."),
-            result = "The new {@link NodePropertyExistsFilter}."
-    )
-    static NodePropertyExistsFilter propertyExistsFilter(String propertyName) {
-        return new NodePropertyExistsFilter(propertyName)
-    }
-
-    /**
-     * Creates a new {@link de.qaware.qav.graph.filter.NodePropertyInFilter}.
-     * This is an "IN" filter.
-     *
-     * @param propertyName the property name
-     * @param value the value that must match to accept the node
-     * @return The new filter.
-     */
-    @QavCommand(name = "propertyInFilter",
-            description = "Creates a new {@link NodePropertyInFilter}.",
+    @QavCommand(
+            name = "addFilter",
+            description = "Registers a new filter under the given name.",
             parameters = [
-                    @QavCommand.Param(name = "propertyName", description = "The property name"),
-                    @QavCommand.Param(name = "value", description = "The value that must match to accept the node.")],
-            result = "The new {@link NodePropertyInFilter}."
+                    @QavCommand.Param(name = "name", description = "the name"),
+                    @QavCommand.Param(name = "filter", description = "the filter")
+            ],
+            result = "Returns the filter."
     )
-    static NodePropertyInFilter propertyInFilter(String propertyName, Object value) {
-        return new NodePropertyInFilter(propertyName, value)
+    NodeFilter addFilter(String name, NodeFilter filter) {
+        this.filters[name] = filter
     }
 
     /**
-     * Creates a new <tt>NodeNameOutFilter</tt>.
-     * This is an "OUT" filter.
-     * Only if none of the given patterns matches the name, the node is accepted.
-     *
-     * @param patterns The patterns to filter out.
-     * @return The new filter.
-     */
-    @QavCommand(name = "nodeNameOutFilter",
-            description = "Creates a new `NodeNameOutFilter`.",
-            parameters = @QavCommand.Param(name = "patterns...", description = """
-                    The patterns (Ant path style) to filter out. 
-                    Only if none of the given patterns matches the name, the node is accepted.
-                    """),
-            result = "The new `NodeNameOutFilter`."
-    )
-    static NodeFilter nodeNameOutFilter(String... patterns) {
-        return new NotFilter(new NodeNameInFilter(patterns))
-    }
-
-    /**
-     * Creates a new {@link de.qaware.qav.graph.filter.DependencyTypeNodeFilter}.
+     * Creates a new {@link de.qaware.qav.graph.filter.DependencyPropertyExistsFilter} to filter dependencies.
      * This is an "IN" filter.
      *
-     * @param dependencyTypeNames The dependency type names to accept in the filter
+     * @param propertyName The property name
      * @return The new filter.
      */
-    @QavCommand(name = "dependencyTypeNodeFilter",
-            description = "Creates a new {@link DependencyTypeNodeFilter}. This is an _IN_ filter.",
-            parameters = @QavCommand.Param(name = "dependencyTypeName", description = "The dependency type name to accept in the filter."),
-            result = "The new {@link DependencyTypeNodeFilter}."
+    @QavCommand(name = "dependencyPropertyExistsFilter",
+            description = "Creates a new {@link DependencyPropertyExistsFilter} to filter which _dependencies_ to keep.",
+            parameters = @QavCommand.Param(name = "propertyName",
+                    description = "The property name which must be set on the dependency. The value does not matter."),
+            result = "The new {@link DependencyPropertyExistsFilter}."
     )
-    DependencyTypeNodeFilter dependencyTypeNodeFilter(String dependencyTypeName) {
-        return new DependencyTypeNodeFilter(dependencyGraph, DependencyType.valueOf(dependencyTypeName))
-    }
-
-    /**
-     * Creates a new {@link DependencyTypeNodeFilter}.
-     * This is an "IN" filter.
-     *
-     * @param dependencyTypes The dependency types to accept in the filter
-     * @return the new filter
-     */
-    @QavCommand(name = "dependencyTypeNodeFilter",
-            description = "Creates a new {@link DependencyTypeNodeFilter}. This is an _IN_ filter.",
-            parameters = @QavCommand.Param(name = "dependencyType", description = "The dependency type to accept in the filter."),
-            result = "The new {@link DependencyTypeNodeFilter}."
-    )
-    DependencyTypeNodeFilter dependencyTypeNodeFilter(DependencyType dependencyType) {
-        return new DependencyTypeNodeFilter(dependencyGraph, dependencyType)
-    }
-
-    /**
-     * Creates a new {@link de.qaware.qav.graph.filter.OutgoingDependencyTypeFilter}.
-     * This is an "IN" filter.
-     *
-     * @param dependencyTypeName The dependency type name to accept in the filter
-     * @return The new filter.
-     */
-    @QavCommand(name = "outgoingDependencyTypeFilter",
-            description = "Creates a new {@link OutgoingDependencyTypeFilter}. This is an _IN_ filter.",
-            parameters = @QavCommand.Param(name = "dependencyTypeName", description = "The dependency type name to accept in the filter."),
-            result = "The new {@link OutgoingDependencyTypeFilter}."
-    )
-    OutgoingDependencyTypeFilter outgoingDependencyTypeFilter(String dependencyTypeName) {
-        return new OutgoingDependencyTypeFilter(dependencyGraph, DependencyType.valueOf(dependencyTypeName))
-    }
-
-    /**
-     * Creates a new {@link OutgoingDependencyTypeFilter}.
-     * This is an "IN" filter.
-     *
-     * @param dependencyType The dependency type to accept in the filter
-     * @return the new filter
-     */
-    @QavCommand(name = "outgoingDependencyTypeFilter",
-            description = "Creates a new {@link OutgoingDependencyTypeFilter}. This is an _IN_ filter.",
-            parameters = @QavCommand.Param(name = "dependencyType", description = "The dependency type to accept in the filter."),
-            result = "The new {@link OutgoingDependencyTypeFilter}."
-    )
-    OutgoingDependencyTypeFilter outgoingDependencyTypeFilter(DependencyType dependencyTypes) {
-        return new OutgoingDependencyTypeFilter(dependencyGraph, dependencyTypes)
-    }
-
-    /**
-     * Creates a new {@link de.qaware.qav.graph.filter.DependencyTypeEdgeOutFilter}.
-     * This is an "OUT" filter.
-     *
-     * @param dependencyTypeNames The dependency type names to filter out.
-     * @return The new filter.
-     */
-    @QavCommand(name = "dependencyTypeEdgeOutFilter",
-            description = "Creates a new {@link DependencyTypeEdgeOutFilter} to filter out _dependencies_.",
-            parameters = @QavCommand.Param(name = "dependencyTypeNames...", description = "The dependency type names to filter out."),
-            result = "The new {@link DependencyTypeEdgeOutFilter}."
-    )
-    static DependencyTypeEdgeOutFilter dependencyTypeEdgeOutFilter(String... dependencyTypeNames) {
-        def dependencyTypes = []
-        dependencyTypeNames.each {
-            dependencyTypes << DependencyType.valueOf(it)
-        }
-        return new DependencyTypeEdgeOutFilter(dependencyTypes)
-    }
-
-    /**
-     * Creates a new {@link DependencyTypeEdgeOutFilter}.
-     * This is an "OUT" filter.
-     *
-     * @param dependencyTypes The dependency types to filter out.
-     * @return the new filter
-     */
-    @QavCommand(name = "dependencyTypeEdgeOutFilter",
-            description = "Creates a new {@link DependencyTypeEdgeOutFilter} to filter out _dependencies_.",
-            parameters = @QavCommand.Param(name = "dependencyTypes...", description = "The dependency types to filter out."),
-            result = "The new {@link DependencyTypeEdgeOutFilter}."
-    )
-    static DependencyTypeEdgeOutFilter dependencyTypeEdgeOutFilter(DependencyType... dependencyTypes) {
-        return new DependencyTypeEdgeOutFilter(dependencyTypes)
+    static DependencyPropertyExistsFilter dependencyPropertyExistsFilter(String propertyName) {
+        return new DependencyPropertyExistsFilter(propertyName)
     }
 
     /**
@@ -272,22 +137,225 @@ class GraphFilterQavPlugin extends BasePlugin {
     }
 
     /**
-     * Creates a new {@link de.qaware.qav.graph.filter.DependencyPropertyExistsFilter} to filter dependencies.
-     * This is an "IN" filter.
+     * Creates a new {@link DependencyToFilter}.
+     * Accepts all edges which have target nodes accepted by the given base filter.
      *
-     * @param propertyName The property name
-     * @return The new filter.
+     * @param baseFilter the node filter for target nodes
+     * @return the new {@link DependencyToFilter}
      */
-    @QavCommand(name = "dependencyPropertyExistsFilter",
-            description = "Creates a new {@link DependencyPropertyExistsFilter} to filter which _dependencies_ to keep.",
-            parameters = @QavCommand.Param(name = "propertyName",
-                    description = "The property name which must be set on the dependency. The value does not matter."),
-            result = "The new {@link DependencyPropertyExistsFilter}."
-    )
-    static DependencyPropertyExistsFilter dependencyPropertyExistsFilter(String propertyName) {
-        return new DependencyPropertyExistsFilter(propertyName)
+    @QavCommand(name = "dependencyToFilter",
+            description = """
+                Creates a new {@link DependencyToFilter}. 
+                Accepts all edges which have target nodes accepted by the given base filter.
+                """,
+            parameters = [
+                    @QavCommand.Param(name = "baseFilter", description = "the node filter for target nodes")
+            ],
+            result = "The new {@link DependencyToFilter}")
+    static DependencyToFilter dependencyToFilter(NodeFilter baseFilter) {
+        return new DependencyToFilter(baseFilter)
     }
 
+    /**
+     * Creates a new {@link de.qaware.qav.graph.filter.DependencyTypeEdgeOutFilter}.
+     * This is an "OUT" filter.
+     *
+     * @param dependencyTypeNames The dependency type names to filter out.
+     * @return The new filter.
+     */
+    @QavCommand(name = "dependencyTypeEdgeOutFilter",
+            description = "Creates a new {@link DependencyTypeEdgeOutFilter} to filter out _dependencies_.",
+            parameters = @QavCommand.Param(name = "dependencyTypeNames...", description = "The dependency type names to filter out."),
+            result = "The new {@link DependencyTypeEdgeOutFilter}."
+    )
+    static DependencyTypeEdgeOutFilter dependencyTypeEdgeOutFilter(String... dependencyTypeNames) {
+        DependencyType[] dependencyTypes = []
+        dependencyTypeNames.each {
+            dependencyTypes << DependencyType.valueOf(it)
+        }
+        return new DependencyTypeEdgeOutFilter(dependencyTypes)
+    }
+
+    /**
+     * Creates a new {@link DependencyTypeEdgeOutFilter}.
+     * This is an "OUT" filter.
+     *
+     * @param dependencyTypes The dependency types to filter out.
+     * @return the new filter
+     */
+    @QavCommand(name = "dependencyTypeEdgeOutFilter",
+            description = "Creates a new {@link DependencyTypeEdgeOutFilter} to filter out _dependencies_.",
+            parameters = @QavCommand.Param(name = "dependencyTypes...", description = "The dependency types to filter out."),
+            result = "The new {@link DependencyTypeEdgeOutFilter}."
+    )
+    static DependencyTypeEdgeOutFilter dependencyTypeEdgeOutFilter(DependencyType... dependencyTypes) {
+        return new DependencyTypeEdgeOutFilter(dependencyTypes)
+    }
+
+    //
+    // --- Node filters
+    //
+
+    /**
+     * Creates a new {@link NodeHasDependencyToFilter}. Accepts all nodes which have outgoing dependencies to nodes
+     * which are accepted by the given base filter.
+     *
+     * @param graph the graph to work on
+     * @param baseFilter the node filter
+     * @return the new {@link NodeHasDependencyToFilter}
+     */
+    @QavCommand(name = "nodeHasDependencyToFilter",
+            description = """
+                Creates a new {@link NodeHasDependencyToFilter}. Accepts all nodes which have outgoing dependencies to 
+                nodes which are accepted by the given base filter.
+            """,
+            parameters = [
+                    @QavCommand.Param(name = "graph", description = "the graph to work on"),
+                    @QavCommand.Param(name = "baseFilter", description = "the node filter")
+            ],
+            result = "the new {@link NodeHasDependencyToFilter}"
+    )
+    static NodeHasDependencyToFilter nodeHasDependencyToFilter(DependencyGraph graph, NodeFilter baseFilter) {
+        return new NodeHasDependencyToFilter(graph, baseFilter)
+    }
+
+    /**
+     * Creates a new {@link NodeHasIncomingDependencyTypeFilter}.
+     * This is an "IN" filter.
+     *
+     * @param dependencyTypeNames The dependency type names to accept in the filter
+     * @return The new filter.
+     */
+    @QavCommand(name = "nodeHasIncomingDependencyTypeFilter",
+            description = "Creates a new {@link NodeHasIncomingDependencyTypeFilter}. This is an _IN_ filter.",
+            parameters = @QavCommand.Param(name = "dependencyTypeName", description = "The dependency type name to accept in the filter."),
+            result = "The new {@link NodeHasIncomingDependencyTypeFilter}."
+    )
+    NodeHasIncomingDependencyTypeFilter nodeHasIncomingDependencyTypeFilter(String dependencyTypeName) {
+        return new NodeHasIncomingDependencyTypeFilter(dependencyGraph, DependencyType.valueOf(dependencyTypeName))
+    }
+
+    /**
+     * Creates a new {@link NodeHasIncomingDependencyTypeFilter}.
+     * This is an "IN" filter.
+     *
+     * @param dependencyTypes The dependency types to accept in the filter
+     * @return the new filter
+     */
+    @QavCommand(name = "nodeHasIncomingDependencyTypeFilter",
+            description = "Creates a new {@link NodeHasIncomingDependencyTypeFilter}. This is an _IN_ filter.",
+            parameters = @QavCommand.Param(name = "dependencyType", description = "The dependency type to accept in the filter."),
+            result = "The new {@link NodeHasIncomingDependencyTypeFilter}."
+    )
+    NodeHasIncomingDependencyTypeFilter nodeHasIncomingDependencyTypeFilter(DependencyType dependencyType) {
+        return new NodeHasIncomingDependencyTypeFilter(dependencyGraph, dependencyType)
+    }
+
+    /**
+     * Creates a new {@link NodeHasOutgoingDependencyTypeFilter}.
+     * This is an "IN" filter.
+     *
+     * @param dependencyTypeName The dependency type name to accept in the filter
+     * @return The new filter.
+     */
+    @QavCommand(name = "nodeHasOutgoingDependencyTypeFilter",
+            description = "Creates a new {@link NodeHasOutgoingDependencyTypeFilter}. This is an _IN_ filter.",
+            parameters = @QavCommand.Param(name = "dependencyTypeName", description = "The dependency type name to accept in the filter."),
+            result = "The new {@link NodeHasOutgoingDependencyTypeFilter}."
+    )
+    NodeHasOutgoingDependencyTypeFilter nodeHasOutgoingDependencyTypeFilter(String dependencyTypeName) {
+        return new NodeHasOutgoingDependencyTypeFilter(dependencyGraph, DependencyType.valueOf(dependencyTypeName))
+    }
+
+    /**
+     * Creates a new {@link NodeHasOutgoingDependencyTypeFilter}.
+     * This is an "IN" filter.
+     *
+     * @param dependencyType The dependency type to accept in the filter
+     * @return the new filter
+     */
+    @QavCommand(name = "nodeHasOutgoingDependencyTypeFilter",
+            description = "Creates a new {@link NodeHasOutgoingDependencyTypeFilter}. This is an _IN_ filter.",
+            parameters = @QavCommand.Param(name = "dependencyType", description = "The dependency type to accept in the filter."),
+            result = "The new {@link NodeHasOutgoingDependencyTypeFilter}."
+    )
+    NodeHasOutgoingDependencyTypeFilter nodeHasOutgoingDependencyTypeFilter(DependencyType dependencyTypes) {
+        return new NodeHasOutgoingDependencyTypeFilter(dependencyGraph, dependencyTypes)
+    }
+
+    /**
+     * Creates a new {@link de.qaware.qav.graph.filter.NodePropertyExistsFilter}.
+     * This is an "IN" filter.
+     *
+     * @param propertyName the name of the property which must exist to accept the node
+     * @return The new filter
+     */
+    @QavCommand(name = "nodePropertyExistsFilter",
+            description = "Creates a new {@link NodePropertyExistsFilter}. This is an _IN_ filter.",
+            parameters = @QavCommand.Param(name = "propertyName", description = "The name of the property which must exist to accept the node."),
+            result = "The new {@link NodePropertyExistsFilter}."
+    )
+    static NodePropertyExistsFilter nodePropertyExistsFilter(String propertyName) {
+        return new NodePropertyExistsFilter(propertyName)
+    }
+
+    /**
+     * Creates a new {@link de.qaware.qav.graph.filter.NodePropertyInFilter}.
+     * This is an "IN" filter.
+     *
+     * @param propertyName the property name
+     * @param value the value that must match to accept the node
+     * @return The new filter.
+     */
+    @QavCommand(name = "nodePropertyInFilter",
+            description = "Creates a new {@link NodePropertyInFilter}.",
+            parameters = [
+                    @QavCommand.Param(name = "propertyName", description = "The property name"),
+                    @QavCommand.Param(name = "value", description = "The value that must match to accept the node.")],
+            result = "The new {@link NodePropertyInFilter}."
+    )
+    static NodePropertyInFilter nodePropertyInFilter(String propertyName, Object value) {
+        return new NodePropertyInFilter(propertyName, value)
+    }
+
+    /**
+     * Creates a new {@link de.qaware.qav.graph.filter.NodeNameInFilter}.
+     * This is an "IN" filter.
+     *
+     * @param patterns The patterns to accept.
+     * @return The new filter.
+     */
+    @QavCommand(name = "nodeNameInFilter",
+            description = "Creates a new `NodeNameInFilter`.",
+            parameters = @QavCommand.Param(name = "patterns...", description = """
+                    The patterns (Ant path style) to accept. 
+                    If any of the given patterns matches the name, the node is accepted.
+                    """),
+            result = "The new `NodeNameInFilter`."
+    )
+    static NodeNameInFilter nodeNameInFilter(String... patterns) {
+        return new NodeNameInFilter(patterns)
+    }
+
+    /**
+     * Creates a new <tt>NodeNameOutFilter</tt>.
+     * This is an "OUT" filter.
+     * Only if none of the given patterns matches the name, the node is accepted.
+     *
+     * @param patterns The patterns to filter out.
+     * @return The new filter.
+     */
+    @QavCommand(name = "nodeNameOutFilter",
+            description = "Creates a new `NodeNameOutFilter`.",
+            parameters = @QavCommand.Param(name = "patterns...", description = """
+                    The patterns (Ant path style) to filter out. 
+                    Only if none of the given patterns matches the name, the node is accepted.
+                    """),
+            result = "The new `NodeNameOutFilter`."
+    )
+    static NodeFilter nodeNameOutFilter(String... patterns) {
+        return new NotFilter(new NodeNameInFilter(patterns))
+    }
     /**
      * Creates a new {@link de.qaware.qav.graph.filter.AndFilter}.
      *

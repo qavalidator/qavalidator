@@ -1,19 +1,16 @@
 package de.qaware.qav.graph.filter;
 
-import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.api.NodeFilter;
-
-import java.util.Set;
 
 /**
  * Accepts nodes which have an outgoing edge of the given type.
  *
  * @author QAware GmbH
  */
-public class OutgoingDependencyTypeFilter implements NodeFilter {
+public class NodeHasOutgoingDependencyTypeFilter implements NodeFilter {
 
     private final DependencyGraph dependencyGraph;
     private final DependencyType dependencyType;
@@ -24,20 +21,13 @@ public class OutgoingDependencyTypeFilter implements NodeFilter {
      * @param dependencyGraph the {@link DependencyGraph}
      * @param dependencyType  the {@link DependencyType} to be included
      */
-    public OutgoingDependencyTypeFilter(DependencyGraph dependencyGraph, DependencyType dependencyType) {
+    public NodeHasOutgoingDependencyTypeFilter(DependencyGraph dependencyGraph, DependencyType dependencyType) {
         this.dependencyGraph = dependencyGraph;
         this.dependencyType = dependencyType;
     }
 
     @Override
     public boolean isAccepted(Node node) {
-        Set<Dependency> outgoingEdges = dependencyGraph.getOutgoingEdges(node);
-        for (Dependency dep : outgoingEdges) {
-            if (dep.getDependencyType().equals(dependencyType)) {
-                return true;
-            }
-        }
-
-        return false;
+        return dependencyGraph.getOutgoingEdges(node).stream().anyMatch(dep -> dep.getDependencyType().equals(dependencyType));
     }
 }
