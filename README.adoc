@@ -38,7 +38,7 @@ Maven Plugin::
 To release the Maven plugin, edit the `pom.xml` and set the new version number.
 Use the standard release plugin:
 
-  cd qav-maven-plugin
+  cd dist/qav-maven-plugin
   mvn release:prepare
   mvn release:perform
 
