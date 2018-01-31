@@ -418,7 +418,7 @@
     </repositories>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/qaware/QAvalidator</developerConnection>
+        <developerConnection>scm:git:https://github.com/qavalidator/qavalidator</developerConnection>
         <tag>HEAD</tag>
     </scm>
 </project>
