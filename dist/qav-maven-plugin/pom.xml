@@ -3,7 +3,7 @@
 
     <groupId>de.qaware.qav</groupId>
     <artifactId>qav-maven-plugin</artifactId>
-    <version>1.2.7-SNAPSHOT</version>
+    <version>1.2.7</version>
     <packaging>maven-plugin</packaging>
 
     <name>QAvalidator :: Maven Plugin</name>
@@ -27,7 +27,7 @@
         <qav.version>1.2.7</qav.version>
 
         <!-- this is the QAvalidator Maven Plugin version to be used for mvn -Pself qav:qav -->
-        <qav-plugin-on-self.version>1.2.7-SNAPSHOT</qav-plugin-on-self.version>
+        <qav-plugin-on-self.version>1.2.7</qav-plugin-on-self.version>
     </properties>
 
     <dependencyManagement>
@@ -419,7 +419,7 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/qavalidator/qavalidator</developerConnection>
-        <tag>HEAD</tag>
+        <tag>qav-maven-plugin-1.2.7</tag>
     </scm>
 </project>
 
