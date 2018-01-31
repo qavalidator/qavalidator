@@ -2,7 +2,7 @@
 [[release-notes]]
 = Release Notes
 
-== Relase 1.2.7 (work in progress)
+== Release 1.2.7 -- 31.01.2018
 
 Breaking Changes::
 * renamed some filters in `GraphFilterPlugin`, to have more consistent naming of the filter commands:
