@@ -26,6 +26,7 @@ subprojects {
 
     // for publishing via Bintray
     apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
 
     group = 'de.qaware.qav'
 
