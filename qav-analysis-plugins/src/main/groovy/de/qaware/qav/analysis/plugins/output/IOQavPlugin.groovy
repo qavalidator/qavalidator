@@ -7,7 +7,6 @@ import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
 import de.qaware.qav.graph.api.DependencyGraph
-import de.qaware.qav.graph.api.Node
 import de.qaware.qav.graph.io.GraphReaderWriter
 import de.qaware.qav.graph.io.NodePrinter
 import de.qaware.qav.visualization.Abbreviation
@@ -86,41 +85,6 @@ class IOQavPlugin extends BasePlugin {
         if (!dependencyGraph.getAllNodes().isEmpty() || printIfEmpty) {
             new NodePrinter(dependencyGraph, this.outputDir + "/" + filename).printNodes()
         }
-    }
-
-    /**
-     * Prints the given node of the given graph into a file.
-     *
-     * @param dependencyGraph the graph
-     * @param filename the filename; it is relative to the outputDir defined via {@link #setOutputDir(java.lang.String)}
-     * @param nodes <em>used to be:</em> the nodes to print. Now deprecated; will print all nodes in the graph.
-     *
-     * @deprecated as of 1.2.0, do not give the list of nodes to print
-     */
-    @Deprecated
-    @QavCommand(name = "printNodes",
-            description = """
-                    Prints the given node of the given graph into a file.
-                    
-                    WARNING: This variant of the command is deprecated.
-                    """,
-            parameters = [
-                    @QavCommand.Param(name = "dependencyGraph", description = "The graph in which the nodes lie."),
-                    @QavCommand.Param(name = "filename", description = """
-                            The filename; it is relative to the `outputDir` defined via the `outputDir` command or
-                            in the Maven/Gradle config (explicitly or by default), or on the command line.
-                            """),
-                    @QavCommand.Param(name = "nodes", description = """
-                            The `Collection` of nodes.
-                            
-                            *Deprecated since 1.2.0.* Do not use this parameter. Filter the graph instead.
-                            This command will print all nodes in the given graph and ignore this parameter.
-                            """)
-
-            ])
-    void printNodes(DependencyGraph dependencyGraph, String filename, List<Node> nodes) {
-        log.warn("DEPRECATED (since 1.2.0): printNodes has only two arguments. Do not pass a list of nodes; it will be ignored. Filter the graph instead.")
-        printNodes(dependencyGraph, filename)
     }
 
     /**
