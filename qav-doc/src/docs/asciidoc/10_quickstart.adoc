@@ -6,6 +6,12 @@ This chapter provides examples that you can copy/paste to get started with QAval
 * Using it: via <<usage-maven,Maven>>, <<usage-gradle,Gradle>>, or <<usage-cli,command line>>
 * An example for the <<getting-started-analysis,QAvalidator AnalysisDSL>>
 
+== Latest version
+
+This is the latest released version:
+
+image::https://api.bintray.com/packages/qa-tse/qavalidator/qav-app/images/download.svg[link="https://bintray.com/qa-tse/qavalidator/qav-app/_latestVersion"]
+
 
 [[usage-maven]]
 == Maven Usage
@@ -17,7 +23,7 @@ Just include the Maven plugin into your pom.xml:
 [source,xml]
 -----
 <properties>
-    <qav.version>1.2.5</qav.version>
+    <qav.version>1.2.7</qav.version>
 </properties>
 
 <build>
@@ -139,7 +145,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "de.qaware.qav:qav-gradle-plugin:1.2.5"
+        classpath "de.qaware.qav:qav-gradle-plugin:1.2.7"
     }
 }
 
