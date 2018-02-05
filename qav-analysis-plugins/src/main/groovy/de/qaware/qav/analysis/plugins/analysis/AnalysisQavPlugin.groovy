@@ -179,7 +179,7 @@ class AnalysisQavPlugin extends BasePlugin {
      * Returns a filtered graph which contains only the nodes specified by the patterns and those with dependencies to them.
      *
      * @param graph the DependencyGraph to analyze
-     * @param patterns the patterns of the target
+     * @param patterns list of target name patterns
      * @return a filtered graph which contains only the nodes specified by the patterns and those with dependencies to them.
      *
      * @since 1.2.7
@@ -196,7 +196,7 @@ class AnalysisQavPlugin extends BasePlugin {
             """,
             parameters = [
                     @QavCommand.Param(name = "graph", description = "the DependencyGraph to analyze"),
-                    @QavCommand.Param(name = "patterns", description = "the patterns of the target")
+                    @QavCommand.Param(name = "patterns", description = "list of target name patterns")
             ],
             result = "a filtered graph which contains only the nodes specified by the patterns and those with dependencies to them."
     )
