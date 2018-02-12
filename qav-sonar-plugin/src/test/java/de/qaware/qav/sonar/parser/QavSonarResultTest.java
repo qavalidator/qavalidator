@@ -3,7 +3,7 @@ package de.qaware.qav.sonar.parser;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link QavSonarResult}.
@@ -38,7 +38,7 @@ public class QavSonarResultTest {
         result.setNoWarnings(0);
         result.setEmpty(false);
 
-        assertThat(result.toString(), is("QavSonarResult{isEmpty=false, noWarnings=0, noErrors=5}"));
+        assertThat(result.toString(), is("QavSonarResult(isEmpty=false, noWarnings=0, noErrors=5)"));
     }
 
 }

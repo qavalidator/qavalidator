@@ -1,10 +1,13 @@
 package de.qaware.qav.visualization;
 
+import lombok.Getter;
+
 /**
  * Line style for DOT or GraphML output.
  *
  * @author QAware GmbH
  */
+@Getter
 public class LineStyle {
 
     private final String color;
@@ -32,19 +35,4 @@ public class LineStyle {
         this.dotLineStyle = "line".equals(lineStyle) ? "solid" : lineStyle;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public String getWidth() {
-        return width;
-    }
-
-    public String getLineStyle() {
-        return lineStyle;
-    }
-
-    public String getDotLineStyle() {
-        return dotLineStyle;
-    }
 }

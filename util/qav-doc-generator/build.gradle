@@ -2,7 +2,6 @@
 // contains the documentation annotations, their annotation processor, and the documentation generator.
 
 apply plugin: 'java-library'
-apply plugin: 'net.ltgt.apt'
 
 dependencies {
     compile project(':util:qav-util')

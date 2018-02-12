@@ -8,6 +8,7 @@ QAvalidator is a tool to model your architecture and check the dependencies in y
 
 == Build
 
+=== Build from the command line
 * The build process is a Gradle build.
 * For the UI, it uses NodeJS and Webpack via Gradle.
 * For the Maven Plugin, use Maven. It's not built within the Gradle build.
@@ -21,6 +22,11 @@ on top level to build everything (except the Maven plugin).
 Sometimes, the Node stuff has problems with the console. To avoid those, the workaround is:
 
   gradlew --console plain [... tasks ...]
+
+=== Using IntelliJ
+
+* Use the IntelliJ Lombok plugin
+* Switch on "Enable Annotation Processing" in "Settings / Build, Excecution, Deployment / Compiler / Annotation Processor"
 
 
 == Release
