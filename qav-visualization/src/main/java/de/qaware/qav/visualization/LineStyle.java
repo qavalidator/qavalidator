@@ -1,6 +1,7 @@
 package de.qaware.qav.visualization;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Line style for DOT or GraphML output.
@@ -8,6 +9,7 @@ import lombok.Getter;
  * @author QAware GmbH
  */
 @Getter
+@ToString
 public class LineStyle {
 
     private final String color;

@@ -5,7 +5,6 @@ apply plugin: 'java-library'
 
 dependencies {
     compile project(':util:qav-util')
-    testCompile project(path: ':util:qav-test-util', configuration: 'testOutput')
 
     compile group: 'org.antlr', name: 'stringtemplate', version: stringtemplateVersion
 
