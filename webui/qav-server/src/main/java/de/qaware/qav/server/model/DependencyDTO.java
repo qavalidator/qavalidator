@@ -1,5 +1,8 @@
 package de.qaware.qav.server.model;
 
+import lombok.Data;
+import lombok.ToString;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +11,8 @@ import java.util.Map;
  *
  * @author QAware GmbH
  */
+@Data
+@ToString
 public class DependencyDTO {
 
     private String sourceName;
@@ -17,43 +22,4 @@ public class DependencyDTO {
     private List<DependencyDTO> baseDependencies;
     private Map<String, Object> properties;
 
-    public String getSourceName() {
-        return sourceName;
-    }
-
-    public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
-    }
-
-    public String getTargetName() {
-        return targetName;
-    }
-
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
-    public List<DependencyDTO> getBaseDependencies() {
-        return baseDependencies;
-    }
-
-    public void setBaseDependencies(List<DependencyDTO> baseDependencies) {
-        this.baseDependencies = baseDependencies;
-    }
-
-    public Map<String, Object> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
-    }
 }
