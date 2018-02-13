@@ -1,0 +1,18 @@
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  DOCKER_IMAGE_NAME: $CI_PROJECT_NAME
+  CACHE_KEY: $CI_COMMIT_REF_SLUG
+  GRADLE_CACHE: /root/.gradle/**
+
+
+stages:
+  - build     # compile, unit-tests, integration-tests, package, run SonarQube analysis
+
+gradle-build:
+  stage: build
+  image: openjdk:8-jdk
+  cache:
+    key: $CACHE_KEY
+    paths:
+      - $GRADLE_CACHE
+  script: "./gradlew clean build"
