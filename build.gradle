@@ -10,9 +10,6 @@ plugins {
 
 sonarqube {
     properties {
-        // environment variable are set by Jenkins:
-        property "sonar.host.url", System.env.SONAR_HOST_URL
-        property "sonar.login", System.env.SONAR_AUTH_TOKEN
         property "sonar.projectName", "QAvalidator"
         property "sonar.exclusions", "**/*.html,**/*.css,**/*.js"
     }
