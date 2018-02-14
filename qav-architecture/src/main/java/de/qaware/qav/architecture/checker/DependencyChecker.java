@@ -75,6 +75,7 @@ public class DependencyChecker extends Checker {
                         && checkAllReferencesAllowed(edge, Constants.TARGET_IMPL, Constants.USES_IMPL);
     }
 
+    @SuppressWarnings("squid:S1698") // compare with "==" instead of .equals()
     private boolean isInSameScope(Dependency edge) {
         LOGGER.debug("Checking for same namespace access: {}", edge);
         Node source = edge.getSource();
