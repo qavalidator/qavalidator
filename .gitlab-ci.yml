@@ -15,4 +15,4 @@ gradle-build:
     key: $CACHE_KEY
     paths:
       - $GRADLE_CACHE
-  script: "./gradlew clean build"
+  script: "./gradlew clean build sonarqube"
