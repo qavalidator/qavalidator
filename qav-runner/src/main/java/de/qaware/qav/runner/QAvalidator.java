@@ -32,7 +32,7 @@ public class QAvalidator {
      * @return the result of the run. If the analysis fails with any kind of {@link Exception}, a flag is set and the
      * message is contained in the {@link QAvalidatorResult}.
      */
-    @SuppressWarnings("squid:S2221,squid:S1166")
+    @SuppressWarnings({"squid:S2221","squid:S1166"})
     // catching Exception (instead of specific subtypes) because there could also be runtime exceptions.
     // Their messages will all be properly logged.
     public QAvalidatorResult runAnalysis(QAvalidatorConfig config) {

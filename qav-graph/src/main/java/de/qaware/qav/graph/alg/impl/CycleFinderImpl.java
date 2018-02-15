@@ -9,6 +9,7 @@ import org.jgrapht.alg.cycle.TarjanSimpleCycles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +23,7 @@ public class CycleFinderImpl implements CycleFinder {
     private static final Logger LOGGER = LoggerFactory.getLogger(CycleFinderImpl.class);
 
     /**
-     * This counter is for all instances,
-     * so that multiple cycle detection runs produce unique IDs.
+     * This counter is for all instances, so that multiple cycle detection runs produce unique IDs.
      */
     private static int cycleCounter = 0;
 
@@ -97,9 +97,7 @@ public class CycleFinderImpl implements CycleFinder {
     }
 
     /**
-     * marks nodes with cycle labels:
-     * IN_CYCLE = true for each node
-     * CYCLE_LABEL = unique label per cycle
+     * marks nodes with cycle labels: IN_CYCLE = true for each node CYCLE_LABEL = unique label per cycle
      */
     private void markNodesInCycles() {
         for (List<Node> cycle : cycles) {
@@ -127,6 +125,6 @@ public class CycleFinderImpl implements CycleFinder {
 
     @Override
     public List<List<Node>> getCycles() {
-        return cycles;
+        return new ArrayList<>(cycles);
     }
 }

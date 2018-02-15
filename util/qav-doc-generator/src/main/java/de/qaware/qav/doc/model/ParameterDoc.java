@@ -1,5 +1,6 @@
 package de.qaware.qav.doc.model;
 
+import lombok.Data;
 import lombok.ToString;
 
 /**
@@ -7,7 +8,10 @@ import lombok.ToString;
  *
  * @author QAware GmbH
  */
+@Data
 @ToString
-public class ParameterDoc extends AbstractNameDescriptionDoc {
+public class ParameterDoc {
 
+    private String name;
+    private String description;
 }

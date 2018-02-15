@@ -13,10 +13,12 @@ import java.util.List;
  * @author QAware GmbH
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
-public class CommandDoc extends AbstractNameDescriptionDoc {
+public class CommandDoc {
 
+    private String name;
+    private String description;
     private List<ParameterDoc> parameters = new ArrayList<>();
     private String result;
 

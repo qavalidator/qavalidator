@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 /**
  * Util methods to deal with ANTLR StringTemplates.
  *
- * @author tilman
+ * @author QAware GmbH
  */
 public final class StringTemplateUtil {
 
@@ -26,16 +26,6 @@ public final class StringTemplateUtil {
      * util class with only static methods.
      */
     private StringTemplateUtil() {
-    }
-
-    /**
-     * loads the STG file; that should be on the classpath (i.e. could also be in the resources or jar file)
-     *
-     * @param templateName the name of the template file
-     * @return the {@link StringTemplateGroup}
-     */
-    public static StringTemplateGroup loadTemplateGroup(String templateName) {
-        return loadTemplateGroupAngleBracket(templateName);
     }
 
     /**

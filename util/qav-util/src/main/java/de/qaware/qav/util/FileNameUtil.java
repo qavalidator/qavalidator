@@ -1,6 +1,7 @@
 package de.qaware.qav.util;
 
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.apache.tools.ant.DirectoryScanner;
 import org.springframework.util.AntPathMatcher;
 
@@ -27,7 +28,6 @@ public final class FileNameUtil {
     private FileNameUtil() {
     }
 
-
     /**
      * Finds all files identified by the given ant-style filter and returns them in a list, sorted according to the
      * absolute paths.
@@ -37,7 +37,7 @@ public final class FileNameUtil {
      */
     public static List<File> identifyFiles(Map parameters) {
         String baseDir = (String) parameters.get("baseDir");
-        if (StringUtils.isEmpty(baseDir) || !new File(baseDir).exists()) {
+        if (Strings.isNullOrEmpty(baseDir) || !new File(baseDir).exists()) {
             return new ArrayList<>();
         }
 
@@ -67,32 +67,32 @@ public final class FileNameUtil {
      * @param setter the setter to call if there are values to set
      */
     private static void setIncludesExcludes(Object values, Consumer<String[]> setter) {
-        String[] array = getAsArray(values);
-        if (array != null) {
-            setter.accept(array);
+        List<String> list = getAsList(values);
+        if (list != null && !list.isEmpty()) {
+            setter.accept(list.toArray(new String[]{}));
         }
     }
 
     /**
-     * returns the given object as String array:
+     * returns the given object as List of Strings:
      * <ul>
-     * <li>if it's null: returns null</li>
-     * <li>if it's a String: returns an array with one element</li>
-     * <li>if it's a List: returns an array of that list</li>
+     * <li>if it's null: returns empty list</li>
+     * <li>if it's a String: returns a list with one element</li>
+     * <li>if it's a List: returns that list</li>
      * </ul>
      *
      * @param values the values
-     * @return the array
+     * @return the list
      */
-    /*package*/ static String[] getAsArray(Object values) {
+    /*package*/ static List<String> getAsList(Object values) {
         if (values == null) {
-            return null;
+            return new ArrayList<>();
         }
 
         if (values instanceof String) {
-            return new String[]{(String) values};
+            return Lists.newArrayList((String) values);
         } else if (values instanceof List) {
-            return ((List<?>) values).toArray(new String[]{});
+            return (List<String>) values;
         } else {
             throw new IllegalArgumentException("includes or excludes must be a String or a List<String> but is a " + values.getClass());
         }
@@ -115,8 +115,8 @@ public final class FileNameUtil {
             return true;
         }
 
-        String[] includes = getAsArray(parameters.get("includes"));
-        String[] excludes = getAsArray(parameters.get("excludes"));
+        List<String> includes = getAsList(parameters.get("includes"));
+        List<String> excludes = getAsList(parameters.get("excludes"));
 
         return matches(name, includes, true) && !matches(name, excludes, false);
     }
@@ -130,18 +130,13 @@ public final class FileNameUtil {
      * @param defaultValue the defaultValue
      * @return true if it matches at least one pattern, false if not
      */
-    public static boolean matches(String name, String[] patterns, boolean defaultValue) {
-        if (patterns == null || patterns.length == 0) {
+    public static boolean matches(String name, List<String> patterns, boolean defaultValue) {
+        if (patterns == null || patterns.isEmpty()) {
             return defaultValue;
         }
 
-        for (String pattern : patterns) {
-            if (matches(name, pattern)) {
-                return true;
-            }
-        }
-
-        return false;
+        return patterns.stream()
+                .anyMatch(pattern -> matches(name, pattern));
     }
 
     /**

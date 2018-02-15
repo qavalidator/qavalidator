@@ -128,8 +128,8 @@ public class FileNameUtilTest {
         assertThat(FileNameUtil.matches("a/b/c/d/e.txt", "**/e.txt"), is(true));
         assertThat(FileNameUtil.matches("a/b/c/d/e.txt", "*/e.txt"), is(false));
 
-        assertThat(FileNameUtil.matches("a/b/c/d/e.txt", new String[] {"**/e.txt"}, false), is(true));
-        assertThat(FileNameUtil.matches("a/b/c/d/e.txt", new String[] {"*/e.txt"}, true), is(false));
+        assertThat(FileNameUtil.matches("a/b/c/d/e.txt", Lists.newArrayList("**/e.txt"), false), is(true));
+        assertThat(FileNameUtil.matches("a/b/c/d/e.txt", Lists.newArrayList("*/e.txt"), true), is(false));
 
         assertThat(FileNameUtil.matches("a/b/c/d/e.txt", null, false), is(false));
         assertThat(FileNameUtil.matches("a/b/c/d/e.txt", null, true), is(true));
@@ -171,12 +171,12 @@ public class FileNameUtilTest {
 
     @Test
     public void testGetAsArray() {
-        assertThat(FileNameUtil.getAsArray(null), nullValue());
-        assertThat(FileNameUtil.getAsArray(""), CoreMatchers.is(new String[] {""}));
-        assertThat(FileNameUtil.getAsArray(Lists.newArrayList("a", "b", "c")), CoreMatchers.is(new String[] {"a", "b", "c"}));
+        assertThat(FileNameUtil.getAsList(null), hasSize(0));
+        assertThat(FileNameUtil.getAsList(""), CoreMatchers.is(Lists.newArrayList("")));
+        assertThat(FileNameUtil.getAsList(Lists.newArrayList("a", "b", "c")), CoreMatchers.is(Lists.newArrayList("a", "b", "c")));
 
         try {
-            assertThat(FileNameUtil.getAsArray(12L), nullValue());
+            assertThat(FileNameUtil.getAsList(12L), nullValue());
             fail("IllegalArgumentException expected");
         } catch(IllegalArgumentException e) {
             assertThat(e.getMessage(), CoreMatchers.is("includes or excludes must be a String or a List<String> but is a class java.lang.Long"));
