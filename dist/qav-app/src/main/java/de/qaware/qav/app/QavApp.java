@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class QavApp implements ApplicationRunner {
 
-    private final PrintStream out = System.out;
+    private static final PrintStream OUT = System.out;
 
     @Value("${analysis}")
     private String analysisFileName;
@@ -64,12 +64,12 @@ public class QavApp implements ApplicationRunner {
      */
     private void reportErrors(QAvalidatorResult result) {
         if (result.isFailedWithException()) {
-            out.println("===== Error in analysis =====");
-            out.println(result.getExceptionMessage());
+            OUT.println("===== Error in analysis =====");
+            OUT.println(result.getExceptionMessage());
         }
         if (!result.getFailedSteps().isEmpty()) {
-            out.println("===== Failed steps: =====");
-            out.println(result.getFailedSteps().toString());
+            OUT.println("===== Failed steps: =====");
+            OUT.println(result.getFailedSteps().toString());
         }
     }
 }

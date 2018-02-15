@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.graph.api.DependencyGraph;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public abstract class Checker {
      * @return a {@link List} of messages
      */
     public List<String> getViolationMessages() {
-        return violationMessages;
+        return new ArrayList<>(violationMessages);
     }
 
     /**

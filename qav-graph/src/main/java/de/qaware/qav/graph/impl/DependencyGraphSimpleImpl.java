@@ -4,8 +4,8 @@ import com.google.common.collect.Maps;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
-import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.api.EdgeFilter;
+import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.api.NodeFilter;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -14,7 +14,10 @@ import org.jgrapht.graph.MaskFunctor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -85,7 +88,7 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
         Dependency edge = graph.getEdge(from, to);
         if (edge != null) {
             if (edge.getDependencyType().ordinal() < type.ordinal()) {
-                LOGGER.debug("Upgrading dependency {} to [{}]", edge, type.name());
+                LOGGER.debug("Upgrading dependency {} to [{}]", edge, type);
                 edge.setDependencyType(type);
             } else {
                 LOGGER.debug("Reusing dependency {}", edge);

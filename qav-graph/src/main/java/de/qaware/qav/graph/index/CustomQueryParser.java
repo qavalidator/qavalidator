@@ -6,6 +6,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -26,7 +27,7 @@ public class CustomQueryParser extends QueryParser {
      */
     public CustomQueryParser(String f, Analyzer a, Set<String> numericFields) {
         super(f, a);
-        this.numericFields = numericFields;
+        this.numericFields = new HashSet<>(numericFields);
     }
 
     @Override

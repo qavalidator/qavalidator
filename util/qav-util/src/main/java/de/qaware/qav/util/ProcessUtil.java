@@ -90,7 +90,7 @@ public final class ProcessUtil {
      */
     public static int execProcess(String directory, List<String> cmd) {
         File procDirectory = new File(directory);
-        LOGGER.debug("Starting process [dir:{}]: {}", procDirectory.getAbsolutePath(), cmd.toString());
+        LOGGER.debug("Starting process [dir:{}]: {}", procDirectory.getAbsolutePath(), cmd);
 
         ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         processBuilder.directory(procDirectory);
@@ -108,17 +108,13 @@ public final class ProcessUtil {
             LOGGER.error("Error starting the postprocessing command '{}': {}", cmd.get(0), e.getMessage());
         } catch (InterruptedException e) {
             LOGGER.error("Error postprocessing '{}': {}", cmd.get(0), e.getMessage());
+            Thread.currentThread().interrupt();
         }
         long end = System.currentTimeMillis();
 
-        String command = cmd.toString();
-        if (result == 0) {
-            String successString = "SUCCESS: ";
-            LOGGER.info("{} executed command '{}' in {} ms", successString, command, (end - start));
-        } else {
-            String successString = "FAILURE: ";
-            LOGGER.info("{} executed command '{}' in {} ms", successString, command, (end - start));
-        }
+        String successString = (result == 0) ? "SUCCESS: " : "FAILURE: ";
+        LOGGER.info("{} executed command '{}' in {} ms", successString, cmd, (end - start));
+
         if (stdOut != null && !stdOut.isEmpty()) {
             LOGGER.info("Stdout: {}", stdOut);
         }

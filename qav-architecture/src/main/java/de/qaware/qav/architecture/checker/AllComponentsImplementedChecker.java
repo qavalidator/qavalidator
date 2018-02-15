@@ -37,7 +37,7 @@ public class AllComponentsImplementedChecker extends Checker {
     public String getViolationMessage() {
         return getViolationMessages().isEmpty()
                 ? null
-                : getViolationMessages().size() + " components without corresponding classes: " + getViolationMessages();
+                : (getViolationMessages().size() + " components without corresponding classes: " + getViolationMessages());
     }
 
     private void check() {

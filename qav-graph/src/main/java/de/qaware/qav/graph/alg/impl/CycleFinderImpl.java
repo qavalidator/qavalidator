@@ -73,11 +73,12 @@ public class CycleFinderImpl implements CycleFinder {
     /**
      * For each cycle, log all base relations
      */
+    @SuppressWarnings("squid:S1698") // compare with "==" instead of .equals()
     private void logBaseRelations(List<Node> nodes) {
         LOGGER.error("Cycle: {}", nodes);
         for (Node source : nodes) {
             for (Node target : nodes) {
-                if (source != target) {
+                if (source != target) { // yes, compare instances
                     Dependency edge = dependencyGraph.getEdge(source, target);
                     if (edge != null) {
                         LOGGER.info("  {} -> {} [{}]", source.getName(), target.getName(), edge.getBaseDependencies().size());
@@ -98,12 +99,21 @@ public class CycleFinderImpl implements CycleFinder {
      */
     private void markNodesInCycles() {
         for (List<Node> cycle : cycles) {
-            String cycleLabel = "Cycle_" + cycleCounter++;
+            String cycleLabel = "Cycle_" + getCycleNumber();
             cycle.forEach(node -> {
                 node.setProperty(IN_CYCLE, true);
                 node.setProperty(CYCLE_LABEL, cycleLabel);
             });
         }
+    }
+
+    /**
+     * unique numbers of cycles
+     *
+     * @return the next cycle number
+     */
+    private static synchronized int getCycleNumber() {
+        return cycleCounter++;
     }
 
     @Override

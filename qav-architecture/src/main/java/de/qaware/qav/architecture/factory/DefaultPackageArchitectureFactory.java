@@ -84,7 +84,7 @@ public final class DefaultPackageArchitectureFactory {
         checkNotNull(dependencyGraph, "graph may not be null");
 
         Architecture result = new Architecture();
-        result.setName(maxLength == 0 ? architectureName : architectureName + "-" + maxLength);
+        result.setName(maxLength == 0 ? architectureName : (architectureName + "-" + maxLength));
 
         for (Node node : dependencyGraph.getAllNodes()) {
             String name = node.getName();
@@ -160,12 +160,12 @@ public final class DefaultPackageArchitectureFactory {
     String getComponentName(String name, int maxLength) {
         checkNotNull(name, "name");
 
-        String[] parts = name.split(pathSplitterRegExp, maxLength == 0 ? 0 : maxLength + 1);
+        String[] parts = name.split(pathSplitterRegExp, maxLength == 0 ? 0 : (maxLength + 1));
         if (parts.length == 1) {
             return null;
         }
 
-        int endIndex = maxLength == 0 ? parts.length - 1 : Math.min(maxLength, parts.length - 1);
+        int endIndex = maxLength == 0 ? (parts.length - 1) : Math.min(maxLength, parts.length - 1);
         return StringUtils.join(parts, pathSeparator, 0, endIndex);
     }
 }

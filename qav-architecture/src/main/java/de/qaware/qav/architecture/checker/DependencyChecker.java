@@ -1,6 +1,5 @@
 package de.qaware.qav.architecture.checker;
 
-import com.google.common.collect.Lists;
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.Dependency;
@@ -11,6 +10,7 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -24,7 +24,7 @@ public class DependencyChecker extends Checker {
 
     private static final Logger LOGGER = getLogger(DependencyChecker.class);
 
-    private final List<Dependency> violatingDependencies = Lists.newArrayList();
+    private List<Dependency> violatingDependencies;
 
     /**
      * Constructor.
@@ -41,29 +41,29 @@ public class DependencyChecker extends Checker {
     public String getViolationMessage() {
         return getViolationMessages().isEmpty()
                 ? null
-                : getViolationMessages().size() + " uncovered dependencies: " + getViolationMessages();
+                : (getViolationMessages().size() + " uncovered dependencies: " + getViolationMessages());
     }
 
     private void check() {
-        dependencyGraph.getAllEdges().stream()
-                .filter(edge -> edge.getDependencyType() != DependencyType.CONTAINS)
-                .filter(edge -> !hasMatchingRule(edge))
-                .forEach(violatingDependencies::add);
+        violatingDependencies =
+                dependencyGraph.getAllEdges().stream()
+                        .filter(edge -> edge.getDependencyType() != DependencyType.CONTAINS)
+                        .filter(edge -> !hasMatchingRule(edge))
+                        .collect(Collectors.toList());
 
         logViolatingDependencies();
     }
 
     /**
      * Checks if there is a rule which allows the given edge.
-     *
+     * <p>
      * I.e., it checks all actual references of the given dependency against "uses" and "usesImpl" rules.
      * <p>
      * Note that for each dependency (i.e.: edge in the graph), there may be more than one reference to APIs oder Impl
      * parts of the target component. Therefore, we need to check each access to each API or Impl.
      * <p>
-     * They are annotated in the Graph:
-     * the actual references are annotated as properties on the edge;
-     * the allowed references are annotated as properties on the source node.
+     * They are annotated in the Graph: the actual references are annotated as properties on the edge; the allowed
+     * references are annotated as properties on the source node.
      *
      * @param edge the edge to check
      * @return true if there is at least one rule which allows all references of the given edge.
@@ -105,8 +105,8 @@ public class DependencyChecker extends Checker {
      * Checks if the dependency is allowed by this component or a parent component.
      *
      * @param edge                 the edge to check
-     * @param actualReferencesKey  the key to look up the actual references; for impl: {@link Constants#USES_IMPL},
-     *                             for API: {@link Constants#USES_API}
+     * @param actualReferencesKey  the key to look up the actual references; for impl: {@link Constants#USES_IMPL}, for
+     *                             API: {@link Constants#USES_API}
      * @param allowedReferencesKey the key to look up the allowed references; for impl: {@link Constants#TARGET_IMPL},
      *                             for API: {@link Constants#TARGET_API}
      * @return true if a rule could be found which justifies all references in that dependency

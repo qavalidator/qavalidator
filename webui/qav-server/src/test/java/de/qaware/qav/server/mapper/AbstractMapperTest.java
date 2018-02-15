@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
  *
  * @author QAware GmbH
  */
-public class AbstractMapperTest {
+public abstract class AbstractMapperTest {
 
     private static final String TEST_GRAPH = "src/test/resources/testGraph1.json";
 

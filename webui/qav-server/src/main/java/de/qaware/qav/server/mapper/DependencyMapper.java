@@ -4,8 +4,10 @@ import com.google.common.collect.Maps;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.server.model.DependencyDTO;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -43,9 +45,10 @@ public final class DependencyMapper {
         return result;
     }
 
-    private static List<DependencyDTO> mapBaseDependencies(List<Dependency> baseDependencies) {
+    private static List<DependencyDTO> mapBaseDependencies(Set<Dependency> baseDependencies) {
         return baseDependencies.stream()
                 .map(DependencyMapper::toDTO)
+                .sorted(Comparator.comparing(DependencyDTO::getSourceName))
                 .collect(Collectors.toList());
     }
 

@@ -36,7 +36,7 @@ public class AllExplicitRulesUsedChecker extends Checker {
     public String getViolationMessage() {
         return getViolationMessages().isEmpty()
                 ? null
-                : getViolationMessages().size() + " unused rules: " + getViolationMessages();
+                : (getViolationMessages().size() + " unused rules: " + getViolationMessages());
     }
 
     private void check() {

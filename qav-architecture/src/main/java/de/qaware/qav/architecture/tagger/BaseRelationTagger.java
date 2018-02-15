@@ -4,7 +4,6 @@ import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,7 +32,7 @@ public final class BaseRelationTagger {
     }
 
     private static void tagBaseRelationNumbers(Dependency dependency) {
-        List<Dependency> baseDependencies = dependency.getBaseDependencies();
+        Set<Dependency> baseDependencies = dependency.getBaseDependencies();
 
         if (!baseDependencies.isEmpty()) {
             Set<String> sourceNames = baseDependencies.stream()

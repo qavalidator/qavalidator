@@ -26,15 +26,14 @@ public final class AsmUtil {
         addReplacement("/", ".");
     }
 
-    private static void addReplacement(String pattern, String rep) {
-        REPLACEMENTS.add(new ImmutablePair<>(Pattern.compile(pattern), rep));
-    }
-
-
     /**
      * util class is not meant to be instantiated.
      */
     private AsmUtil() {
+    }
+
+    private static void addReplacement(String pattern, String rep) {
+        REPLACEMENTS.add(new ImmutablePair<>(Pattern.compile(pattern), rep));
     }
 
     /**
@@ -64,7 +63,7 @@ public final class AsmUtil {
         if (className == null) {
             return null;
         }
-        if (collapseInnerClasses && className.indexOf('$') > 0) {
+        if (collapseInnerClasses && className.indexOf('$') >= 0) {
             return toClassName(className.substring(0, className.indexOf('$')));
         }
         return toClassName(className);

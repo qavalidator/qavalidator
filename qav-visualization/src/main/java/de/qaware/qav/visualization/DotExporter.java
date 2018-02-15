@@ -227,7 +227,7 @@ public class DotExporter {
         if (noNodes < MAX_NODES_FOR_DOT_CREATION) {
             postProcessResults();
         } else {
-            LOGGER.info("Not calling DOT - graph probably too large.");
+            LOGGER.info("Not calling DOT - graph probably too large: {} nodes", noNodes);
         }
     }
 

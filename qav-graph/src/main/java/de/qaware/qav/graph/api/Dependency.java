@@ -1,9 +1,9 @@
 package de.qaware.qav.graph.api;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static java.lang.String.format;
 
@@ -16,7 +16,7 @@ public class Dependency extends AbstractGraphElement {
 
     private final Node source;
     private final Node target;
-    private final List<Dependency> baseDependencies = Lists.newArrayList();
+    private final Set<Dependency> baseDependencies = new HashSet<>();
     private DependencyType dependencyType;
 
     /**
@@ -65,12 +65,12 @@ public class Dependency extends AbstractGraphElement {
     }
 
     /**
-     * getter. returns a copy of the baseDependencies list.
+     * getter. returns a copy of the baseDependencies set.
      *
-     * @return a copy of the baseDependencies list.
+     * @return a copy of the baseDependencies set.
      */
-    public List<Dependency> getBaseDependencies() {
-        return Lists.newArrayList(baseDependencies);
+    public Set<Dependency> getBaseDependencies() {
+        return new HashSet<>(baseDependencies);
     }
 
     @Override
