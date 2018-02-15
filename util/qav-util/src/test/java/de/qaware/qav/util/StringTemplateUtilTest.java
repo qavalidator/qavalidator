@@ -17,13 +17,13 @@ public class StringTemplateUtilTest {
 
     @Test
     public void testLoadTemplateGroup() {
-        StringTemplateGroup stringTemplateGroup = StringTemplateUtil.loadTemplateGroup("/stg/Test.stg");
+        StringTemplateGroup stringTemplateGroup = StringTemplateUtil.loadTemplateGroupAngleBracket("/stg/Test.stg");
         assertStringTemplate(stringTemplateGroup);
     }
 
     @Test
     public void testLoadTemplateGroupWithDollarSign() {
-        StringTemplateGroup stringTemplateGroup = StringTemplateUtil.loadTemplateGroup("/stg/Test_Dollar.stg", true);
+        StringTemplateGroup stringTemplateGroup = StringTemplateUtil.loadTemplateGroupDollarSign("/stg/Test_Dollar.stg");
         assertStringTemplate(stringTemplateGroup);
     }
 
@@ -37,6 +37,6 @@ public class StringTemplateUtilTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testLoadTemplateGroupNotExisting() {
-        StringTemplateUtil.loadTemplateGroup("/not/existing/file.stg");
+        StringTemplateUtil.loadTemplateGroupAngleBracket("/not/existing/file.stg");
     }
 }

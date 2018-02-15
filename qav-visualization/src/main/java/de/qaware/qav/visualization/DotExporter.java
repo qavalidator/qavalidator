@@ -55,6 +55,8 @@ public class DotExporter {
     public static final String NODES_ATT = "nodes";
     public static final String EDGES_ATT = "edges";
     public static final String CLUSTERS_ATT = "clusters";
+    public static final String FROM_ATT = "from";
+    public static final String TO_ATT = "to";
 
     private final DependencyGraph dependencyGraph;
     private final String fileNameBase;
@@ -95,7 +97,7 @@ public class DotExporter {
 
         this.createEdgeLabels = createEdgeLabels;
 
-        templates = StringTemplateUtil.loadTemplateGroup(DOT_STG);
+        templates = StringTemplateUtil.loadTemplateGroupAngleBracket(DOT_STG);
         outGraphST = templates.getInstanceOf(FILE_ST);
     }
 
@@ -190,9 +192,9 @@ public class DotExporter {
     private StringTemplate createEdgeST(Dependency dependency) {
         noEdges++;
         StringTemplate edgeST = templates.getInstanceOf(EDGE_ST);
-        edgeST.setAttribute("from", GraphExportStyles.getId(dependency.getSource().getName()));
-        edgeST.setAttribute("to", GraphExportStyles.getId(dependency.getTarget().getName()));
-        edgeST.setAttribute("style", DotExportStyles.getEdgeStyle(dependency));
+        edgeST.setAttribute(FROM_ATT, GraphExportStyles.getId(dependency.getSource().getName()));
+        edgeST.setAttribute(TO_ATT, GraphExportStyles.getId(dependency.getTarget().getName()));
+        edgeST.setAttribute(STYLE_ATT, DotExportStyles.getEdgeStyle(dependency));
 
         if (createEdgeLabels) {
             if (dependency.hasProperty(Constants.BASE_REL_COUNT)) {

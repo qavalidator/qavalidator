@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * Line style for DOT or GraphML output.
+ * Edge style for DOT or GraphML output.
  *
  * @author QAware GmbH
  */
 @Getter
 @ToString
-public class LineStyle {
+public class EdgeStyle {
 
     private final String color;
     private final String width;
@@ -30,7 +30,7 @@ public class LineStyle {
      * @param lineStyle the style, may be line, dashed, dotted, dashed_dotted.
      *                  Will be adjusted for {@link #dotLineStyle}: <tt>"solid"</tt> instead of <tt>"line"</tt>
      */
-    public LineStyle(String color, String width, String lineStyle) {
+    public EdgeStyle(String color, String width, String lineStyle) {
         this.color = color;
         this.width = width;
         this.lineStyle = lineStyle;

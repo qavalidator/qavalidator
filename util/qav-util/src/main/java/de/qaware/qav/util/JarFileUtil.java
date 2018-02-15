@@ -47,6 +47,7 @@ public final class JarFileUtil {
      * @param parameters   the parameters map. Has one entry for "includes" and one for "excludes" patterns.
      * @param classHandler the {@link ClassHandler} which will handle the class files.
      */
+    @SuppressWarnings("squid:S1166") // wants log or rethrow exception. It's logged well enough here.
     public static void readJarFile(File base, Map parameters, ClassHandler classHandler) {
         checkNotNull(base, "Jar file must be given");
         LOGGER.info("Reading JAR file: {}", base.getAbsolutePath());

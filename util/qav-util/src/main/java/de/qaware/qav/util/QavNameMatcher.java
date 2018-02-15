@@ -46,7 +46,7 @@ public class QavNameMatcher {
         checkNotNull(pattern, "pattern");
         checkNotNull(name, "name");
 
-        if (pattern.equals("*") || pattern.endsWith(pathSeparator + "*")) {
+        if ("*".equals(pattern) || pattern.endsWith(pathSeparator + "*")) {
             pattern += "*";
         }
 

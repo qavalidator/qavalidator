@@ -90,7 +90,7 @@ public class GraphMLExporter {
 
         this.createEdgeLabels = createEdgeLabels;
 
-        templates = StringTemplateUtil.loadTemplateGroup(GRAPHML_STG, true);
+        templates = StringTemplateUtil.loadTemplateGroupDollarSign(GRAPHML_STG);
         outGraphST = templates.getInstanceOf(FILE_ST);
 
         outGraphST.setAttribute("gname", "QAvalidator");
@@ -199,7 +199,7 @@ public class GraphMLExporter {
         StringTemplate edgeST = templates.getInstanceOf(EDGE_ST);
         edgeST.setAttribute("from", GraphExportStyles.getId(dependency.getSource().getName()));
         edgeST.setAttribute("to", GraphExportStyles.getId(dependency.getTarget().getName()));
-        LineStyle style = GraphExportStyles.getEdgeStyle(dependency);
+        EdgeStyle style = GraphExportStyles.getEdgeStyle(dependency);
         edgeST.setAttribute("color", style.getColor());
         edgeST.setAttribute("style", style.getLineStyle());
         edgeST.setAttribute("width", style.getWidth());

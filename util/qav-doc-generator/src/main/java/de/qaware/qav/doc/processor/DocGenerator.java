@@ -43,7 +43,7 @@ public class DocGenerator {
      * @param docFileWriter utility to write out the documentation
      */
     public DocGenerator(DocFileWriter docFileWriter) {
-        this.templates = StringTemplateUtil.loadTemplateGroup(QAVDOC_STG);
+        this.templates = StringTemplateUtil.loadTemplateGroupAngleBracket(QAVDOC_STG);
         this.docFileWriter = docFileWriter;
     }
 

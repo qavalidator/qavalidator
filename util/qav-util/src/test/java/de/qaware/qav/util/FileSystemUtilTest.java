@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link FileSystemUtil}.
@@ -111,8 +111,12 @@ public class FileSystemUtilTest {
     @Test
     public void testReadBytesFromFileNotExisting() {
         String filename = "build/not_existing_file";
-        byte[] result = FileSystemUtil.readBytesFromFile(filename);
-        assertThat(result, nullValue());
+        try {
+            FileSystemUtil.readBytesFromFile(filename);
+            fail("IllegalArgumentException expected");
+        } catch(IllegalArgumentException e) {
+            assertThat(e.getMessage().startsWith("Error reading file "), is(true));
+        }
     }
 
 }

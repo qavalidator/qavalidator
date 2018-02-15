@@ -24,7 +24,7 @@ public class GraphExportStylesTest {
     @Test
     public void testGetEdgeStyle() {
         Dependency dep = new Dependency(new Node("n1"), new Node("n2"), DependencyType.CREATE);
-        LineStyle edgeStyle = GraphExportStyles.getEdgeStyle(dep);
+        EdgeStyle edgeStyle = GraphExportStyles.getEdgeStyle(dep);
         assertThat(edgeStyle, notNullValue());
         assertThat(edgeStyle.getColor(), is("#b2182b"));
         assertThat(edgeStyle.getWidth(), is("3.0"));
@@ -34,7 +34,7 @@ public class GraphExportStylesTest {
     @Test
     public void testGetEdgeStyleDefault() {
         Dependency dep = new Dependency(new Node("n1"), new Node("n2"), DependencyType.CONTAINS);
-        LineStyle edgeStyle = GraphExportStyles.getEdgeStyle(dep);
+        EdgeStyle edgeStyle = GraphExportStyles.getEdgeStyle(dep);
         assertThat(edgeStyle, notNullValue());
         assertThat(edgeStyle.getColor(), is("#67001f"));
         assertThat(edgeStyle.getWidth(), is("1.0"));

@@ -14,9 +14,9 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author QAware GmbH
  */
-public class QavIntegrationRun {
+public class QavIntegrationTest {
 
-    private static final Logger LOGGER = getLogger(QavIntegrationRun.class);
+    private static final Logger LOGGER = getLogger(QavIntegrationTest.class);
 
     /**
      * This is a sample to run on QAvalidator.

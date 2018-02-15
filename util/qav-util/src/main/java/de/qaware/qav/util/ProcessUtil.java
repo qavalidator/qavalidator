@@ -88,6 +88,7 @@ public final class ProcessUtil {
      * @param cmd       the command line
      * @return the exit value of the process
      */
+    @SuppressWarnings("squid:S1166") // wants log or rethrow exception. It's logged well enough here.
     public static int execProcess(String directory, List<String> cmd) {
         File procDirectory = new File(directory);
         LOGGER.debug("Starting process [dir:{}]: {}", procDirectory.getAbsolutePath(), cmd);

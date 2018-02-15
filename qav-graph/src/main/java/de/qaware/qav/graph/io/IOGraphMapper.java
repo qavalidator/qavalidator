@@ -119,7 +119,7 @@ public class IOGraphMapper {
             Node node = dependencyGraph.getOrCreateNodeByName((String) nodeMap.get("name"));
 
             nodeMap.forEach((key, value) -> {
-                if (!key.equals("name")) {
+                if (!"name".equals(key)) {
                     node.setProperty(key, value);
                 }
             });

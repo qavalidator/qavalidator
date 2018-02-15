@@ -59,6 +59,7 @@ public final class LogFileParser {
      * @param result     the {@link QavSonarResult} to sum the result
      * @param resultFile the file to parse
      */
+    @SuppressWarnings("squid:S1166") // wants log or rethrow exception. It's logged well enough here.
     private static void analyseFile(QavSonarResult result, File resultFile) {
         LOGGER.info("Reading file: {}", resultFile.getAbsolutePath());
         try {

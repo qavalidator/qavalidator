@@ -14,6 +14,7 @@ public final class DotExportStyles {
 
     private static final String DEFAULT_STYLE = "color = black";
     private static final String CYCLE_STYLE = "color = red, penwidth = 3.0";
+    private static final double VERTICAL_SPACE_FACTOR = 0.3;
 
     /**
      * Utils class with only static method.
@@ -49,7 +50,7 @@ public final class DotExportStyles {
      */
     public static String getEdgeStyle(Dependency rel) {
         StringTemplate st = new StringTemplate("color = \"$color$\", fontcolor = \"$color$\", penwidth = $width$, style = $style$");
-        LineStyle edgeStyle = GraphExportStyles.getEdgeStyle(rel);
+        EdgeStyle edgeStyle = GraphExportStyles.getEdgeStyle(rel);
         st.setAttribute("color", edgeStyle.getColor());
         st.setAttribute("width", edgeStyle.getWidth());
         st.setAttribute("style", edgeStyle.getDotLineStyle());
@@ -64,7 +65,7 @@ public final class DotExportStyles {
      * @return the rankSep
      */
     public static double getRankSep(int noNodes) {
-        return Math.sqrt(noNodes) * 0.3;
+        return Math.sqrt(noNodes) * VERTICAL_SPACE_FACTOR;
     }
 
 

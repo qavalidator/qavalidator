@@ -75,28 +75,27 @@ public final class FileNameUtil {
 
     /**
      * returns the given object as String array:
-     * <p>
      * <ul>
      * <li>if it's null: returns null</li>
      * <li>if it's a String: returns an array with one element</li>
      * <li>if it's a List: returns an array of that list</li>
-     * <p>
      * </ul>
      *
      * @param values the values
      * @return the array
      */
     /*package*/ static String[] getAsArray(Object values) {
-        if (values != null) {
-            if (values instanceof String) {
-                return new String[]{(String) values};
-            } else if (values instanceof List) {
-                return ((List<?>) values).toArray(new String[]{});
-            } else {
-                throw new IllegalArgumentException("includes or excludes must be a String or a List<String> but is a " + values.getClass());
-            }
+        if (values == null) {
+            return null;
         }
-        return null;
+
+        if (values instanceof String) {
+            return new String[]{(String) values};
+        } else if (values instanceof List) {
+            return ((List<?>) values).toArray(new String[]{});
+        } else {
+            throw new IllegalArgumentException("includes or excludes must be a String or a List<String> but is a " + values.getClass());
+        }
     }
 
     /**

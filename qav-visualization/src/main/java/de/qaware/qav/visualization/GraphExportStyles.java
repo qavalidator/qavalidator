@@ -39,25 +39,25 @@ public final class GraphExportStyles {
     private static final String STANDARD_LINE = "line";
 
     // Default line style
-    private static final LineStyle DEFAULT_LINE_STYLE = new LineStyle(BLACK, THIN, STANDARD_LINE);
+    private static final EdgeStyle DEFAULT_LINE_STYLE = new EdgeStyle(BLACK, THIN, STANDARD_LINE);
 
-    private static final Map<DependencyType, LineStyle> EDGE_STYLES = Maps.newHashMap();
+    private static final Map<DependencyType, EdgeStyle> EDGE_STYLES = Maps.newHashMap();
 
     static {
         // @formatter:off
-        EDGE_STYLES.put(DependencyType.REFERENCE,    new LineStyle(COLOR_11, THIN,  DASHED));
-        EDGE_STYLES.put(DependencyType.READ_ONLY,    new LineStyle(COLOR_10, THIN,  STANDARD_LINE));
-        EDGE_STYLES.put(DependencyType.ANNOTATED_BY, new LineStyle(COLOR_9,  THIN,  DASHED));
-        EDGE_STYLES.put(DependencyType.INJECTED,     new LineStyle(COLOR_3,  THIN,  STANDARD_LINE));
+        EDGE_STYLES.put(DependencyType.REFERENCE,    new EdgeStyle(COLOR_11, THIN,  DASHED));
+        EDGE_STYLES.put(DependencyType.READ_ONLY,    new EdgeStyle(COLOR_10, THIN,  STANDARD_LINE));
+        EDGE_STYLES.put(DependencyType.ANNOTATED_BY, new EdgeStyle(COLOR_9,  THIN,  DASHED));
+        EDGE_STYLES.put(DependencyType.INJECTED,     new EdgeStyle(COLOR_3,  THIN,  STANDARD_LINE));
         EDGE_STYLES.put(DependencyType.READ_WRITE,   DEFAULT_LINE_STYLE);
-        EDGE_STYLES.put(DependencyType.CREATE,       new LineStyle(COLOR_2,  THICK,  STANDARD_LINE));
-        EDGE_STYLES.put(DependencyType.INHERIT,      new LineStyle(COLOR_1,  THICK,  DASHED));
+        EDGE_STYLES.put(DependencyType.CREATE,       new EdgeStyle(COLOR_2,  THICK,  STANDARD_LINE));
+        EDGE_STYLES.put(DependencyType.INHERIT,      new EdgeStyle(COLOR_1,  THICK,  DASHED));
 
-        EDGE_STYLES.put(DependencyType.TEST,         new LineStyle(COLOR_11, THIN,   STANDARD_LINE));
+        EDGE_STYLES.put(DependencyType.TEST,         new EdgeStyle(COLOR_11, THIN,   STANDARD_LINE));
         EDGE_STYLES.put(DependencyType.COMPILE,      DEFAULT_LINE_STYLE);
-        EDGE_STYLES.put(DependencyType.PROVIDED,     new LineStyle(COLOR_3,  THIN,   DASHED));
-        EDGE_STYLES.put(DependencyType.RUNTIME,      new LineStyle(COLOR_2,  MEDIUM, DASHED));
-        EDGE_STYLES.put(DependencyType.CONTAINS,     new LineStyle(COLOR_1,  THIN,   STANDARD_LINE));
+        EDGE_STYLES.put(DependencyType.PROVIDED,     new EdgeStyle(COLOR_3,  THIN,   DASHED));
+        EDGE_STYLES.put(DependencyType.RUNTIME,      new EdgeStyle(COLOR_2,  MEDIUM, DASHED));
+        EDGE_STYLES.put(DependencyType.CONTAINS,     new EdgeStyle(COLOR_1,  THIN,   STANDARD_LINE));
         // @formatter:on
     }
 
@@ -71,9 +71,9 @@ public final class GraphExportStyles {
      * provide the edge style depending on the type of the relationship.
      *
      * @param rel the {@link Dependency} to style
-     * @return the edge {@link LineStyle}
+     * @return the edge {@link EdgeStyle}
      */
-    public static LineStyle getEdgeStyle(Dependency rel) {
+    public static EdgeStyle getEdgeStyle(Dependency rel) {
         return EDGE_STYLES.getOrDefault(rel.getDependencyType(), DEFAULT_LINE_STYLE);
     }
 

@@ -1,5 +1,6 @@
 package de.qaware.qav.util;
 
+import com.google.common.base.Charsets;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.apache.commons.io.IOUtils;
@@ -34,20 +35,40 @@ public final class StringTemplateUtil {
      * @return the {@link StringTemplateGroup}
      */
     public static StringTemplateGroup loadTemplateGroup(String templateName) {
-        return loadTemplateGroup(templateName, false);
+        return loadTemplateGroupAngleBracket(templateName);
     }
 
     /**
      * Loads the STG file; that should be on the classpath (i.e. could also be in the resources or jar file).
+     * The STG file uses "&lt;" / "&gt;" characters.
      *
      * @param templateName  the name of the template file
-     * @param useDollarSign if <tt>true</tt> then the STG file uses "$" instead of "&lt;" / "&gt;", which is handy
-     *                      for HTML templates.
      * @return the {@link StringTemplateGroup}
      */
-    public static StringTemplateGroup loadTemplateGroup(String templateName, boolean useDollarSign) {
-        StringTemplateGroup result;
+    public static StringTemplateGroup loadTemplateGroupAngleBracket(String templateName) {
+        InputStreamReader reader = getTemplateInputStreamReader(templateName);
+        StringTemplateGroup result = new StringTemplateGroup(reader);
+        IOUtils.closeQuietly(reader);
 
+        return result;
+    }
+
+    /**
+     * Loads the STG file; that should be on the classpath (i.e. could also be in the resources or jar file).
+     * The STG file uses "$" instead of "&lt;" / "&gt;", which is handy for HTML templates.
+     *
+     * @param templateName  the name of the template file
+     * @return the {@link StringTemplateGroup}
+     */
+    public static StringTemplateGroup loadTemplateGroupDollarSign(String templateName) {
+        InputStreamReader reader = getTemplateInputStreamReader(templateName);
+        StringTemplateGroup result = new StringTemplateGroup(reader, DefaultTemplateLexer.class);
+        IOUtils.closeQuietly(reader);
+
+        return result;
+    }
+
+    private static InputStreamReader getTemplateInputStreamReader(String templateName) {
         InputStream is = StringTemplateUtil.class.getResourceAsStream(templateName);
 
         if (is == null) {
@@ -56,14 +77,6 @@ public final class StringTemplateUtil {
             throw new IllegalArgumentException(msg);
         }
 
-        InputStreamReader reader = new InputStreamReader(is);
-        if (useDollarSign) {
-            result = new StringTemplateGroup(reader, DefaultTemplateLexer.class);
-        } else {
-            result = new StringTemplateGroup(reader);
-        }
-        IOUtils.closeQuietly(reader);
-
-        return result;
+        return new InputStreamReader(is, Charsets.UTF_8);
     }
 }

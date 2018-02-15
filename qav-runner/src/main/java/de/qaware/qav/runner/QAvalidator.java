@@ -29,9 +29,12 @@ public class QAvalidator {
      * Does the exception handling.
      *
      * @param config the configuration
-     * @return the result of the run. If the analysis fails with any kind of {@link Throwable}, a flag is set and the
+     * @return the result of the run. If the analysis fails with any kind of {@link Exception}, a flag is set and the
      * message is contained in the {@link QAvalidatorResult}.
      */
+    @SuppressWarnings("squid:S2221,squid:S1166")
+    // catching Exception (instead of specific subtypes) because there could also be runtime exceptions.
+    // Their messages will all be properly logged.
     public QAvalidatorResult runAnalysis(QAvalidatorConfig config) {
 
         QAvalidatorResult result = new QAvalidatorResult();
@@ -63,8 +66,8 @@ public class QAvalidator {
      * First checks the {@link QAvalidatorConfig}: If there is an analysis filename given, that file should be used and
      * must therefore exist.
      * <p>
-     * If not filename is given in the config, it tries the default locations, as defined in
-     * {@link #ANALYSIS_FILENAME_FALLBACKS}.
+     * If not filename is given in the config, it tries the default locations, as defined in {@link
+     * #ANALYSIS_FILENAME_FALLBACKS}.
      *
      * @param config the {@link QAvalidatorConfig}
      * @return the analysis filename

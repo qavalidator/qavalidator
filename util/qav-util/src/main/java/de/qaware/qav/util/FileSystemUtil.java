@@ -162,6 +162,7 @@ public final class FileSystemUtil {
      * @param filename the file to write to
      * @param append   <tt>true</tt> to append, <tt>false</tt> to overwrite
      */
+    @SuppressWarnings("squid:S1166") // wants log or rethrow exception. It's logged well enough here.
     public static void writeStringToFile(String content, String filename, boolean append) {
         File outputFile = new File(filename);
         try {
@@ -177,14 +178,16 @@ public final class FileSystemUtil {
      * @param filename the file name
      * @return the byte array. <tt>null</tt> if the file can not be read.
      */
+    @SuppressWarnings("squid:S1166") // wants log or rethrow exception. It's logged well enough here.
     public static byte[] readBytesFromFile(String filename) {
         File file = new File(filename);
         try {
             return FileUtils.readFileToByteArray(file);
         } catch (IOException e) {
-            LOGGER.error("Error reading file {}: {}", file.getAbsolutePath(), e.getMessage());
+            String msg = String.format("Error reading file %s: %s", file.getAbsolutePath(), e.getMessage());
+            LOGGER.error(msg);
+            throw new IllegalArgumentException(msg, e);
         }
-        return null;
     }
 
 }
