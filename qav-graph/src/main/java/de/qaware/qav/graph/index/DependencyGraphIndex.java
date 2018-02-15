@@ -37,6 +37,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class DependencyGraphIndex {
 
     private static final Logger LOGGER = getLogger(DependencyGraphIndex.class);
+    private static final int MAX_RESULTS = 1000;
 
     private final DependencyGraph graph;
     private final Set<String> numericFields;
@@ -83,8 +84,7 @@ public class DependencyGraphIndex {
 
         // Store the index in memory:
         directory = new RAMDirectory();
-        // To store an index on disk, use this instead:
-        //Directory directory = FSDirectory.open("/tmp/testindex");
+        // To store an index on disk, use the method FSDirectory#open() instead.
 
         try {
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
@@ -133,7 +133,7 @@ public class DependencyGraphIndex {
             throw new IllegalArgumentException("Parsing of query failed: " + queryString, e);
         }
 
-        ScoreDoc[] hits = indexSearcher.search(query, 1000, Sort.INDEXORDER).scoreDocs;
+        ScoreDoc[] hits = indexSearcher.search(query, MAX_RESULTS, Sort.INDEXORDER).scoreDocs;
 
         Set<Node> result = Sets.newHashSet();
 

@@ -1,5 +1,7 @@
 package de.qaware.qav.graph.io;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Map;
  *
  * @author QAware GmbH
  */
+@Data
 public class IOEdge {
 
     private String from;
@@ -22,48 +25,6 @@ public class IOEdge {
     private Map<String, Object> props = new HashMap<>();
 
     private List<IOEdge> baseDependencies = new ArrayList<>();
-
-    // --- getters and setters
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Map<String, Object> getProps() {
-        return props;
-    }
-
-    public void setProps(Map<String, Object> props) {
-        this.props = props;
-    }
-
-    public List<IOEdge> getBaseDependencies() {
-        return baseDependencies;
-    }
-
-    public void setBaseDependencies(List<IOEdge> baseDependencies) {
-        this.baseDependencies = baseDependencies;
-    }
 
     @Override
     public String toString() {

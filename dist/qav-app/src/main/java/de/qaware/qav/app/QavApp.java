@@ -17,6 +17,7 @@ import java.util.List;
 @Component
 public class QavApp implements ApplicationRunner {
 
+    @SuppressWarnings("squid:S106") // wants a Logger instead. But this is a command line app which uses stdout.
     private static final PrintStream OUT = System.out;
 
     @Value("${analysis}")

@@ -1,5 +1,7 @@
 package de.qaware.qav.graph.io;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,28 +14,11 @@ import java.util.Map;
  *
  * @author QAware GmbH
  */
+@Data
 public class IOGraph {
 
     private List<Map<String, Object>> nodes = new ArrayList<>();
     private List<IOEdge> edges = new ArrayList<>();
-
-    // --- getters and setter
-
-    public List<Map<String, Object>> getNodes() {
-        return nodes;
-    }
-
-    public void setNodes(List<Map<String, Object>> nodes) {
-        this.nodes = nodes;
-    }
-
-    public List<IOEdge> getEdges() {
-        return edges;
-    }
-
-    public void setEdges(List<IOEdge> edges) {
-        this.edges = edges;
-    }
 
     @Override
     public String toString() {

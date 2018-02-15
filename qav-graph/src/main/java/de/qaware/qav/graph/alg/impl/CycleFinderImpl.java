@@ -79,17 +79,21 @@ public class CycleFinderImpl implements CycleFinder {
         for (Node source : nodes) {
             for (Node target : nodes) {
                 if (source != target) { // yes, compare instances
-                    Dependency edge = dependencyGraph.getEdge(source, target);
-                    if (edge != null) {
-                        LOGGER.info("  {} -> {} [{}]", source.getName(), target.getName(), edge.getBaseDependencies().size());
-                        edge.getBaseDependencies().forEach(it ->
-                                LOGGER.info("    * {} -> {} [{}]", it.getSource().getName(), it.getTarget().getName(), it.getDependencyType())
-                        );
-                    }
+                    logBaseRelation(source, target);
                 }
             }
         }
 
+    }
+
+    private void logBaseRelation(Node source, Node target) {
+        Dependency edge = dependencyGraph.getEdge(source, target);
+        if (edge != null) {
+            LOGGER.info("  {} -> {} [{}]", source.getName(), target.getName(), edge.getBaseDependencies().size());
+            edge.getBaseDependencies().forEach(it ->
+                    LOGGER.info("    * {} -> {} [{}]", it.getSource().getName(), it.getTarget().getName(), it.getDependencyType())
+            );
+        }
     }
 
     /**

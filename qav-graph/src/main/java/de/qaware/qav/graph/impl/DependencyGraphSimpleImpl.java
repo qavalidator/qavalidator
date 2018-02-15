@@ -202,13 +202,11 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append(this.getClass().getSimpleName())
-                .append("[Nodes:")
-                .append(graph.vertexSet().size())
-                .append("; Edges:")
-                .append(graph.edgeSet().size())
-                .append("]")
-                .toString();
+        return this.getClass().getSimpleName() +
+                "[Nodes:" +
+                graph.vertexSet().size() +
+                "; Edges:" +
+                graph.edgeSet().size() +
+                "]";
     }
 }

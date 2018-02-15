@@ -15,15 +15,22 @@ import java.util.stream.Collectors;
 
 /**
  * Creates the QAvalidator language documentation.
- *
- * Traverses a {@link PluginDocTree} and generates AsciiDoc documentation.
- * Writes the documentation into <tt>.adoc</tt> files using the given {@link DocFileWriter}.
+ * <p>
+ * Traverses a {@link PluginDocTree} and generates AsciiDoc documentation. Writes the documentation into <tt>.adoc</tt>
+ * files using the given {@link DocFileWriter}.
  *
  * @author QAware GmbH
  */
 public class DocGenerator {
 
     private static final String QAVDOC_STG = "/stg/QavDoc.stg";
+
+    // StringTemplate attribute names:
+    private static final String DESCRIPTION_ATT = "description";
+    private static final String NAME_ATT = "name";
+    private static final String COMMANDS_ATT = "commands";
+    private static final String PARAMETERS_ATT = "parameters";
+    private static final String RESULT_ATT = "result";
 
     private final StringTemplateGroup templates;
     private final DocFileWriter docFileWriter;
@@ -54,27 +61,29 @@ public class DocGenerator {
 
     private StringTemplate getPluginDoc(String pluginName, PluginDoc qavPluginDoc, List<CommandDoc> qavCommands) {
         StringTemplate pluginST = templates.getInstanceOf("plugin");
-        pluginST.setAttribute("name", pluginName);
-        pluginST.setAttribute("description", trimDesc(qavPluginDoc.getDescription()));
-        pluginST.setAttribute("commands", getCommands(qavCommands));
+        pluginST.setAttribute(NAME_ATT, pluginName);
+        pluginST.setAttribute(DESCRIPTION_ATT, trimDesc(qavPluginDoc.getDescription()));
+        pluginST.setAttribute(COMMANDS_ATT, getCommands(qavCommands));
         return pluginST;
     }
 
     private List<StringTemplate> getCommands(List<CommandDoc> commandList) {
         // remove duplicated commands.
-        List<CommandDoc> commands = commandList.stream().distinct().collect(Collectors.toList());
-        commands.sort(Comparator.comparing(CommandDoc::getName));
+        List<CommandDoc> commands = commandList.stream()
+                .distinct()
+                .sorted(Comparator.comparing(CommandDoc::getName))
+                .collect(Collectors.toList());
 
         List<StringTemplate> result = Lists.newArrayList();
-        for (CommandDoc qavCommand: commands) {
+        for (CommandDoc qavCommand : commands) {
             StringTemplate commandST = templates.getInstanceOf("command");
-            commandST.setAttribute("name", qavCommand.getName());
-            commandST.setAttribute("description", trimDesc(qavCommand.getDescription()));
-            commandST.setAttribute("parameters", getParameters(qavCommand));
+            commandST.setAttribute(NAME_ATT, qavCommand.getName());
+            commandST.setAttribute(DESCRIPTION_ATT, trimDesc(qavCommand.getDescription()));
+            commandST.setAttribute(PARAMETERS_ATT, getParameters(qavCommand));
 
             String resultText = trimDesc(qavCommand.getResult());
             if (!StringUtils.isBlank(resultText)) {
-                commandST.setAttribute("result", resultText);
+                commandST.setAttribute(RESULT_ATT, resultText);
             }
             result.add(commandST);
         }
@@ -85,8 +94,8 @@ public class DocGenerator {
         List<StringTemplate> params = Lists.newArrayList();
         for (ParameterDoc param : qavCommand.getParameters()) {
             StringTemplate parameterST = templates.getInstanceOf("parameter");
-            parameterST.setAttribute("name", param.getName());
-            parameterST.setAttribute("description", trimDesc(param.getDescription()));
+            parameterST.setAttribute(NAME_ATT, param.getName());
+            parameterST.setAttribute(DESCRIPTION_ATT, trimDesc(param.getDescription()));
             params.add(parameterST);
         }
 
@@ -103,6 +112,6 @@ public class DocGenerator {
     static String trimDesc(String s) {
         return s.replaceAll("^[ \t]+", "")
                 .replaceAll("\\n[ \t]+", "\n")
-                .replaceAll("\\{@link[ \t]+(?<name>[\\w.]*)[ \t]*\\}", "`${name}`");
+                .replaceAll("\\{@link[ \t]+(?<name>[\\w.]*)[ \t]*}", "`${name}`");
     }
 }

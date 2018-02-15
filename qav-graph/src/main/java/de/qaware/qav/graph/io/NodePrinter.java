@@ -1,15 +1,13 @@
 package de.qaware.qav.graph.io;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.Node;
-import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,8 +22,6 @@ public class NodePrinter {
 
     private final DependencyGraph dependencyGraph;
     private final File outputFile;
-
-    private PrintWriter out;
 
     /**
      * Constructor.
@@ -49,22 +45,12 @@ public class NodePrinter {
      * Creates the file, if it didn't exist. Overwrites it if it did.
      */
     public void printNodes() {
-        FileWriter fw;
         try {
-            fw = new FileWriter(this.outputFile, false);
+            Files.write("", this.outputFile, Charsets.UTF_8);
+            dependencyGraph.getAllNodes().forEach(this::printNode);
         } catch (IOException e) {
             throw new IllegalStateException("Error writing to file " + this.outputFile.getAbsolutePath(), e);
         }
-
-        BufferedWriter bw = new BufferedWriter(fw);
-        this.out = new PrintWriter(bw);
-
-        this.out.print("");
-        dependencyGraph.getAllNodes().forEach(this::printNode);
-
-        IOUtils.closeQuietly(out);
-        IOUtils.closeQuietly(bw);
-        IOUtils.closeQuietly(fw);
     }
 
     /**
@@ -78,14 +64,14 @@ public class NodePrinter {
         if (node == null) {
             return;
         }
-        out.format("name: %s%n", node.getName());
+        append(String.format("name: %s%n", node.getName()));
 
         Map<String, Object> properties = node.getProperties();
         if (properties.size() > 1) { // one property is always there: the name
-            out.format("    Node Properties:%n");
+            append(String.format("    Node Properties:%n"));
             properties.forEach((key, value) -> {
                         if (!"name".equals(key)) {
-                            out.format("        %s: %s%n", key, value);
+                            append(String.format("        %s: %s%n", key, value));
                         }
                     }
             );
@@ -93,16 +79,24 @@ public class NodePrinter {
 
         List<Dependency> outEdges = new ArrayList<>(dependencyGraph.getBaseGraph().getOutgoingEdges(node));
         if (!outEdges.isEmpty()) {
-            out.format("    OUTGOING -->%n");
+            append(String.format("    OUTGOING -->%n"));
             outEdges.sort(Comparator.comparing(o -> o.getTarget().getName()));
-            outEdges.forEach(dep -> out.format("        %s[%s]%n", dep.getTarget().getName(), dep.getDependencyType().name()));
+            outEdges.forEach(dep -> append(String.format("        %s[%s]%n", dep.getTarget().getName(), dep.getDependencyType().name())));
         }
 
         List<Dependency> inEdges = new ArrayList<>(dependencyGraph.getBaseGraph().getIncomingEdges(node));
         if (!inEdges.isEmpty()) {
-            out.format("    INCOMING <--%n");
+            append(String.format("    INCOMING <--%n"));
             inEdges.sort(Comparator.comparing(o -> o.getSource().getName()));
-            inEdges.forEach(dep -> out.format("        %s[%s]%n", dep.getSource().getName(), dep.getDependencyType().name()));
+            inEdges.forEach(dep -> append(String.format("        %s[%s]%n", dep.getSource().getName(), dep.getDependencyType().name())));
+        }
+    }
+
+    private void append(String s) {
+        try {
+            Files.append(s, this.outputFile, Charsets.UTF_8);
+        } catch(IOException e) {
+            throw new IllegalStateException("Error writing to file " + this.outputFile.getAbsolutePath(), e);
         }
     }
 }

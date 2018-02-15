@@ -40,6 +40,7 @@ public class DocFileWriter {
      * @param doc        the String to write
      * @throws IllegalStateException when output file can't be written.
      */
+    @SuppressWarnings("squid:S116") // log or rethrow exception. Which is exactly what happens.
     public void writeDocFile(String pluginName, String doc) {
         createOutputDir();
         File outputFile = new File(outputDir, pluginName + ".adoc");

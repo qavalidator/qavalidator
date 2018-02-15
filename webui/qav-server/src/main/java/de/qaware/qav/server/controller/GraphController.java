@@ -190,6 +190,6 @@ public class GraphController {
     private String normalizeQuery(String query) {
         return query.indexOf(':') >= 0
                 ? query
-                : "name:" + query.trim();
+                : ("name:" + query.trim());
     }
 }

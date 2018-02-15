@@ -9,6 +9,8 @@ import java.util.List;
  *
  * @author QAware GmbH
  */
+@SuppressWarnings("squid:S1214")
+// does not recommend commend constants in interfaces. But here, using this property name is part of the interface.
 public interface CycleFinder {
 
     /**
@@ -20,6 +22,7 @@ public interface CycleFinder {
      * property name for the cycle label: attribute is a label identifying the cycle.
      */
     String CYCLE_LABEL = "CYCLE";
+
     /**
      * returns <tt>true</tt> if there is a cycle, <tt>false</tt> if not.
      *

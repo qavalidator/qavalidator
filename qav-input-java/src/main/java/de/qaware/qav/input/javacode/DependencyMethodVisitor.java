@@ -54,12 +54,14 @@ public class DependencyMethodVisitor extends MethodVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+        LOGGER.debug("visitAnnotation: desc: {}, visible: {}", desc, visible);
         AnalysisUtil.analyzeAnnotation(dependencyGraph, classNode, desc, visible, collapseInnerClasses, lineNo);
         return null;
     }
 
     @Override
     public AnnotationVisitor visitParameterAnnotation(int parameter, String desc, boolean visible) {
+        LOGGER.debug("visitParameterAnnotation: parameter: {}, desc: {}, visible: {}", parameter, desc, visible);
         AnalysisUtil.analyzeAnnotation(dependencyGraph, classNode, desc, visible, collapseInnerClasses, lineNo);
         return null;
     }
@@ -77,7 +79,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
         if (isIgnorable(targetClassName)) {
             LOGGER.debug("Skipping reference from {} to {}", className, targetClassName);
         } else if (targetClassName.equals(className)) {
-            LOGGER.debug("Skipping self-reference: {} [{}]", className, dependencyType.name());
+            LOGGER.debug("Skipping self-reference: {} [{}]", className, dependencyType);
         } else {
             addDependency(targetClassName, dependencyType);
             paramTypes.forEach(it -> addDependency(it, DependencyType.REFERENCE));

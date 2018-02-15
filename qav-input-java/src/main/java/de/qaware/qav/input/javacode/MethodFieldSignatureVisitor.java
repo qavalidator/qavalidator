@@ -5,6 +5,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.signature.SignatureVisitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class MethodFieldSignatureVisitor extends SignatureVisitor {
     }
 
     public List<String> getParamTypes() {
-        return paramTypes;
+        return new ArrayList<>(paramTypes);
     }
 
     /**
@@ -68,7 +69,7 @@ public class MethodFieldSignatureVisitor extends SignatureVisitor {
         if (returnTypes.isEmpty()) {
             return Lists.newArrayList("void");
         } else {
-            return returnTypes;
+            return new ArrayList<>(returnTypes);
         }
     }
 }
