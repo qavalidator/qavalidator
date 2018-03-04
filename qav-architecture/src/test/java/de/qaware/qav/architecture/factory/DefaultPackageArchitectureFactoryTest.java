@@ -8,6 +8,7 @@ import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -38,7 +39,7 @@ public class DefaultPackageArchitectureFactoryTest {
         assertThat(architecture.getName(), is("my-architecture"));
 
         assertThat(architecture.getAllComponents(), hasSize(3));
-        assertThat(architecture.getAllComponents().stream().map(Component::getName).collect(Collectors.toList()),
+        assertThat(getComponentNameList(architecture),
                 is(Lists.newArrayList("com.example.api", "com.example", "com")));
 
         assertThat(architecture.getParentComponentName("com.example.api.A"), is("com.example.api"));
@@ -61,7 +62,7 @@ public class DefaultPackageArchitectureFactoryTest {
 
         assertThat(architecture.getName(), is("Package"));
         assertThat(architecture.getAllComponents(), hasSize(4));
-        assertThat(architecture.getAllComponents().stream().map(Component::getName).collect(Collectors.toList()),
+        assertThat(getComponentNameList(architecture),
                 is(Lists.newArrayList("com.example.impl", "com.example.api", "com.example", "com")));
 
         assertThat(architecture.getParentComponentName("com.example.api.A"), is("com.example.api"));
@@ -96,7 +97,7 @@ public class DefaultPackageArchitectureFactoryTest {
 
         assertThat(architecture.getName(), is("Package"));
         assertThat(architecture.getAllComponents(), hasSize(10));
-        assertThat(architecture.getAllComponents().stream().map(Component::getName).collect(Collectors.toList()),
+        assertThat(getComponentNameList(architecture),
                 is(Lists.newArrayList("com.example.impl.a", "com.example.impl.b",
                         "com.example.impl", "com.example.api", "org.abc.api.d",
                         "com.example", "org.abc.api", "org.abc",
@@ -138,7 +139,7 @@ public class DefaultPackageArchitectureFactoryTest {
 
         assertThat(architecture.getName(), is("Package-3"));
         assertThat(architecture.getAllComponents(), hasSize(7));
-        assertThat(architecture.getAllComponents().stream().map(Component::getName).collect(Collectors.toList()),
+        assertThat(getComponentNameList(architecture),
                 is(Lists.newArrayList("com.example.impl", "com.example.api", "com.example",
                         "org.abc.api", "org.abc",
                         "com", "org")));
@@ -174,10 +175,54 @@ public class DefaultPackageArchitectureFactoryTest {
         assertThat(architecture.getAllComponents(), hasSize(0));
     }
 
+    @Test
+    public void testCreateArchitectureOnePackage() {
+        DependencyGraph dependencyGraph = DependencyGraphFactory.createGraph();
+        dependencyGraph.getOrCreateNodeByName("ClassInDefaultPackage");
+
+        Architecture architecture = new DefaultPackageArchitectureFactory(dependencyGraph).createArchitecture();
+
+        assertThat(architecture.getName(), is("Package"));
+
+        assertThat(architecture.getAllComponents(), hasSize(1));
+        assertThat(getComponentNameList(architecture),
+                is(Lists.newArrayList("ClassInDefaultPackage")));
+
+        assertThat(architecture.getParentComponent("ClassInDefaultPackage"), is(architecture));
+        assertThat(architecture.getParentComponent("anythingElse"), nullValue());
+    }
+
+    @Test
+    public void testCreateArchitectureTwoPackages() {
+        DependencyGraph dependencyGraph = DependencyGraphFactory.createGraph();
+        dependencyGraph.getOrCreateNodeByName("org.a");
+
+        Architecture architecture = new DefaultPackageArchitectureFactory(dependencyGraph).createArchitecture();
+
+        assertThat(architecture.getName(), is("Package"));
+
+        assertThat(architecture.getAllComponents(), hasSize(1));
+        assertThat(getComponentNameList(architecture),
+                is(Lists.newArrayList("org")));
+
+        assertThat(architecture.getParentComponent("org.a.A").getName(), is("org")); // "org.a" is a leaf!
+        assertThat(architecture.getParentComponent("org.a").getName(), is("org"));
+        assertThat(architecture.getParentComponent("org"), is(architecture));
+        assertThat(architecture.getParentComponent("anythingElse"), nullValue());
+    }
+
     @Test(expected = NullPointerException.class)
     public void testNullInput() {
-        new DefaultPackageArchitectureFactory(null).createArchitecture();
+        new DefaultPackageArchitectureFactory(null);
     }
+
+    private List<String> getComponentNameList(Architecture architecture) {
+        return architecture.getAllComponents().stream().map(Component::getName).collect(Collectors.toList());
+    }
+
+    //
+    // --- getComponentName()
+    //
 
     @Test
     public void testGetComponentName() {

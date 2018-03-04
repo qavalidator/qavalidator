@@ -5,7 +5,6 @@ import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.dsl.model.ClassSet;
 import de.qaware.qav.architecture.dsl.model.Component;
 import de.qaware.qav.graph.api.DependencyGraph;
-import de.qaware.qav.graph.api.Node;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
@@ -13,8 +12,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * Create an {@link Architecture} from a given
- * {@link DependencyGraph}.
+ * Create an {@link Architecture} from a given {@link DependencyGraph}.
+ * <p>
+ * Interpret the names as fully qualified names, structured by a separator (e.g. <tt>"."</tt>), and use the names as
+ * package hierarchy.
  *
  * @author QAware GmbH
  */
@@ -43,9 +44,9 @@ public final class DefaultPackageArchitectureFactory {
     }
 
     /**
-     * Setter. This regular expression is used to split the names to find hierarchical structures.
-     * Defaults to the dot, which is useful for fully qualified Java class names, or also for property names.
-     *
+     * Setter. This regular expression is used to split the names to find hierarchical structures. Defaults to the dot,
+     * which is useful for fully qualified Java class names, or also for property names.
+     * <p>
      * If the separator is the dot, then escape it, because the splitter works on regular expressions.
      *
      * @param separator the separator String used to split and join the parts
@@ -81,28 +82,14 @@ public final class DefaultPackageArchitectureFactory {
      * @return the new {@link Architecture}
      */
     public Architecture createArchitecture(int maxLength) {
-        checkNotNull(dependencyGraph, "graph may not be null");
-
         Architecture result = new Architecture();
         result.setName(maxLength == 0 ? architectureName : (architectureName + "-" + maxLength));
 
-        for (Node node : dependencyGraph.getAllNodes()) {
-            String name = node.getName();
-            createComponent(result, name, maxLength);
-        }
+        // for each node in the graph: create the component it's in.
+        dependencyGraph.getAllNodes().forEach(
+                node -> createComponent(result, node.getName(), maxLength)
+        );
 
-        for (Node node : dependencyGraph.getAllNodes()) {
-            String componentName = getComponentName(node.getName(), maxLength);
-            if (componentName == null) {
-                LOGGER.debug("Node {}: is a direct child of Architecture Root Node, creating component explicitly", node.getName());
-                Component component = doCreateComponent(node.getName());
-                component.setParent(result);
-                result.getChildren().add(component);
-                result.getNameToComponent().put(node.getName(), component);
-            }
-        }
-
-        result.getParentComponent("fs");
         // Sort according to the length of the names (= names of the include patterns) so that the most detailed
         // hit matches: make sure to be correct with nested components.
         // If the length is equal, sort according to the name to be predictive.
@@ -117,6 +104,18 @@ public final class DefaultPackageArchitectureFactory {
     private Component createComponent(Architecture architecture, String name, int maxLength) {
         String componentName = getComponentName(name, maxLength);
         if (componentName == null) {
+            if (architecture.getNameToComponent().get(name) == null) {
+                // this happens for direct children of the root node, e.g. a class in the default package
+                LOGGER.debug("Node {}: is a direct child of Architecture Root Node, creating component explicitly", name);
+                Component component = doCreateComponent(name);
+                architecture.getAllComponents().add(component);
+                architecture.getNameToComponent().put(name, component);
+                architecture.getApiNameToComponent().put(name, component);
+
+                component.setParent(architecture);
+                architecture.getChildren().add(component);
+            }
+
             return architecture;
         }
 
@@ -135,6 +134,14 @@ public final class DefaultPackageArchitectureFactory {
         return component;
     }
 
+    /**
+     * Actually creates the component.
+     * <p>
+     * Adds an API definition which matches its name plus <tt>pathSeparator</tt> + <tt>"*"</tt>.
+     *
+     * @param componentName name of the component
+     * @return the new {@link Component}
+     */
     private Component doCreateComponent(String componentName) {
         LOGGER.debug("Creating Component {}", componentName);
         Component result = new Component();
@@ -153,8 +160,8 @@ public final class DefaultPackageArchitectureFactory {
      * E.g., for Java class names, it returns the package name.
      *
      * @param name      the node name
-     * @param maxLength the maximum depth of the returned package name. Full package name if this is <tt>0</tt>.
-     * @return the package name
+     * @param maxLength the maximum depth of the returned package name; full package name if this is <tt>0</tt>
+     * @return the package name; <tt>null</tt> if the given name is already at root level
      */
     /* package */
     String getComponentName(String name, int maxLength) {
