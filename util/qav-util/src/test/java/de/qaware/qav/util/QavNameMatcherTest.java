@@ -20,6 +20,9 @@ public class QavNameMatcherTest {
         assertThat(qavNameMatcher.matches("xy.**", "xy"), is(true));
         assertThat(qavNameMatcher.matches("xy.*", "xy"), is(true));
         assertThat(qavNameMatcher.matches("xy", "xy"), is(true));
+
+        assertThat(qavNameMatcher.matches("v*", "v1"), is(true));
+        assertThat(qavNameMatcher.matches("v*", "x1"), is(false));
     }
 
     @Test

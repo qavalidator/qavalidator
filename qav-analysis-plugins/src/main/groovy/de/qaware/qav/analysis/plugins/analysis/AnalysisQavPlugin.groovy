@@ -18,6 +18,7 @@ import de.qaware.qav.graph.api.NodeFilter
 import de.qaware.qav.graph.filter.DependencyTypeEdgeOutFilter
 import de.qaware.qav.graph.filter.NodeHasDependencyToFilter
 import de.qaware.qav.graph.filter.NodeNameInFilter
+import de.qaware.qav.graph.filter.NodePropertyExistsFilter
 import de.qaware.qav.graph.filter.NotFilter
 import groovy.util.logging.Slf4j
 
@@ -90,7 +91,7 @@ class AnalysisQavPlugin extends BasePlugin {
             analysis.violation("Cycles: ${cycleFinder.cycles.size()} cylces with ${totalNodes} nodes")
         }
 
-        NodeFilter cycleFilter = analysis.filter("cycleFilter")
+        NodeFilter cycleFilter = new NodePropertyExistsFilter(CycleFinder.IN_CYCLE)
         return graph.filter(cycleFilter)
     }
 

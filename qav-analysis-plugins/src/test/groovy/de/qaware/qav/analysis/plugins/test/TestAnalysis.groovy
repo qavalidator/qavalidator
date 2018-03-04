@@ -14,6 +14,8 @@ class TestAnalysis implements Analysis {
     Map<String, Closure> closureMap = [:]
     final Expando context = new Expando()
     final errorMessages = []
+    final calledMethods = []
+    final calledMethodsArgs = [:]
 
     @Override
     Closure register(String name, Closure closure) {
@@ -34,5 +36,13 @@ class TestAnalysis implements Analysis {
     @Override
     void error(Throwable throwable) {
         this.error(throwable.message)
+    }
+
+    @Override
+    Object invokeMethod(String name, Object args) {
+        calledMethods << name
+        calledMethodsArgs[name] = args
+        log.warn("Called method on analysis: ${name} (args: ${args})")
+        return null
     }
 }

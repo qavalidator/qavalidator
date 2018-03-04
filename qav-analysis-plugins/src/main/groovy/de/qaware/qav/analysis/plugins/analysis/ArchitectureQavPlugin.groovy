@@ -1,17 +1,15 @@
 package de.qaware.qav.analysis.plugins.analysis
 
-import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory
-import de.qaware.qav.architecture.nodecreator.ArchitectureNodeCreator
-import de.qaware.qav.architecture.nodecreator.ArchitectureNodeTagger
-import de.qaware.qav.architecture.nodecreator.DependencyMapper
-import de.qaware.qav.architecture.tagger.ArchitectureHeightTagger
-import de.qaware.qav.architecture.tagger.BaseRelationTagger
-import de.qaware.qav.analysis.plugins.base.BasePlugin
-import de.qaware.qav.doc.QavCommand
-import de.qaware.qav.doc.QavPluginDoc
 import de.qaware.qav.analysis.dsl.model.Analysis
+import de.qaware.qav.analysis.plugins.base.BasePlugin
 import de.qaware.qav.architecture.dsl.api.QavArchitectureReader
 import de.qaware.qav.architecture.dsl.model.Architecture
+import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory
+import de.qaware.qav.architecture.nodecreator.ArchitectureViewCreator
+import de.qaware.qav.architecture.nodecreator.Result
+import de.qaware.qav.architecture.tagger.ArchitectureHeightTagger
+import de.qaware.qav.doc.QavCommand
+import de.qaware.qav.doc.QavPluginDoc
 import de.qaware.qav.graph.api.DependencyGraph
 import de.qaware.qav.graph.filter.AndFilter
 import de.qaware.qav.graph.filter.NodePropertyExistsFilter
@@ -213,26 +211,13 @@ class ArchitectureQavPlugin extends BasePlugin {
             result = "A filtered graph which contains all nodes which belong to this new architecture."
     )
     DependencyGraph createArchitectureView(DependencyGraph sourceGraph, Architecture architecture, String tag = null) {
-        if (tag == null) {
-            tag = architecture.name
-        }
-        List<String> unmappedClasses = ArchitectureNodeCreator.createAllArchitectureNodes(sourceGraph, architecture)
-        if (unmappedClasses) {
-            analysis.violation("There are unmapped classes in architecture ${architecture.name}: ${unmappedClasses}")
+        Result result = ArchitectureViewCreator.createArchitectureView(sourceGraph, architecture, tag)
+
+        if (result.violationMessage) {
+            analysis.violation(result.violationMessage)
         }
 
-        DependencyMapper.mapDependencies(sourceGraph, architecture.getName())
-        ArchitectureNodeTagger.tagArchitectureNodes(sourceGraph, architecture, tag)
-
-        def architectureGraph = sourceGraph.getBaseGraph().filter(
-                new AndFilter(
-                        new NodePropertyInFilter(tag, true),
-                        new NodePropertyInFilter("type", "architecture")
-                ))
-
-        BaseRelationTagger.tagBaseRelationNumbers(architectureGraph)
-
-        return architectureGraph
+        return result.architectureGraph
     }
 
     /**

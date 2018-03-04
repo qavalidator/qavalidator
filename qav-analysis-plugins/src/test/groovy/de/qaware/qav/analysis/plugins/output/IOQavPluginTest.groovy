@@ -70,6 +70,12 @@ class IOQavPluginTest {
         // do print empty graph. This also proves that the path used in the test above is correct
         ioQavPlugin.printNodes(graph, "testGraph.txt", true)
         assert outputFile.exists()
+
+        // test the default setting:
+        FileUtils.deleteDirectory(testDir)
+        testDir.mkdirs()
+        ioQavPlugin.printNodes(graph, "testGraph.txt")
+        assert outputFile.exists()
     }
 
     @Test
@@ -79,7 +85,7 @@ class IOQavPluginTest {
 
         DependencyGraph graph = createSampleGraph()
 
-        ioQavPlugin.printNodes(graph, "testGraph.txt", true)
+        ioQavPlugin.printNodes(graph, "testGraph.txt")
         assert outputFile.exists()
 
         File expectedFile = new File("src/test/resources/testGraphExpected.txt")
