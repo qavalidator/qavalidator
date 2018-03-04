@@ -1,0 +1,6 @@
+name: v1
+    OUTGOING -->
+        v2[READ_ONLY]
+name: v2
+    INCOMING <--
+        v1[READ_ONLY]

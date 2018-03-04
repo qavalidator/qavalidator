@@ -1,0 +1,33 @@
+digraph G {
+
+/* ========================================================================= 
+ * Layout information 
+ * ====================================================================== */ 
+ 
+compound = true; 
+// rankdir = LR; 
+ 
+fontname = "Helvetica"; 
+fontsize = 11; 
+ranksep = "0.4242640687119285 equally" 
+ 
+node [  shape    = box, 
+        color    = "blue", 
+        fontname = "Helvetica", 
+        fontsize = 11, 
+        height   = 0.25 ]; 
+
+edge [  arrowsize = 1.25,
+        fontname = "Helvetica",
+        fontsize = 9 ];
+
+// Clusters:
+
+// Nodes:
+_v1 [label="v1" URL="/#/node/v1" , color = black  ];
+_v2 [label="v2" URL="/#/node/v2" , color = black  ];
+   
+// Edges:
+_v1 -> _v2 [ color = "#2166ac", fontcolor = "#2166ac", penwidth = 1.0, style = solid , label="", headlabel="", taillabel=""];
+
+}

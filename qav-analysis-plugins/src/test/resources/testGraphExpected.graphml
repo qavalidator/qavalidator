@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:y="http://www.yworks.com/xml/graphml"
+    xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+
+    <!-- Created for yEd -->
+    <key for="port" id="d0" yfiles.type="portgraphics"/>
+    <key for="port" id="d1" yfiles.type="portgeometry"/>
+    <key for="port" id="d2" yfiles.type="portuserdata"/>
+    <key for="node" id="d3" attr.name="url" attr.type="string" />
+    <key for="node" id="d4" attr.name="description" attr.type="string" />
+    <key for="node" id="d5" yfiles.type="nodegraphics"/>
+    <key for="graphml" id="d6" yfiles.type="resources"/>
+    <key for="edge" id="d7" attr.name="url" attr.type="string" />
+    <key for="edge" id="d8" attr.name="description" attr.type="string" />
+    <key for="edge" id="d9" yfiles.type="edgegraphics"/>
+
+    <graph id="QAvalidator" edgedefault="directed">
+        <node id="_v1">
+            <data key="d3"/>
+            <data key="d5">
+                <y:UMLClassNode>
+                    <y:Geometry height="60.0" width="120.0" x="0.0" y="0.0"/>
+                    <y:Fill color="#28507A" transparent="false"/>
+                    <y:BorderStyle color="#000000" type="line" width="1.0"/>
+                    <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold"
+                                 hasBackgroundColor="false" hasLineColor="false" height="20.0" modelName="custom"
+                                 textColor="#000000" visible="true" width="45.0" x="0.0" y="0.0">v1<y:LabelModel>
+                            <y:SmartNodeLabelModel distance="4.0"/>
+                        </y:LabelModel>
+                        <y:ModelParameter>
+                            <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+                        </y:ModelParameter>
+                    </y:NodeLabel>
+                    <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                        <y:AttributeLabel> </y:AttributeLabel>
+                        <y:MethodLabel/>
+                    </y:UML>
+                </y:UMLClassNode>
+            </data>
+        </node>
+        <node id="_v2">
+            <data key="d3"/>
+            <data key="d5">
+                <y:UMLClassNode>
+                    <y:Geometry height="60.0" width="120.0" x="0.0" y="0.0"/>
+                    <y:Fill color="#28507A" transparent="false"/>
+                    <y:BorderStyle color="#000000" type="line" width="1.0"/>
+                    <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="bold"
+                                 hasBackgroundColor="false" hasLineColor="false" height="20.0" modelName="custom"
+                                 textColor="#000000" visible="true" width="45.0" x="0.0" y="0.0">v2<y:LabelModel>
+                            <y:SmartNodeLabelModel distance="4.0"/>
+                        </y:LabelModel>
+                        <y:ModelParameter>
+                            <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+                        </y:ModelParameter>
+                    </y:NodeLabel>
+                    <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                        <y:AttributeLabel> </y:AttributeLabel>
+                        <y:MethodLabel/>
+                    </y:UML>
+                </y:UMLClassNode>
+            </data>
+        </node>
+        <edge source="_v1" target="_v2">
+            <data key="d9">
+            <y:PolyLineEdge>
+                <y:LineStyle color="#2166ac" type="line" width="1.0"/>
+                <y:Arrows source="none" target="standard"/>
+                <y:BendStyle smoothed="false"/>
+            </y:PolyLineEdge>
+            </data>
+        </edge>
+    </graph>
+</graphml>

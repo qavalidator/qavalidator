@@ -1,0 +1,14 @@
+{
+  "nodes" : [ {
+    "name" : "v1"
+  }, {
+    "name" : "v2"
+  } ],
+  "edges" : [ {
+    "from" : "v1",
+    "to" : "v2",
+    "type" : "READ_ONLY",
+    "props" : { },
+    "baseDependencies" : [ ]
+  } ]
+}

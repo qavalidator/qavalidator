@@ -230,4 +230,13 @@ class IOQavPlugin extends BasePlugin {
     String getOutputDir() {
         return this.outputDir
     }
+
+    /**
+     * Getter.
+     *
+     * @return the list of abbreviations
+     */
+    List getAbbreviations() {
+        return abbreviations
+    }
 }

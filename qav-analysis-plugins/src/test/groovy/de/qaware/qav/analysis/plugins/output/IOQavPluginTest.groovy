@@ -2,6 +2,11 @@ package de.qaware.qav.analysis.plugins.output
 
 import de.qaware.qav.analysis.plugins.output.impl.SonarLogUtil
 import de.qaware.qav.analysis.plugins.test.TestAnalysis
+import de.qaware.qav.architecture.dsl.model.Architecture
+import de.qaware.qav.graph.api.DependencyGraph
+import de.qaware.qav.graph.api.DependencyType
+import de.qaware.qav.graph.factory.DependencyGraphFactory
+import de.qaware.qav.visualization.Abbreviation
 import org.apache.commons.io.FileUtils
 import org.junit.After
 import org.junit.Before
@@ -37,6 +42,104 @@ class IOQavPluginTest {
         def analysis = new TestAnalysis()
         ioQavPlugin.apply(analysis)
         assert analysis.closureMap.size() == 6
+    }
+
+    @Test
+    void testAbbreviations() {
+        assert ioQavPlugin.abbreviations.isEmpty()
+        ioQavPlugin.registerAbbreviation("Long name", "L")
+        ioQavPlugin.registerAbbreviation("Long name 2", "L2")
+        assert ioQavPlugin.abbreviations.size() == 2
+        assert ioQavPlugin.abbreviations == [
+                new Abbreviation("Long name", "L"),
+                new Abbreviation("Long name 2", "L2")
+        ]
+    }
+
+    @Test
+    void testPrintEmptyGraph() {
+        ioQavPlugin.setOutputDir(TEST_PATH, true)
+        File outputFile = new File(testDir, "testGraph.txt")
+
+        DependencyGraph graph = DependencyGraphFactory.createGraph()
+
+        // don't print empty graph:
+        ioQavPlugin.printNodes(graph, "testGraph.txt", false)
+        assert !outputFile.exists()
+
+        // do print empty graph. This also proves that the path used in the test above is correct
+        ioQavPlugin.printNodes(graph, "testGraph.txt", true)
+        assert outputFile.exists()
+    }
+
+    @Test
+    void testPrintGraph() {
+        ioQavPlugin.setOutputDir(TEST_PATH, true)
+        File outputFile = new File(testDir, "testGraph.txt")
+
+        DependencyGraph graph = createSampleGraph()
+
+        ioQavPlugin.printNodes(graph, "testGraph.txt", true)
+        assert outputFile.exists()
+
+        File expectedFile = new File("src/test/resources/testGraphExpected.txt")
+        assert expectedFile.exists()
+        String expected = normalizeText(expectedFile)
+        String actual = normalizeText(outputFile)
+
+        assert expected == actual
+    }
+
+    @Test
+    void testWriteFile() {
+        DependencyGraph graph = createSampleGraph()
+        ioQavPlugin.setOutputDir(TEST_PATH, true)
+        File outputFile = new File(testDir, "testGraph.json")
+        assert !outputFile.exists()
+
+        ioQavPlugin.writeFile(graph, "testGraph.json")
+        assert outputFile.exists()
+
+        File expectedFile = new File("src/test/resources/testGraphExpected.json")
+        assert expectedFile.exists()
+        String expected = normalizeText(expectedFile)
+        String actual = normalizeText(outputFile)
+
+        assert expected == actual
+    }
+
+    @Test
+    void testWriteDot() {
+        DependencyGraph graph = createSampleGraph()
+        ioQavPlugin.setOutputDir(TEST_PATH, true)
+        File outputFile = new File(testDir, "testGraph.dot")
+        assert !outputFile.exists()
+
+        ioQavPlugin.writeDot(graph, "testGraph", new Architecture())
+        assert outputFile.exists()
+
+        File expectedFile = new File("src/test/resources/testGraphExpected.dot")
+        assert expectedFile.exists()
+        String expected = normalizeText(expectedFile)
+        String actual = normalizeText(outputFile)
+
+        assert expected == actual
+    }
+
+    static private DependencyGraph createSampleGraph() {
+        DependencyGraph graph = DependencyGraphFactory.createGraph()
+        def v1 = graph.getOrCreateNodeByName("v1")
+        def v2 = graph.getOrCreateNodeByName("v2")
+        graph.addDependency(v1, v2, DependencyType.READ_ONLY)
+        graph
+    }
+
+    static private String normalizeText(File expectedFile) {
+        expectedFile.text
+                .replaceAll("\r", "\n")
+                .replaceAll("\n\n", "\n")
+                .replaceAll("\n\n", "\n")
+                .trim()
     }
 
     @Test

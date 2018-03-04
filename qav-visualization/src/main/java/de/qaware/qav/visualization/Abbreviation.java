@@ -1,6 +1,7 @@
 package de.qaware.qav.visualization;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /**
  * This is to beautify the output in the DOT graph.
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
  * @author QAware GmbH
  */
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Abbreviation {
 
     /** the pattern to match */
