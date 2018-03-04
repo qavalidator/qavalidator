@@ -1,6 +1,7 @@
 package de.qaware.qav.analysis.plugins.output
 
 import de.qaware.qav.analysis.plugins.output.impl.SonarLogUtil
+import de.qaware.qav.analysis.plugins.test.TestAnalysis
 import org.apache.commons.io.FileUtils
 import org.junit.After
 import org.junit.Before
@@ -29,6 +30,13 @@ class IOQavPluginTest {
     @After
     void cleanup() {
         FileUtils.deleteDirectory(testDir)
+    }
+
+    @Test
+    void testApply() {
+        def analysis = new TestAnalysis()
+        ioQavPlugin.apply(analysis)
+        assert analysis.closureMap.size() == 6
     }
 
     @Test
@@ -72,9 +80,9 @@ class IOQavPluginTest {
     }
 
     @Test
-    public void testSetOutputDirOnlyOnce() {
-        String path1 = TEST_PATH;
-        String path2 = TEST_PATH + "2";
+    void testSetOutputDirOnlyOnce() {
+        String path1 = TEST_PATH
+        String path2 = TEST_PATH + "2"
 
         ioQavPlugin.setOutputDir(path1)
         File realPath = new File(ioQavPlugin.outputDir)

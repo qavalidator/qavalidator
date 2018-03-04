@@ -20,4 +20,18 @@ interface Analysis {
      * @return the context (an {@link Expando})
      */
     Expando getContext()
+
+    /**
+     * Report an error.
+     *
+     * @param msg the message
+     */
+    void error(String msg)
+
+    /**
+     * Report an error.
+     *
+     * @param throwable the cause
+     */
+    void error(Throwable throwable)
 }

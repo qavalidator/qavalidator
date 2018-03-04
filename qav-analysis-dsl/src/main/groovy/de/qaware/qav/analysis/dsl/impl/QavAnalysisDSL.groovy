@@ -94,13 +94,21 @@ abstract class QavAnalysisDSL extends Script implements Analysis {
      * Reports an error by throwing an {@link IllegalStateException}.
      *
      * @param msg the message to throw
-     * @throws IllegalStateException with the given messages
+     * @throws IllegalStateException with the given message
      */
-    static void error(String msg) {
+    @Override
+    void error(String msg) {
         throw new IllegalStateException(msg)
     }
 
-    static void error(Throwable throwable) {
+    /**
+     * Reports an error by throwing an {@link IllegalStateException}.
+     *
+     * @param throwable the cause
+     * @throws IllegalStateException with the given cause
+     */
+    @Override
+    void error(Throwable throwable) {
         throw new IllegalStateException(throwable)
     }
     /**

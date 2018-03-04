@@ -43,7 +43,7 @@ class TypescriptInputReader {
     void read(String filename) {
         File inputFile = new File(filename)
         if (!inputFile.exists()) {
-            throw new IllegalArgumentException("File ${inputFile.absolutePath} does not exist")
+            throw new IllegalArgumentException("File ${inputFile.canonicalPath} does not exist")
         }
 
         Node input = new XmlParser(false, false).parse(inputFile)

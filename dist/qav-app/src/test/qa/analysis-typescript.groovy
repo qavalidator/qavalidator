@@ -3,9 +3,9 @@ import de.qaware.qav.architecture.dsl.model.Architecture
 apply "de.qaware.qav.analysis.plugins.ShortcutQavPlugin"
 
 analysis("Step 1: Read Typescript file") {
-    inputTypescript "../qav-input-typescript/src/test/resources/typescript/ts-qav-export.xml"
+    inputTypescript "../../qav-input-typescript/src/test/resources/typescript/ts-qav-export.xml"
 
-    tsFileGraph = typescriptDependencyGraph.filter(propertyInFilter("typescript.type", "File"))
+    tsFileGraph = typescriptDependencyGraph.filter(nodePropertyInFilter("typescript.type", "File"))
     tsPackageGraph = createPackageArchitectureView(tsFileGraph, "TS-Package", "/")
 
     writeDot(tsFileGraph, "typescript", new Architecture())
