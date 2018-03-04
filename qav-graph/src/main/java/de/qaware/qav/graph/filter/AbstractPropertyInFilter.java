@@ -1,8 +1,8 @@
 package de.qaware.qav.graph.filter;
 
-import com.google.common.collect.Maps;
 import de.qaware.qav.graph.api.AbstractGraphElement;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,9 +15,12 @@ import java.util.Map;
  * @param <T> the graph element type
  * @author QAware GmbH
  */
+@SuppressWarnings("squid:S1694")
+// warns that there is no abstract method, i.e. no abstract behaviour that is encapsulated here. However, this class
+// contains the commonalities of filters working on AbstractGraphElement (i.e. Nodes and Dependencies) and is therefore fine.
 public abstract class AbstractPropertyInFilter<T extends AbstractGraphElement> {
 
-    private final Map<String, Object> properties = Maps.newHashMap();
+    private final Map<String, Object> properties = new HashMap<>();
 
     /**
      * Default constructor.

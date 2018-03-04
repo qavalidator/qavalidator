@@ -1,11 +1,11 @@
 package de.qaware.qav.graph.api;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +16,9 @@ import java.util.Map;
  *
  * @author QAware GmbH
  */
+@SuppressWarnings("squid:S1694")
+// warns that there is no abstract method, i.e. no abstract behaviour that is encapsulated here. However, this class
+// contains the commonalities of elements in a graph and is therefore fine.
 public abstract class AbstractGraphElement {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGraphElement.class);
@@ -28,7 +31,7 @@ public abstract class AbstractGraphElement {
     /**
      * properties of the node or edge.
      */
-    protected final Map<String, Object> properties = Maps.newHashMap();
+    protected final Map<String, Object> properties = new HashMap<>();
 
     /**
      * get the name.
@@ -93,8 +96,8 @@ public abstract class AbstractGraphElement {
     }
 
     /**
-     * Adds the value to the list of values. Only adds if the value was not in the list before.
-     * Creates the list if it does not exist so far. Changes the value to a {@link List} if it wasn't a List before.
+     * Adds the value to the list of values. Only adds if the value was not in the list before. Creates the list if it
+     * does not exist so far. Changes the value to a {@link List} if it wasn't a List before.
      *
      * @param key   name of the property
      * @param value value to add.
@@ -109,13 +112,13 @@ public abstract class AbstractGraphElement {
 
         Object object = properties.get(key);
         if (object == null) {
-            list = Lists.newArrayList();
+            list = new ArrayList<>();
             properties.put(key, list);
         } else if (object instanceof List) {
             list = (List<Object>) object;
         } else {
             LOGGER.warn("Property {} was not a list, replacing with a list.", key);
-            list = Lists.newArrayList();
+            list = new ArrayList<>();
             list.add(object);
             properties.put(key, list);
         }
@@ -130,6 +133,6 @@ public abstract class AbstractGraphElement {
      * @return a copy of the properties map.
      */
     public Map<String, Object> getProperties() {
-        return Maps.newHashMap(properties);
+        return new HashMap<>(properties);
     }
 }

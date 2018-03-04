@@ -1,10 +1,9 @@
 package de.qaware.qav.graph.api;
 
-import com.google.common.base.Preconditions;
-
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
 
 /**
@@ -27,9 +26,9 @@ public class Dependency extends AbstractGraphElement {
      * @param dependencyType the {@link DependencyType}
      */
     public Dependency(Node source, Node target, DependencyType dependencyType) {
-        this.source = Preconditions.checkNotNull(source, "Source may not be null");
-        this.target = Preconditions.checkNotNull(target, "Target may not be null");
-        this.dependencyType = Preconditions.checkNotNull(dependencyType, "Dependency type may not be null");
+        this.source = checkNotNull(source, "Source may not be null");
+        this.target = checkNotNull(target, "Target may not be null");
+        this.dependencyType = checkNotNull(dependencyType, "Dependency type may not be null");
     }
 
     public Node getSource() {
@@ -50,7 +49,7 @@ public class Dependency extends AbstractGraphElement {
      * @param dependencyType the {@link DependencyType}, may not be null
      */
     public void setDependencyType(DependencyType dependencyType) {
-        this.dependencyType = Preconditions.checkNotNull(dependencyType, "Dependency type may not be null");
+        this.dependencyType = checkNotNull(dependencyType, "Dependency type may not be null");
     }
 
     /**

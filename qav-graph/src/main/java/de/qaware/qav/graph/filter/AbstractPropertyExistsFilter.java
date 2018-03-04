@@ -1,22 +1,25 @@
 package de.qaware.qav.graph.filter;
 
-import com.google.common.collect.Sets;
 import de.qaware.qav.graph.api.AbstractGraphElement;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Filter on the basis of {@link AbstractGraphElement} properties.
  * <p>
- * This is an IN-filter, i.e. only if ALL properties in this filter are present in the given node, the node is
- * accepted. If NOT ALL properties in this filter are present in the given node, the node will not be accepted.
+ * This is an IN-filter, i.e. only if ALL properties in this filter are present in the given node, the node is accepted.
+ * If NOT ALL properties in this filter are present in the given node, the node will not be accepted.
  *
  * @param <T> the graph element type
  * @author QAware GmbH
  */
+@SuppressWarnings("squid:S1694")
+// warns that there is no abstract method, i.e. no abstract behaviour that is encapsulated here. However, this class
+// contains the commonalities of filters working on AbstractGraphElement (i.e. Nodes and Dependencies) and is therefore fine.
 public abstract class AbstractPropertyExistsFilter<T extends AbstractGraphElement> {
 
-    private final Set<String> propertyNames = Sets.newHashSet();
+    private final Set<String> propertyNames = new HashSet<>();
 
     /**
      * Default constructor.

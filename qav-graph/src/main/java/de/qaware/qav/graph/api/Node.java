@@ -1,6 +1,6 @@
 package de.qaware.qav.graph.api;
 
-import com.google.common.base.Preconditions;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Node in the dependency graph.
@@ -17,7 +17,7 @@ public class Node extends AbstractGraphElement {
      * @param name the name of the node
      */
     public Node(String name) {
-        Preconditions.checkNotNull(name);
+        checkNotNull(name, "Name may not be null");
         properties.put(NAME, name);
     }
 
