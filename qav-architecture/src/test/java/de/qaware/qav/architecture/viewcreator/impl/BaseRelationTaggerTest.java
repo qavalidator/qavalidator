@@ -1,8 +1,8 @@
-package de.qaware.qav.architecture.nodecreator.impl;
+package de.qaware.qav.architecture.viewcreator.impl;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
-import de.qaware.qav.architecture.nodecreator.DependencyMapper;
+import de.qaware.qav.architecture.viewcreator.DependencyMapper;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;

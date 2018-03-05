@@ -1,9 +1,9 @@
-package de.qaware.qav.architecture.nodecreator;
+package de.qaware.qav.architecture.viewcreator;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
-import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator;
-import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeTagger;
-import de.qaware.qav.architecture.nodecreator.impl.BaseRelationTagger;
+import de.qaware.qav.architecture.viewcreator.impl.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.viewcreator.impl.ArchitectureNodeTagger;
+import de.qaware.qav.architecture.viewcreator.impl.BaseRelationTagger;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.filter.AndFilter;
 import de.qaware.qav.graph.filter.NodePropertyInFilter;

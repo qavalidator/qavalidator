@@ -1,5 +1,7 @@
-package de.qaware.qav.architecture.nodecreator;
+package de.qaware.qav.architecture.viewcreator;
 
+import de.qaware.qav.architecture.viewcreator.impl.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.viewcreator.impl.ComponentNameTagger;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
@@ -24,7 +26,7 @@ public final class DependencyMapper {
      * <p>
      * For each Edge from V1 to V2, it creates the dependency parent(V1) to parent(V2) in the Target Graph, where the
      * parent nodes are defined by the given tag. They should be set beforehand, see {@link
-     * de.qaware.qav.architecture.nodecreator.impl.ComponentNameTagger} and {@link de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator}.
+     * ComponentNameTagger} and {@link ArchitectureNodeCreator}.
      * We assume that both parent(V1) and parent(V2) exist in the Base Graph.
      *
      * @param dependencyGraph the {@link DependencyGraph}

@@ -2,7 +2,7 @@ package de.qaware.qav.architecture.tagger;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
-import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.viewcreator.impl.ArchitectureNodeCreator;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
 import org.junit.Test;

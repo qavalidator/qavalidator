@@ -2,9 +2,9 @@ package de.qaware.qav.visualization;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
-import de.qaware.qav.architecture.nodecreator.DependencyMapper;
-import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator;
-import de.qaware.qav.architecture.nodecreator.impl.BaseRelationTagger;
+import de.qaware.qav.architecture.viewcreator.DependencyMapper;
+import de.qaware.qav.architecture.viewcreator.impl.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.viewcreator.impl.BaseRelationTagger;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;

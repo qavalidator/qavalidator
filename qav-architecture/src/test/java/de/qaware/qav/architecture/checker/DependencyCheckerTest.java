@@ -2,7 +2,7 @@ package de.qaware.qav.architecture.checker;
 
 import de.qaware.qav.architecture.dsl.api.QavArchitectureReader;
 import de.qaware.qav.architecture.dsl.model.Architecture;
-import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.viewcreator.impl.ArchitectureNodeCreator;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;

@@ -34,10 +34,10 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
     }
 
     component("Architecture") {
-        api "de.qaware.qav.architecture.checker.*"
-        api "de.qaware.qav.architecture.factory.*"
-        api "de.qaware.qav.architecture.nodecreator.*"
-        api "de.qaware.qav.architecture.tagger.*"
+        api "de.qaware.qav.architecture.checker.**"
+        api "de.qaware.qav.architecture.factory.**"
+        api "de.qaware.qav.architecture.viewcreator.**"
+        api "de.qaware.qav.architecture.tagger.**"
 
         uses "Graph.base", "Graph.filter"
     }

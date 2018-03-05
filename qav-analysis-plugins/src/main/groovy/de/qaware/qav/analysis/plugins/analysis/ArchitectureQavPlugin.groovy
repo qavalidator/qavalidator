@@ -5,9 +5,9 @@ import de.qaware.qav.analysis.plugins.base.BasePlugin
 import de.qaware.qav.architecture.dsl.api.QavArchitectureReader
 import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory
-import de.qaware.qav.architecture.nodecreator.ArchitectureViewCreator
-import de.qaware.qav.architecture.nodecreator.Result
 import de.qaware.qav.architecture.tagger.ArchitectureHeightTagger
+import de.qaware.qav.architecture.viewcreator.ArchitectureViewCreator
+import de.qaware.qav.architecture.viewcreator.Result
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
 import de.qaware.qav.graph.api.DependencyGraph

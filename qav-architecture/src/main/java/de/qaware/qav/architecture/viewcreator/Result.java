@@ -1,4 +1,4 @@
-package de.qaware.qav.architecture.nodecreator;
+package de.qaware.qav.architecture.viewcreator;
 
 import de.qaware.qav.graph.api.DependencyGraph;
 import lombok.Data;

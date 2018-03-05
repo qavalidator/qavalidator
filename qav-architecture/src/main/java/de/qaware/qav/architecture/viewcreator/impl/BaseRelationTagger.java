@@ -1,4 +1,4 @@
-package de.qaware.qav.architecture.nodecreator.impl;
+package de.qaware.qav.architecture.viewcreator.impl;
 
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.Dependency;

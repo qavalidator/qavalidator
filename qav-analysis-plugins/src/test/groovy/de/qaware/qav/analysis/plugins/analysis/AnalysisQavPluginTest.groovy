@@ -3,8 +3,8 @@ package de.qaware.qav.analysis.plugins.analysis
 import de.qaware.qav.analysis.plugins.test.TestAnalysis
 import de.qaware.qav.architecture.dsl.api.QavArchitectureReader
 import de.qaware.qav.architecture.dsl.model.Architecture
-import de.qaware.qav.architecture.nodecreator.ArchitectureViewCreator
-import de.qaware.qav.architecture.nodecreator.Result
+import de.qaware.qav.architecture.viewcreator.ArchitectureViewCreator
+import de.qaware.qav.architecture.viewcreator.Result
 import de.qaware.qav.graph.api.DependencyGraph
 import de.qaware.qav.graph.api.DependencyType
 import de.qaware.qav.graph.factory.DependencyGraphFactory

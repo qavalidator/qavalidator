@@ -1,4 +1,4 @@
-package de.qaware.qav.architecture.nodecreator;
+package de.qaware.qav.architecture.viewcreator;
 
 import de.qaware.qav.architecture.dsl.api.QavArchitectureReader;
 import de.qaware.qav.architecture.dsl.model.Architecture;

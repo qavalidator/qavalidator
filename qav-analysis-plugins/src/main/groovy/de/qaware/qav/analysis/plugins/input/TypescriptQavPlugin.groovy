@@ -2,7 +2,7 @@ package de.qaware.qav.analysis.plugins.input
 
 import de.qaware.qav.analysis.dsl.model.Analysis
 import de.qaware.qav.analysis.plugins.base.BasePlugin
-import de.qaware.qav.architecture.nodecreator.DependencyMapper
+import de.qaware.qav.architecture.viewcreator.DependencyMapper
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
 import de.qaware.qav.graph.api.DependencyGraph
