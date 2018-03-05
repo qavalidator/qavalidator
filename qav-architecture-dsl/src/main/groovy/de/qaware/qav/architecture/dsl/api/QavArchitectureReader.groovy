@@ -20,17 +20,20 @@ class QavArchitectureReader {
 
     /**
      * Constructor.
+     *
+     * Read the given QAV Architecture File.
+     *
      * @param fileName the file to read
      */
     QavArchitectureReader(String fileName, String alternateDir) {
         this.architectureFileText = FileSystemUtil.readFileAsText(fileName, alternateDir)
+        read()
     }
-
 
     /**
      * Read the given QAV Architecture File.
      */
-    void read() {
+    private void read() {
         def config = new CompilerConfiguration()
         config.scriptBaseClass = ArchitectureDSL.name
 

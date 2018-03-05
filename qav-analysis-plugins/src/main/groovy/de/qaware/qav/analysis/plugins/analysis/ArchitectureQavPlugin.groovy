@@ -98,7 +98,6 @@ class ArchitectureQavPlugin extends BasePlugin {
     )
     void readArchitecture(String filename) {
         def reader = new QavArchitectureReader(filename, analysis.context.analysisBasePath)
-        reader.read()
         this.architectureMap.putAll(reader.getArchitectures())
     }
 

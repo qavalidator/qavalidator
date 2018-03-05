@@ -14,7 +14,6 @@ class QavArchitectureReaderTest {
     void testRead() {
         QavArchitectureReader reader = new QavArchitectureReader("src/test/resources/qa/architecture.groovy", null)
         assert reader
-        reader.read()
 
         Architecture architecture = reader.getArchitectures()["T-View"]
         assert architecture != null
@@ -24,10 +23,8 @@ class QavArchitectureReaderTest {
 
     @Test
     void testReadWithErrors() {
-        QavArchitectureReader reader = new QavArchitectureReader("classpath:/qa/arch-with-errors.groovy", null)
-
         try {
-            reader.read()
+            new QavArchitectureReader("classpath:/qa/arch-with-errors.groovy", null)
         } catch(IllegalArgumentException e) {
             assert e.message == "Architecture Test-1 contains errors."
         }

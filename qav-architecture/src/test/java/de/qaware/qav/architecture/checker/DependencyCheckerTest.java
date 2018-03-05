@@ -52,7 +52,6 @@ public class DependencyCheckerTest extends AbstractArchitectureCheckerTest {
         graph.addDependency(n2, n3, DependencyType.READ_ONLY);
 
         QavArchitectureReader reader = new QavArchitectureReader("classpath:/qa/arch-for-dependency-checker-test.groovy", null);
-        reader.read();
         Architecture architecture = reader.getArchitectures().get("Test-1");
         assertThat(architecture, notNullValue());
         new ArchitectureNodeCreator(graph, architecture).createAllArchitectureNodes();

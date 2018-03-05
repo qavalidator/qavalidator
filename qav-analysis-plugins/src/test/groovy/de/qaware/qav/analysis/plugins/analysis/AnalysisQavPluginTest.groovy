@@ -134,7 +134,6 @@ class AnalysisQavPluginTest {
 
     static private Architecture readArchitecture() {
         QavArchitectureReader reader = new QavArchitectureReader("src/test/resources/testArchitecture.groovy", null)
-        reader.read()
 
         Architecture architecture = reader.getArchitectures()["T-View"]
         assert architecture != null

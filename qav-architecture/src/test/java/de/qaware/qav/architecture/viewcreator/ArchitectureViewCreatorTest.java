@@ -53,7 +53,6 @@ public class ArchitectureViewCreatorTest {
 
     private void initArchitecture() {
         QavArchitectureReader reader = new QavArchitectureReader("src/test/resources/qa/arch-for-view-creator-test.groovy", null);
-        reader.read();
         this.architecture = reader.getArchitectures().get("Test-Architecture");
     }
 
