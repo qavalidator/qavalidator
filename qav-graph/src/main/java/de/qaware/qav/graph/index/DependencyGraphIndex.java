@@ -1,6 +1,6 @@
 package de.qaware.qav.graph.index;
 
-import com.google.common.collect.Sets;
+import com.google.common.base.Stopwatch;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.Node;
 import org.apache.lucene.analysis.Analyzer;
@@ -24,13 +24,17 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * Index to find nodes. Based on in-memory Lucene index.
+ * Index to find nodes. Based on an in-memory Lucene index.
+ * <p>
+ * We use Lucene foremost for its convenient query language. It's used mainly (or only) in the Web UI to find nodes.
  *
  * @author QAware GmbH
  */
@@ -40,7 +44,7 @@ public class DependencyGraphIndex {
     private static final int MAX_RESULTS = 1000;
 
     private final DependencyGraph graph;
-    private final Set<String> numericFields;
+    private final Set<String> numericFields = new HashSet<>();
 
     private Directory directory;
     private Analyzer analyzer;
@@ -53,33 +57,18 @@ public class DependencyGraphIndex {
      */
     public DependencyGraphIndex(DependencyGraph graph, String... numericFields) {
         this.graph = graph;
-        this.numericFields = Sets.newHashSet();
         Collections.addAll(this.numericFields, numericFields);
 
-        long start = System.currentTimeMillis();
         initIndex();
-
-        if (LOGGER.isDebugEnabled()) {
-            long duration = System.currentTimeMillis() - start;
-            LOGGER.debug("Index built, took {} ms", duration);
-        }
     }
 
     /**
-     * Find nodes with the given query.
+     * Setup up the Lucene index.
      *
-     * @param queryString the Lucene query
-     * @return the matching nodes
+     * Put all {@link Node}s of the {@link #graph} into the index.
      */
-    public Set<Node> findNodes(String queryString) {
-        try {
-            return doFindNodes(queryString);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Finding nodes failed for query: " + queryString, e);
-        }
-    }
-
     private void initIndex() {
+        Stopwatch stopwatch = Stopwatch.createStarted();
         analyzer = new StandardAnalyzer();
 
         // Store the index in memory:
@@ -96,6 +85,8 @@ public class DependencyGraphIndex {
         } catch (IOException e) {
             LOGGER.error("Indexing failed: ", e);
         }
+
+        LOGGER.debug("Index built, took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
     private void indexAllNodes(IndexWriter indexWriter) throws IOException {
@@ -108,9 +99,8 @@ public class DependencyGraphIndex {
         Document doc = new Document();
 
         for (Map.Entry<String, Object> entry : node.getProperties().entrySet()) {
-            Object value = entry.getValue();
-
             String key = entry.getKey();
+            Object value = entry.getValue();
             if (numericFields.contains(key)) {
                 doc.add(new LongPoint(key, Long.valueOf((String) value)));
             } else {
@@ -121,21 +111,36 @@ public class DependencyGraphIndex {
         indexWriter.addDocument(doc);
     }
 
+    /**
+     * Find nodes with the given query.
+     *
+     * @param queryString the Lucene query
+     * @return the matching nodes
+     */
+    public Set<Node> findNodes(String queryString) {
+        try {
+            return doFindNodes(queryString);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Finding nodes failed for query: " + queryString, e);
+        }
+    }
+
+    /**
+     * Execute the query against the Lucene index.
+     *
+     * @param queryString the query String
+     * @return the {@link Set} of {@link Node}s. May be empty, but never null.
+     * @throws IOException if there is a low-level IO error in Lucene
+     */
     private Set<Node> doFindNodes(String queryString) throws IOException {
         DirectoryReader directoryReader = DirectoryReader.open(directory);
         IndexSearcher indexSearcher = new IndexSearcher(directoryReader);
 
-        Query query;
-        try {
-            QueryParser parser = new CustomQueryParser(queryString, analyzer, numericFields);
-            query = parser.parse(queryString);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Parsing of query failed: " + queryString, e);
-        }
+        Query query = parseQuery(queryString);
 
         ScoreDoc[] hits = indexSearcher.search(query, MAX_RESULTS, Sort.INDEXORDER).scoreDocs;
 
-        Set<Node> result = Sets.newHashSet();
+        Set<Node> result = new HashSet<>();
 
         for (ScoreDoc hit : hits) {
             Document hitDoc = indexSearcher.doc(hit.doc);
@@ -146,5 +151,20 @@ public class DependencyGraphIndex {
         directoryReader.close();
 
         return result;
+    }
+
+    /**
+     * Parse the Lucene query; take care of numeric fields.
+     *
+     * @param queryString the original query String
+     * @return the parsed {@link Query}
+     */
+    private Query parseQuery(String queryString) {
+        try {
+            QueryParser parser = new CustomQueryParser(queryString, analyzer, numericFields);
+            return parser.parse(queryString);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Parsing of query failed: " + queryString, e);
+        }
     }
 }

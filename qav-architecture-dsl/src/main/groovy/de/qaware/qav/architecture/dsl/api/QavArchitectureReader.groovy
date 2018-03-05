@@ -44,7 +44,7 @@ class QavArchitectureReader {
         architectures = shell.evaluate(architectureFileText)
 
         architectures.values().each {
-            new ArchitectureResolver().resolveArchitecture(it)
+            ArchitectureResolver.resolveArchitecture(it)
         }
     }
 }

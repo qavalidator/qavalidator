@@ -5,8 +5,10 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.objectweb.asm.Type;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Utility methods to deal with ASM Strings.
@@ -37,23 +39,20 @@ public final class AsmUtil {
     }
 
     /**
-     * returns the type names of the parameters
+     * Returns the type names of the parameters.
      *
-     * @param desc                 the Asm description
+     * @param desc                 the ASM description
      * @param collapseInnerClasses Flag if inner classes are to be collapsed
      * @return the type names
      */
     public static List<String> getParameterTypeNames(String desc, boolean collapseInnerClasses) {
-        List<String> paramTypes = Lists.newArrayList();
-        Type[] argumentTypes = Type.getArgumentTypes(desc);
-        for (Type t : argumentTypes) {
-            paramTypes.add(toClassName(t.getClassName(), collapseInnerClasses));
-        }
-        return paramTypes;
+        return Arrays.stream(Type.getArgumentTypes(desc))
+                .map(t -> toClassName(t.getClassName(), collapseInnerClasses))
+                .collect(Collectors.toList());
     }
 
     /**
-     * Returns cleaned name of class or outer class, if inner classes should be collapsed
+     * Returns cleaned name of class or outer class, if inner classes should be collapsed.
      *
      * @param className            Name of the class
      * @param collapseInnerClasses Flag if inner classes are to be collapsed
@@ -70,7 +69,7 @@ public final class AsmUtil {
     }
 
     /**
-     * Returns cleaned class name
+     * Returns cleaned class name.
      *
      * @param className The name of the class
      * @return The cleaned name of the class

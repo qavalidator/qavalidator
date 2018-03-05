@@ -214,7 +214,12 @@ public class DotExporter {
     // === finish ===
 
     /**
-     * finish: write dot file, and trigger calling the dot program.
+     * Finish: write dot file, and trigger calling the dot program.
+     * <p>
+     * Only do so if the graph is not too large; otherwise <tt>dot</tt> tends to fail and hangs, causing QAvalidator to
+     * not terminate. We use a heuristic, based on the number of nodes in the graph (which is probably not correct;
+     * better would be to look at the nesting of the cluster graph, or to find a method to detect failure and kill the
+     * process).
      */
     private void finish() {
         String filename = FileNameUtil.getCanonicalPath(fileNameBase + ".dot");

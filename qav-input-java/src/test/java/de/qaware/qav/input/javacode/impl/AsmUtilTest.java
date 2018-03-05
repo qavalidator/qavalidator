@@ -22,4 +22,12 @@ public class AsmUtilTest {
         assertThat(AsmUtil.toClassName("byte[]", true), is("byte"));
         assertThat(AsmUtil.toClassName(null, true), nullValue());
     }
+
+    @Test
+    public void testApplyTwiceDoesNotMatter() {
+        assertThat(AsmUtil.toClassName("java.util.List", true), is("java.util.List"));
+        assertThat(AsmUtil.toClassName("java.util.List$Entry", true), is("java.util.List"));
+        assertThat(AsmUtil.toClassName("java.util.List$Entry", false), is("java.util.List$Entry"));
+    }
+
 }

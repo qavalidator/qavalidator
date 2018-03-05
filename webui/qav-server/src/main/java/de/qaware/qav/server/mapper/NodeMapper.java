@@ -15,6 +15,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Mapper from {@link Node} to {@link NodeDTO}.
+ * <p>
+ * Maps the properties, the hierarchy (parents and children), and the dependencies (incoming and outgoing). Sorts all
+ * entries alphabetically, for nice display at the UI.
  *
  * @author QAware GmbH
  */

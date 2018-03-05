@@ -66,26 +66,26 @@ public class DependencyMethodVisitor extends MethodVisitor {
         return null;
     }
 
-
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
         LOGGER.debug("Line: {}, Opcode: {}, owner: {}, name: {}, desc: {}, itf: {}", lineNo, opcode, owner, name, desc, itf);
 
-        List<String> paramTypes = AsmUtil.getParameterTypeNames(desc, collapseInnerClasses);
-
         DependencyType dependencyType = getDepType(name);
-        String targetClassName = AsmUtil.toClassName(owner, collapseInnerClasses);
+        addDependency(owner, dependencyType);
 
-        if (isIgnorable(targetClassName)) {
-            LOGGER.debug("Skipping reference from {} to {}", className, targetClassName);
-        } else if (targetClassName.equals(className)) {
-            LOGGER.debug("Skipping self-reference: {} [{}]", className, dependencyType);
-        } else {
-            addDependency(targetClassName, dependencyType);
-            paramTypes.forEach(it -> addDependency(it, DependencyType.REFERENCE));
-        }
+        List<String> paramTypes = AsmUtil.getParameterTypeNames(desc, collapseInnerClasses);
+        paramTypes.forEach(it -> addDependency(it, DependencyType.REFERENCE));
     }
 
+    /**
+     * Apply heuristics to define the {@link DependencyType}.
+     * <p>
+     * It's only based on the name, not on what the method actually does. I.e. {@link DependencyType#READ_ONLY} access
+     * is defined solely on the name; it's not checked whether the method has side effects.
+     *
+     * @param methodName the method name
+     * @return the {@link DependencyType}
+     */
     private DependencyType getDepType(String methodName) {
         if ("<init>".equals(methodName) || "<clinit>".equals(methodName)) {
             return DependencyType.CREATE;
@@ -138,7 +138,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
         // type is null for finally blocks
         if (type != null) {
             LOGGER.debug("TryCatchBlock: type: {}", type);
-            addDependency(AsmUtil.toClassName(type, collapseInnerClasses), DependencyType.READ_ONLY);
+            addDependency(type, DependencyType.READ_ONLY);
         }
     }
 
@@ -147,7 +147,8 @@ public class DependencyMethodVisitor extends MethodVisitor {
         this.lineNo = line;
     }
 
-    private void addDependency(String targetClassName, DependencyType dependencyType) {
+    private void addDependency(String targetName, DependencyType dependencyType) {
+        String targetClassName = AsmUtil.toClassName(targetName, collapseInnerClasses);
         if (!className.equals(targetClassName) && !isIgnorable(targetClassName)) {
             LOGGER.debug("Add dependency: {}#{} --[{}]--> {}", className, methodName, dependencyType, targetClassName);
             Node targetNode = dependencyGraph.getOrCreateNodeByName(targetClassName);

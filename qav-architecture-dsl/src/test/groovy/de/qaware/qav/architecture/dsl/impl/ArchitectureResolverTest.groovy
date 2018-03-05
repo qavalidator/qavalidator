@@ -14,7 +14,7 @@ class ArchitectureResolverTest {
     void testResolveArchitecture() {
         Architecture architecture = createArchitecture()
 
-        new ArchitectureResolver().resolveArchitecture(architecture)
+        ArchitectureResolver.resolveArchitecture(architecture)
         assert architecture.nameToComponent.size() == 4
     }
 

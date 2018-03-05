@@ -1,5 +1,6 @@
 package de.qaware.qav.input.javacode.impl;
 
+import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
@@ -21,7 +22,13 @@ import static de.qaware.qav.graph.api.Constants.TYPE_CLASS;
 import static de.qaware.qav.input.javacode.impl.DependencyUtil.isIgnorable;
 
 /**
- * This visitor collects all dependencies on the class level and sends off a method visitor for each method.
+ * This visitor collects all dependencies on the class level:
+ * <p>
+ * 1. analyze all fields
+ * <p>
+ * 2. analyze all methods and their signatures, i.e. return type and parameter types
+ * <p>
+ * 3. send off a method visitor for each method
  *
  * @author QAware GmbH
  */
@@ -33,7 +40,8 @@ public class DependencyClassVisitor extends ClassVisitor {
     private final boolean collapseInnerClasses;
 
     /**
-     * The name of the currently analyzed class.
+     * The name of the currently analyzed class. Will be set in the call to the {@link #visit(int, int, String, String,
+     * String, String[])} method.
      */
     private String className;
 
@@ -66,6 +74,7 @@ public class DependencyClassVisitor extends ClassVisitor {
 
         analyzeSignature(name, signature);
 
+        // Inheritance: may be one class an many interfaces:
         addInheritanceDependency(superName);
         Arrays.stream(interfaces).forEach(this::addInheritanceDependency);
     }
@@ -85,8 +94,7 @@ public class DependencyClassVisitor extends ClassVisitor {
         LOGGER.debug("Original field info: Access: {}, Name: {}, Desc: {}, Signature: {}, Value: {}",
                 access, name, desc, signature, value == null ? "null" : value);
 
-        String typeName = AsmUtil.toClassName(Type.getType(desc).getClassName(), collapseInnerClasses);
-        addParameterTypeDependency(typeName);
+        addParameterTypeDependency(Type.getType(desc).getClassName());
 
         analyzeSignature(name, signature);
 
@@ -98,7 +106,7 @@ public class DependencyClassVisitor extends ClassVisitor {
         LOGGER.debug("Original method info: Access: {}, Name: {}, Desc: {}, Signature: {}, Exceptions: {}",
                 access, name, desc, signature, exceptions == null ? "null" : Arrays.asList(exceptions));
 
-        String returnTypeName = AsmUtil.toClassName(Type.getReturnType(desc).getClassName(), collapseInnerClasses);
+        String returnTypeName = Type.getReturnType(desc).getClassName();
         List<String> paramTypes = AsmUtil.getParameterTypeNames(desc, collapseInnerClasses);
         LOGGER.debug("Method (plain): {} {}#{}({})", returnTypeName, className, name, paramTypes);
         addParameterTypeDependency(returnTypeName);
@@ -107,12 +115,18 @@ public class DependencyClassVisitor extends ClassVisitor {
         analyzeSignature(name, signature);
 
         if (exceptions != null) {
-            Arrays.stream(exceptions).forEach(it -> addParameterTypeDependency(AsmUtil.toClassName(it, collapseInnerClasses)));
+            Arrays.stream(exceptions).forEach(this::addParameterTypeDependency);
         }
 
         return new DependencyMethodVisitor(dependencyGraph, className, name, collapseInnerClasses);
     }
 
+    /**
+     * Analyze the given signature and add the dependencies.
+     *
+     * @param name      class, method, or field name
+     * @param signature signature String
+     */
     private void analyzeSignature(String name, String signature) {
         if (signature != null) {
             SignatureReader sr = new SignatureReader(signature);
@@ -128,21 +142,38 @@ public class DependencyClassVisitor extends ClassVisitor {
         }
     }
 
-
+    /**
+     * Add inheritance dependency.
+     * <p>
+     * Normalizes the target node name to use.
+     * <p>
+     * Set the property <tt>type</tt> to <tt>class</tt> on the parent node.
+     *
+     * @param parentName the name of the parent class
+     */
     private void addInheritanceDependency(String parentName) {
         String parentClassName = AsmUtil.toClassName(parentName, collapseInnerClasses);
         if (!isIgnorable(parentClassName)) {
             Node superNode = dependencyGraph.getOrCreateNodeByName(parentClassName);
             superNode.setProperty(TYPE, TYPE_CLASS);
-            dependencyGraph.addDependency(classNode, superNode, DependencyType.INHERIT);
+            Dependency dependency = dependencyGraph.addDependency(classNode, superNode, DependencyType.INHERIT);
+            LOGGER.debug("Add dependency: {}", dependency);
         }
     }
 
-    private void addParameterTypeDependency(String targetClassName) {
+    /**
+     * Add a type dependency, i.e. using {@link DependencyType#REFERENCE}.
+     * <p>
+     * Normalizes the target node name to use.
+     *
+     * @param targetName the name of the target class
+     */
+    private void addParameterTypeDependency(String targetName) {
+        String targetClassName = AsmUtil.toClassName(targetName, collapseInnerClasses);
         if (!className.equals(targetClassName) && !isIgnorable(targetClassName)) {
-            LOGGER.debug("Add dependency: {} --[{}]--> {}", className, DependencyType.REFERENCE, targetClassName);
             Node targetNode = dependencyGraph.getOrCreateNodeByName(targetClassName);
-            dependencyGraph.addDependency(classNode, targetNode, DependencyType.REFERENCE);
+            Dependency dependency = dependencyGraph.addDependency(classNode, targetNode, DependencyType.REFERENCE);
+            LOGGER.debug("Add dependency: {}", dependency);
         }
     }
 }

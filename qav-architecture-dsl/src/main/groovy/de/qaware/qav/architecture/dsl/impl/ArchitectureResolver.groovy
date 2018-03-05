@@ -17,14 +17,20 @@ class ArchitectureResolver {
      * Resolve all "usesAPI" references within the {@link de.qaware.qav.architecture.dsl.model.Architecture}.
      *
      * @param architecture the {@link de.qaware.qav.architecture.dsl.model.Architecture} to check
-     * @throws AssertionError if there are undefined references
+     * @throws IllegalArgumentException if there are undefined references
      */
-    void resolveArchitecture(Architecture architecture) {
+    static void resolveArchitecture(Architecture architecture) {
         setupIndexMaps(architecture)
         checkUsesRelations(architecture)
     }
 
-    private Component[] setupIndexMaps(Architecture architecture) {
+    /**
+     * Create the lookup maps to find components by their name, their API names, or their IMPL names.
+     *
+     * @param architecture the {@link Architecture}
+     * @return the List of {@link Component}s
+     */
+    private static Component[] setupIndexMaps(Architecture architecture) {
         architecture.allComponents.each { cmp ->
             architecture.nameToComponent[cmp.name] = cmp
 
@@ -37,7 +43,12 @@ class ArchitectureResolver {
         }
     }
 
-    private void checkUsesRelations(Architecture architecture) {
+    /**
+     * Checks that all declared references have a valid target.
+     *
+     * @param architecture the {@link Architecture}
+     */
+    private static void checkUsesRelations(Architecture architecture) {
         boolean success = true
         architecture.allComponents.each { cmp ->
             cmp.usesAPI.values().each {ClassSet classSet ->
@@ -52,7 +63,7 @@ class ArchitectureResolver {
         }
     }
 
-    private boolean checkUsesRelation(Map<String, Component> apiOrImplToComponentMap, Component cmp, ClassSet classSet) {
+    private static boolean checkUsesRelation(Map<String, Component> apiOrImplToComponentMap, Component cmp, ClassSet classSet) {
         boolean success = true
         classSet.getPatterns().each { String target ->
             if (!apiOrImplToComponentMap[target]) {
