@@ -1,8 +1,8 @@
 package de.qaware.qav.architecture.tagger;
 
-import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.architecture.dsl.model.Architecture;
-import de.qaware.qav.architecture.nodecreator.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
+import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertThat;
 public class ArchitectureHeightTaggerTest {
 
     @Test
-    public void testTagArchitectureHeight() throws Exception {
+    public void testTagArchitectureHeight() {
         DependencyGraph dependencyGraph = DependencyGraphFactory.createGraph();
 
         dependencyGraph.getOrCreateNodeByName("X.A.b");
@@ -32,7 +32,7 @@ public class ArchitectureHeightTaggerTest {
 
         // Note that the package architecture does not include the leaves at all, so the packages start with height "0".
         Architecture packageArchitecture = new DefaultPackageArchitectureFactory(dependencyGraph).createArchitecture();
-        ArchitectureNodeCreator.createAllArchitectureNodes(dependencyGraph, packageArchitecture);
+        new ArchitectureNodeCreator(dependencyGraph, packageArchitecture).createAllArchitectureNodes();
         ArchitectureHeightTagger.tagArchitectureHeight(dependencyGraph, packageArchitecture);
 
         String key = packageArchitecture.getName() + "-height";

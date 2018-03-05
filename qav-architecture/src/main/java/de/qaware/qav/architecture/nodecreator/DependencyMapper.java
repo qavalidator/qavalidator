@@ -13,8 +13,6 @@ import de.qaware.qav.graph.api.Node;
  */
 public final class DependencyMapper {
 
-    public static final String DEPENDS_ON_IMPL = "dependsOnImpl";
-
     /**
      * util class, no instances.
      */
@@ -22,10 +20,12 @@ public final class DependencyMapper {
     }
 
     /**
-     * Maps all dependencies given in the Base Graph onto the level of architecture components: For each Edge from V1 to
-     * V2, it creates the dependency parent(V1) to parent(V2) in the Target Graph, where the parent nodes are defined by
-     * the given tag. They should be set beforehand, see {@link ArchitectureNodeCreator}.
-     * We assume that both parent(V1) and parent(V2) exist in the Target Graph.
+     * Maps all dependencies in the given graph onto the level of architecture components:
+     * <p>
+     * For each Edge from V1 to V2, it creates the dependency parent(V1) to parent(V2) in the Target Graph, where the
+     * parent nodes are defined by the given tag. They should be set beforehand, see {@link
+     * de.qaware.qav.architecture.nodecreator.impl.ComponentNameTagger} and {@link de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator}.
+     * We assume that both parent(V1) and parent(V2) exist in the Base Graph.
      *
      * @param dependencyGraph the {@link DependencyGraph}
      * @param tag             the name of the architecture
@@ -37,23 +37,23 @@ public final class DependencyMapper {
                 .forEach(edge -> createArchitectureDependency(dependencyGraph.getBaseGraph(), tag, edge));
     }
 
-    private static void createArchitectureDependency(DependencyGraph dependencyGraph, String tag, Dependency dep) {
-        Node baseFrom = dep.getSource();
-        Node baseTo = dep.getTarget();
+    private static void createArchitectureDependency(DependencyGraph baseGraph, String tag, Dependency dep) {
+        Node from = dep.getSource();
+        Node to = dep.getTarget();
 
         // if the tag is not set on either of these two, the Node will be null, too, and no dependency will be mapped:
-        Node parentFrom = dependencyGraph.getNode((String) baseFrom.getProperty(tag + Constants.PARENT_SUFFIX));
-        Node parentTo = dependencyGraph.getNode((String) baseTo.getProperty(tag + Constants.PARENT_SUFFIX));
+        Node parentFrom = baseGraph.getNode((String) from.getProperty(tag + Constants.PARENT_SUFFIX));
+        Node parentTo = baseGraph.getNode((String) to.getProperty(tag + Constants.PARENT_SUFFIX));
 
         if (parentFrom != null && parentTo != null && !parentFrom.equals(parentTo)) {
-            Dependency architectureDependency = dependencyGraph.addDependency(parentFrom, parentTo, dep.getDependencyType());
+            Dependency architectureDependency = baseGraph.addDependency(parentFrom, parentTo, dep.getDependencyType());
             architectureDependency.addBaseDependency(dep);
 
             // the *dependency* goes from component to component.
             // the architecture definition, however, checks if the *API* (or the Impl) may be accessed.
             // So we need to note the *API* name or *Impl* name that this dependency goes to.
-            architectureDependency.addListProperty(Constants.TARGET_API, baseTo.getProperty(tag + Constants.PARENT_API_SUFFIX));
-            architectureDependency.addListProperty(Constants.TARGET_IMPL, baseTo.getProperty(tag + Constants.PARENT_IMPL_SUFFIX));
+            architectureDependency.addListProperty(Constants.TARGET_API, to.getProperty(tag + Constants.PARENT_API_SUFFIX));
+            architectureDependency.addListProperty(Constants.TARGET_IMPL, to.getProperty(tag + Constants.PARENT_IMPL_SUFFIX));
         }
     }
 }

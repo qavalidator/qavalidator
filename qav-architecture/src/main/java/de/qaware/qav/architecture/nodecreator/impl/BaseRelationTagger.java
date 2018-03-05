@@ -1,11 +1,10 @@
-package de.qaware.qav.architecture.tagger;
+package de.qaware.qav.architecture.nodecreator.impl;
 
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Tags each architecture dependency with the number of base relations, the number of different source nodes in
@@ -35,17 +34,17 @@ public final class BaseRelationTagger {
         Set<Dependency> baseDependencies = dependency.getBaseDependencies();
 
         if (!baseDependencies.isEmpty()) {
-            Set<String> sourceNames = baseDependencies.stream()
+            long sourceNames = baseDependencies.stream()
                     .map(dep -> dep.getSource().getName())
-                    .collect(Collectors.toSet());
+                    .distinct().count();
 
-            Set<String> targetNames = baseDependencies.stream()
+            long targetNames = baseDependencies.stream()
                     .map(dep -> dep.getTarget().getName())
-                    .collect(Collectors.toSet());
+                    .distinct().count();
 
             dependency.setProperty(Constants.BASE_REL_COUNT, baseDependencies.size());
-            dependency.setProperty(Constants.BASE_REL_COUNT_SOURCES, sourceNames.size());
-            dependency.setProperty(Constants.BASE_REL_COUNT_TARGETS, targetNames.size());
+            dependency.setProperty(Constants.BASE_REL_COUNT_SOURCES, sourceNames);
+            dependency.setProperty(Constants.BASE_REL_COUNT_TARGETS, targetNames);
         }
     }
 }

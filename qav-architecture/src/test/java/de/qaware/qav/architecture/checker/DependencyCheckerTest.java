@@ -2,7 +2,7 @@ package de.qaware.qav.architecture.checker;
 
 import de.qaware.qav.architecture.dsl.api.QavArchitectureReader;
 import de.qaware.qav.architecture.dsl.model.Architecture;
-import de.qaware.qav.architecture.nodecreator.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
@@ -55,7 +55,7 @@ public class DependencyCheckerTest extends AbstractArchitectureCheckerTest {
         reader.read();
         Architecture architecture = reader.getArchitectures().get("Test-1");
         assertThat(architecture, notNullValue());
-        ArchitectureNodeCreator.createAllArchitectureNodes(graph, architecture);
+        new ArchitectureNodeCreator(graph, architecture).createAllArchitectureNodes();
 
         DependencyChecker checker = new DependencyChecker(graph, architecture);
         assertThat(checker.isOk(), is(true));

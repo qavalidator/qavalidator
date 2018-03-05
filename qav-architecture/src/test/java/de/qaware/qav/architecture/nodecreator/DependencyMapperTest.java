@@ -1,7 +1,8 @@
 package de.qaware.qav.architecture.nodecreator;
 
-import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.architecture.dsl.model.Architecture;
+import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
+import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
@@ -42,7 +43,7 @@ public class DependencyMapperTest {
         assertThat(dependencyGraph.getEdge(a, e), nullValue());
 
         Architecture packageArchitecture = new DefaultPackageArchitectureFactory(dependencyGraph).createArchitecture();
-        ArchitectureNodeCreator.createAllArchitectureNodes(dependencyGraph, packageArchitecture);
+        new ArchitectureNodeCreator(dependencyGraph, packageArchitecture).createAllArchitectureNodes();
         DependencyMapper.mapDependencies(dependencyGraph, packageArchitecture.getName());
 
         Node x = dependencyGraph.getNode("X");

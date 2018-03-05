@@ -2,12 +2,12 @@ package de.qaware.qav.architecture.checker;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.dsl.model.ClassSet;
 import de.qaware.qav.architecture.dsl.model.Component;
-import de.qaware.qav.architecture.nodecreator.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.architecture.nodecreator.DependencyMapper;
+import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
@@ -43,7 +43,7 @@ abstract public class AbstractArchitectureCheckerTest {
         }
 
         packageArchitecture = new DefaultPackageArchitectureFactory(graph).createArchitecture();
-        ArchitectureNodeCreator.createAllArchitectureNodes(graph, this.packageArchitecture);
+        new ArchitectureNodeCreator(graph, this.packageArchitecture).createAllArchitectureNodes();
         DependencyMapper.mapDependencies(graph, packageArchitecture.getName());
 
         if (withUnimplementedComponent) {

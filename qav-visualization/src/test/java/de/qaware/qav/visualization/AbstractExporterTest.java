@@ -2,9 +2,9 @@ package de.qaware.qav.visualization;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
-import de.qaware.qav.architecture.nodecreator.ArchitectureNodeCreator;
 import de.qaware.qav.architecture.nodecreator.DependencyMapper;
-import de.qaware.qav.architecture.tagger.BaseRelationTagger;
+import de.qaware.qav.architecture.nodecreator.impl.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.nodecreator.impl.BaseRelationTagger;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
@@ -46,7 +46,7 @@ public abstract class AbstractExporterTest {
         dependencyGraph.addDependency(n4, n5, DependencyType.CREATE);
 
         architecture = new DefaultPackageArchitectureFactory(dependencyGraph).createArchitecture();
-        ArchitectureNodeCreator.createAllArchitectureNodes(dependencyGraph, architecture);
+        new ArchitectureNodeCreator(dependencyGraph, architecture).createAllArchitectureNodes();
         DependencyMapper.mapDependencies(dependencyGraph, architecture.getName());
         BaseRelationTagger.tagBaseRelationNumbers(dependencyGraph);
 

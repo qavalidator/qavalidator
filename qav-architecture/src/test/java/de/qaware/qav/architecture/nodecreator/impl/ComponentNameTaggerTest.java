@@ -1,7 +1,7 @@
-package de.qaware.qav.architecture.tagger;
+package de.qaware.qav.architecture.nodecreator.impl;
 
-import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.architecture.dsl.model.Architecture;
+import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link ComponentNameTagger}.
@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 public class ComponentNameTaggerTest {
 
     @Test
-    public void testTagComponentNames() throws Exception {
+    public void testTagComponentNames() {
         DependencyGraph dependencyGraph = DependencyGraphFactory.createGraph();
 
         dependencyGraph.getOrCreateNodeByName("X.A.b");

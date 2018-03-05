@@ -1,8 +1,7 @@
-package de.qaware.qav.architecture.tagger;
+package de.qaware.qav.architecture.nodecreator.impl;
 
-import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.architecture.dsl.model.Architecture;
-import de.qaware.qav.architecture.nodecreator.ArchitectureNodeCreator;
+import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.architecture.nodecreator.DependencyMapper;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.Dependency;
@@ -52,7 +51,7 @@ public class BaseRelationTaggerTest {
 
         // Note that the package architecture does not include the leaves at all, so the packages start with height "0".
         Architecture packageArchitecture = new DefaultPackageArchitectureFactory(dependencyGraph).createArchitecture();
-        ArchitectureNodeCreator.createAllArchitectureNodes(dependencyGraph, packageArchitecture);
+        new ArchitectureNodeCreator(dependencyGraph, packageArchitecture).createAllArchitectureNodes();
         DependencyMapper.mapDependencies(dependencyGraph, packageArchitecture.getName());
     }
 
@@ -70,13 +69,13 @@ public class BaseRelationTaggerTest {
 
         Dependency d1 = assertEdge(packageGraph, comp1, api);
         assertThat(d1.getProperty(Constants.BASE_REL_COUNT), is(2));
-        assertThat(d1.getProperty(Constants.BASE_REL_COUNT_SOURCES), is(2));
-        assertThat(d1.getProperty(Constants.BASE_REL_COUNT_TARGETS), is(2));
+        assertThat(d1.getProperty(Constants.BASE_REL_COUNT_SOURCES), is(2L));
+        assertThat(d1.getProperty(Constants.BASE_REL_COUNT_TARGETS), is(2L));
 
         Dependency d2 = assertEdge(packageGraph, comp2, util);
         assertThat(d2.getProperty(Constants.BASE_REL_COUNT), is(3));
-        assertThat(d2.getProperty(Constants.BASE_REL_COUNT_SOURCES), is(2));
-        assertThat(d2.getProperty(Constants.BASE_REL_COUNT_TARGETS), is(3));
+        assertThat(d2.getProperty(Constants.BASE_REL_COUNT_SOURCES), is(2L));
+        assertThat(d2.getProperty(Constants.BASE_REL_COUNT_TARGETS), is(3L));
 
         Node com = assertNode(packageGraph, "com");
         Node company = assertNode(packageGraph, "com.company");

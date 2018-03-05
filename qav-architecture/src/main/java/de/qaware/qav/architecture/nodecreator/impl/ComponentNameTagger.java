@@ -1,4 +1,4 @@
-package de.qaware.qav.architecture.tagger;
+package de.qaware.qav.architecture.nodecreator.impl;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.dsl.model.Component;

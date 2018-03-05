@@ -1,10 +1,6 @@
 package de.qaware.qav.visualization;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
-import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
-import de.qaware.qav.architecture.nodecreator.ArchitectureNodeCreator;
-import de.qaware.qav.architecture.nodecreator.DependencyMapper;
-import de.qaware.qav.architecture.tagger.BaseRelationTagger;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
@@ -13,6 +9,7 @@ import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Creates a graph which it then uses to export via Dot/GraphML to draw a legend.
@@ -21,14 +18,14 @@ import java.util.ArrayList;
  */
 public class LegendCreator {
 
-    private DependencyGraph graph = DependencyGraphFactory.createGraph();
-    private Architecture architecture;
+    private final DependencyGraph graph = DependencyGraphFactory.createGraph();
+    private final Architecture architecture = new Architecture();
 
     /**
      * Constructor.
      */
     public LegendCreator() {
-        init();
+        initGraph();
     }
 
     /**
@@ -41,21 +38,15 @@ public class LegendCreator {
         new GraphMLExporter(this.graph, filenameBase, this.architecture, new ArrayList<>(), true).exportGraph();
     }
 
-    private void init() {
-        // set up the graph: one pair of node for each dependency type
-        for (int i = 0; i < DependencyType.values().length; i++) {
-            DependencyType type = DependencyType.values()[i];
-            // skip CONTAINS, as no edge is drawn, instead the nodes are nested.
-            if (type != DependencyType.CONTAINS) {
-                addDependency(type);
-            }
-        }
-
-        // set up the architecture:
-        this.architecture = new DefaultPackageArchitectureFactory(this.graph).createArchitecture();
-        ArchitectureNodeCreator.createAllArchitectureNodes(this.graph, architecture);
-        DependencyMapper.mapDependencies(this.graph, architecture.getName());
-        BaseRelationTagger.tagBaseRelationNumbers(this.graph);
+    /**
+     * Set up the graph: one pair of node for each dependency type.
+     * <p>
+     * Skip CONTAINS, as no edge is drawn, instead the nodes are nested.
+     */
+    private void initGraph() {
+        Arrays.stream(DependencyType.values())
+                .filter(type -> type != DependencyType.CONTAINS)
+                .forEach(this::addDependency);
     }
 
     private void addDependency(DependencyType type) {

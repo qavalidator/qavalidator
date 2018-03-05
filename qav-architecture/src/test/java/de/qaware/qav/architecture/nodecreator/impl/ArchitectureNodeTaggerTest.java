@@ -1,7 +1,7 @@
-package de.qaware.qav.architecture.nodecreator;
+package de.qaware.qav.architecture.nodecreator.impl;
 
-import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.architecture.dsl.model.Architecture;
+import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.Node;
@@ -48,7 +48,7 @@ public class ArchitectureNodeTaggerTest {
 
         DependencyGraph inputGraph = dependencyGraph.filter(new NodePropertyInFilter("scope", "input"));
 
-        ArchitectureNodeCreator.createAllArchitectureNodes(dependencyGraph, packageArchitecture);
+        new ArchitectureNodeCreator(dependencyGraph, packageArchitecture).createAllArchitectureNodes();
         ArchitectureNodeTagger.tagArchitectureNodes(inputGraph, packageArchitecture, "my-tag");
 
         Node x = assertNode("X");
