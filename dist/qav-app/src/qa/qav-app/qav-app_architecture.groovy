@@ -24,7 +24,7 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
     component("AnalysisPlugins") {
         api "de.qaware.qav.analysis.plugins.**"
 
-        uses "Graph.filter", "Graph.base"
+        uses "Graph.filter", "Graph.base", "JavaInput"
     }
 
     component("ArchitectureDSL") {
@@ -62,7 +62,10 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
     }
 
     component("Input") {
-        component("JavaInput") {api "de.qaware.qav.input.javacode.**"}
+        component("JavaInput") {
+            api "de.qaware.qav.input.javacode.api.**"
+            impl "de.qaware.qav.input.javacode.impl.**"
+        }
         component("MavenInput") {api "de.qaware.qav.input.maven.**"}
         component("TypescriptInput") {api "de.qaware.qav.input.typescript.**"}
 

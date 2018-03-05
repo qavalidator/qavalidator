@@ -1,9 +1,9 @@
-package de.qaware.qav.input.javacode;
+package de.qaware.qav.input.javacode.impl;
 
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link DependencyUtil}.
@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class DependencyUtilTest {
 
     @Test
-    public void testIsIgnorable() throws Exception {
+    public void testIsIgnorable() {
         assertThat(DependencyUtil.isIgnorable("java.lang.Object"), is(true));
         assertThat(DependencyUtil.isIgnorable("java.lang.String"), is(true));
         assertThat(DependencyUtil.isIgnorable("B"), is(true));

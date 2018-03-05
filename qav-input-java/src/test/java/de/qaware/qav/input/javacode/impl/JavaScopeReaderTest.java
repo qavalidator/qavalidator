@@ -1,9 +1,9 @@
-package de.qaware.qav.input.javacode;
+package de.qaware.qav.input.javacode.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.architecture.dsl.model.Architecture;
+import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
@@ -45,7 +45,7 @@ public class JavaScopeReaderTest {
     private DependencyGraph dependencyGraph;
 
     @Test
-    public void testReadNoRootDirs() throws Exception {
+    public void testReadNoRootDirs() {
         dependencyGraph = DependencyGraphFactory.createGraph();
         new JavaScopeReader(dependencyGraph, true).read(Maps.newHashMap());
 
@@ -242,7 +242,7 @@ public class JavaScopeReaderTest {
         Node f = getNode("de.qaware.qav.test.methods.IF");
         Node g = getNode("de.qaware.qav.test.methods.G");
         Node h = getNode("de.qaware.qav.test.methods.IH");
-        Node list = getNode("java.util.List");
+        getNode("java.util.List");
 
         assertRelation(myMethods, a, DependencyType.REFERENCE);
         assertRelation(myMethods, b, DependencyType.REFERENCE);
@@ -261,6 +261,9 @@ public class JavaScopeReaderTest {
         assertThat(dependencyGraph.getAllNodes(), hasSize(2));
         Node myPrimitives = getNode("de.qaware.qav.test.primitives.MyPrimitives");
         Node myBoxed= getNode("de.qaware.qav.test.primitives.MyBoxed");
+
+        assertThat(myPrimitives, notNullValue());
+        assertThat(myBoxed, notNullValue());
     }
 
     @Test

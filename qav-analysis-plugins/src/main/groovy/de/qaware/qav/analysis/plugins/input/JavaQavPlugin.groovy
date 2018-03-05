@@ -1,10 +1,11 @@
 package de.qaware.qav.analysis.plugins.input
 
+import de.qaware.qav.analysis.dsl.model.Analysis
 import de.qaware.qav.analysis.plugins.base.BasePlugin
-import de.qaware.qav.input.javacode.JavaScopeReader
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
-import de.qaware.qav.analysis.dsl.model.Analysis
+import de.qaware.qav.input.javacode.api.JavaScopeInput
+import de.qaware.qav.input.javacode.impl.JavaScopeInputImpl
 
 /**
  * Provides the Java input for QAvalidator.
@@ -14,6 +15,28 @@ import de.qaware.qav.analysis.dsl.model.Analysis
 @QavPluginDoc(name = "JavaQavPlugin",
         description = "Provides the Java input for QAvalidator")
 class JavaQavPlugin extends BasePlugin {
+
+    private final JavaScopeInput javaScopeInput
+
+    /**
+     * Constructor.
+     *
+     * Uses the default implementation to read the Java input.
+     */
+    JavaQavPlugin() {
+        this.javaScopeInput = new JavaScopeInputImpl()
+    }
+
+    /**
+     * Constructor.
+     *
+     * Uses the given implementation. Useful for tests.
+     *
+     * @param javaScopeInput the {@link JavaScopeInput} implementation to use
+     */
+    JavaQavPlugin(JavaScopeInput javaScopeInput) {
+        this.javaScopeInput = javaScopeInput
+    }
 
     @Override
     void apply(Analysis analysis) {
@@ -140,6 +163,6 @@ class JavaQavPlugin extends BasePlugin {
         if (!parameters.includes) {
             parameters.includes = ["**/*.class", "**/*.jar"]
         }
-        new JavaScopeReader(context.dependencyGraph, collapseInnerClasses).read(parameters)
+        javaScopeInput.read(context.dependencyGraph, collapseInnerClasses, parameters)
     }
 }

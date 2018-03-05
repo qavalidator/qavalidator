@@ -1,4 +1,4 @@
-package de.qaware.qav.input.javacode;
+package de.qaware.qav.input.javacode.impl;
 
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;

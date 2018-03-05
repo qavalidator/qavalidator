@@ -1,4 +1,4 @@
-package de.qaware.qav.input.javacode;
+package de.qaware.qav.input.javacode.impl;
 
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static de.qaware.qav.graph.api.Constants.TYPE;
 import static de.qaware.qav.graph.api.Constants.TYPE_CLASS;
-import static de.qaware.qav.input.javacode.DependencyUtil.isIgnorable;
+import static de.qaware.qav.input.javacode.impl.DependencyUtil.isIgnorable;
 
 /**
  * This visitor collects all dependencies on the class level and sends off a method visitor for each method.

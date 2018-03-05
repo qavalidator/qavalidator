@@ -1,4 +1,4 @@
-package de.qaware.qav.input.javacode;
+package de.qaware.qav.input.javacode.impl;
 
 import com.google.common.collect.Lists;
 import org.objectweb.asm.Opcodes;

@@ -1,4 +1,4 @@
-package de.qaware.qav.input.javacode;
+package de.qaware.qav.input.javacode.impl;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.tuple.ImmutablePair;
