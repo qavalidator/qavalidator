@@ -31,7 +31,15 @@ public class DependencyClassVisitor extends ClassVisitor {
 
     private final DependencyGraph dependencyGraph;
     private final boolean collapseInnerClasses;
+
+    /**
+     * The name of the currently analyzed class.
+     */
     private String className;
+
+    /**
+     * The {@link Node} representing the currently analyzed class.
+     */
     private Node classNode;
 
     /**

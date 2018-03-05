@@ -1,6 +1,5 @@
 package de.qaware.qav.graph.impl;
 
-import com.google.common.collect.Maps;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
@@ -16,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,10 +29,14 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DependencyGraphSimpleImpl.class);
 
-    private final Map<String, Node> nodeMap = Maps.newHashMap();
+    private final Map<String, Node> nodeMap = new HashMap<>();
 
     private DirectedGraph<Node, Dependency> graph = new DefaultDirectedGraph<>(Dependency.class);
 
+    /**
+     * The underlying graph. This is needed to add nodes or edges to filtered graphs. If this is the "original" graph,
+     * then <tt>baseGraph</tt> points to <tt>this</tt>.
+     */
     private final DependencyGraph baseGraph;
 
     /**
@@ -81,6 +85,17 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
         return nodeMap.containsKey(name);
     }
 
+    /**
+     * Add a new dependency to the graph.
+     * <p>
+     * If there already is a dependency between these two nodes, the {@link DependencyType} is "upgraded" in case the
+     * new dependency has a higher value (see {@link DependencyType#ordinal}.
+     *
+     * @param from source
+     * @param to   target
+     * @param type type of the dependency
+     * @return the new {@link Dependency}
+     */
     @Override
     public Dependency addDependency(Node from, Node to, DependencyType type) {
         Dependency result;
@@ -127,12 +142,13 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
         return filterDependencies(getIncomingEdges(node), dependencyType);
     }
 
-    protected void setGraph(DirectedGraph<Node, Dependency> graph) {
-        this.graph = graph;
-
-        for (Node node : graph.vertexSet()) {
-            nodeMap.put(node.getName(), node);
-        }
+    /**
+     * Filters the given collection to only those of the given {@link DependencyType}.
+     */
+    private Set<Dependency> filterDependencies(Set<Dependency> dependencies, DependencyType dependencyType) {
+        return dependencies.stream()
+                .filter(dep -> dep.getDependencyType().equals(dependencyType))
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -171,6 +187,22 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
         return clone;
     }
 
+    /**
+     * Set a new JGraphT graph.
+     * <p>
+     * Put all nodes in {@link #nodeMap} so that the methods {@link #getNode(String)}, {@link #hasNode(String)} etc.
+     * know about them.
+     *
+     * @param graph the {@link DirectedGraph}
+     */
+    protected void setGraph(DirectedGraph<Node, Dependency> graph) {
+        this.graph = graph;
+
+        for (Node node : graph.vertexSet()) {
+            nodeMap.put(node.getName(), node);
+        }
+    }
+
     @Override
     public Collection<Node> getAllNodes() {
         return new ArrayList<>(graph.vertexSet());
@@ -179,16 +211,6 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
     @Override
     public Collection<Dependency> getAllEdges() {
         return new ArrayList<>(graph.edgeSet());
-    }
-
-    /**
-     * filters the given collection.
-     */
-    private Set<Dependency> filterDependencies(Set<Dependency> dependencies, DependencyType dependencyType) {
-        return dependencies
-                .stream()
-                .filter(dep -> dep.getDependencyType().equals(dependencyType))
-                .collect(Collectors.toSet());
     }
 
     /**
