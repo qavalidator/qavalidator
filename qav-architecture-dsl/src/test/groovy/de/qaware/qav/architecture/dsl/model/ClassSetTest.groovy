@@ -37,6 +37,17 @@ class ClassSetTest {
     }
 
     @Test
+    void testMatchesMorePatterns2() {
+        // same as above, just different initialization
+        ClassSet classSet = new ClassSet("t1")
+        classSet.addPatterns("my.impl.a.*", "my.impl.b.*")
+
+        assert classSet.matches("my.impl.a.AbcImpl")
+        assert classSet.matches("my.impl.b.AbcImpl")
+        assert !classSet.matches("my.api.Abc")
+    }
+
+    @Test
     void testMatchesBadInput() {
         ClassSet classSet = new ClassSet("t1", Lists.newArrayList("my.impl.a.*", "my.impl.b.*"))
 

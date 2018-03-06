@@ -3,6 +3,7 @@ package de.qaware.qav.architecture.dsl.model
 import de.qaware.qav.util.QavNameMatcher
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
 
 /**
  *
@@ -123,7 +124,7 @@ class ClassSet {
 
     @Override
     String toString() {
-        return new ToStringBuilder(this)
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("name", name)
                 .append("patterns", patterns)
                 .toString()

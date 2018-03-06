@@ -43,10 +43,13 @@ class Architecture extends Component {
                 .toString()
     }
 
-    String getRootNodeName() {
-        return name
-    }
-
+    /**
+     * Return the name of the parent component, or null if not included or no parent.
+     * Convenience method for {@link #getParentComponent(java.lang.String)}<tt>?.name</tt>
+     *
+     * @param name name of the class or component; may not be null
+     * @return the name of the parent component, or null if not included or no parent
+     */
     String getParentComponentName(String name) {
         checkNotNull(name)
         Component parentComponent = getParentComponent(name)
@@ -54,6 +57,30 @@ class Architecture extends Component {
         return parentComponent?.name
     }
 
+    /**
+     * Return the parent component of the given class or component.
+     * <tt>null</tt> if it is not included, or does not have a parent component.
+     *
+     * The "parent component" is the component <i>which contains</i> the given class or component.
+     *
+     * <ul>
+     * <li>For classes, it's the component which contains it, as defined by {@link Component#isApi(java.lang.String)}
+     * or {@link Component#isImpl(java.lang.String)}.</li>
+     *
+     * <li>For components, it's the parent component of the given component.</li>
+     *
+     * <li>If the given name is the name of the Architecture, i.e. the root node name, then the result is <tt>null</tt>.</li>
+     *
+     * <li>If the given name is excluded (as defined by {@link #includes} and {@link #excludes}, see {@link #isIncluded(java.lang.String)}
+     * then the result is <tt>null</tt>.</li>
+     *
+     * <li>If the given name can't be found, neither in the component names, nor in the <tt>isApi</tt> or <tt>isImpl</tt>
+     * definitions, the result is <tt>null</tt>.</li>
+     * </ul>
+     *
+     * @param name name name of the class or component; may not be null
+     * @return the parent component, or null if not included or no parent
+     */
     Component getParentComponent(String name) {
         checkNotNull(name)
         if (name == this.name) {

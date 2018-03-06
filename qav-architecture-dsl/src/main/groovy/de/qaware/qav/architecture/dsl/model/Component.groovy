@@ -57,15 +57,27 @@ class Component {
         return findMatch(impl, name)
     }
 
+    /**
+     * Return <tt>true</tt> if the name matches one of the API patterns.
+     *
+     * @param name class name to check
+     * @return whether the name matches an API pattern
+     */
     boolean isApi(String name) {
         return getApiName(name) != null
     }
 
+    /**
+     * Return <tt>true</tt> if the name matches one of the IMPL patterns.
+     *
+     * @param name class name to check
+     * @return whether the name matches an IMPL pattern
+     */
     boolean isImpl(String name) {
         return getImplName(name) != null
     }
 
-    private String findMatch(Map<String, ClassSet> baseMap, String name) {
+    private static String findMatch(Map<String, ClassSet> baseMap, String name) {
         for (Map.Entry<String, ClassSet> entry : baseMap.entrySet()) {
             if (entry.value.matches(name)) {
                 return entry.key
@@ -76,7 +88,7 @@ class Component {
 
     /**
      * Get the pathSeparator for the ClassSet patterns, if defined.
-     * If not, returns the pathSeparator defined for the parent class. If no pathSeparator is defined, returns null.
+     * If not, returns the pathSeparator defined for the parent class. If no parent is defined, returns null.
      *
      * @return the pathSeparator, or null.
      */
