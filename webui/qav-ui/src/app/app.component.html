@@ -1,13 +1,20 @@
 <div class="container">
-  <div class="header">
-    <h1>QAvalidator</h1>
-  </div>
-  We have this graph: {{graphInfo}}
-  <nav>
-    <a routerLink="/nodes">Nodes</a>
+  <nav class="navbar navbar-dark mb-5 qav-background">
+    <a class="navbar-brand" href="/">QAvalidator</a>
+    <div class="navbar-expand mr-auto">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="#">Home</a>
+        <a class="nav-item nav-link" routerLink="/nodes">Nodes</a>
+      </div>
+    </div>
   </nav>
+
+  We have this graph: {{graphInfo}}
   <router-outlet></router-outlet>
-  <div class="container footer navbar-fixed-bottom">
-    <p>QAvalidator &mdash; &copy; QAware GmbH 2016</p>
-  </div>
+
+  <nav class="navbar mt-5 fixed-bottom qav-background">
+    <div class="navbar-expand m-auto navbar-text">
+      QAvalidator &mdash; &copy; QAware GmbH 2016
+    </div>
+  </nav>
 </div>

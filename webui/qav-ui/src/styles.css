@@ -1,8 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~font-awesome/css/font-awesome.css";
+
 /* add padding to give space for the sticky footer */
 body {
   padding-bottom: 2em;
+}
+
+/* Background color */
+.qav-background {
+  color: white;
+  background: #28537D;
 }
 
 /* Custom page header */
