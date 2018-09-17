@@ -28,13 +28,16 @@ node {
     nodeModulesDir = file("${project.projectDir}")
 }
 
-build.dependsOn(npm_install, npm_run_build)
+processResources.dependsOn(npm_install, npm_run_buildProd)
 
-sourceSets.main.resources.srcDirs = ["${project.buildDir}"]
-sourceSets.main.resources.includes = ["public/**"]
+sourceSets.main.resources.srcDirs = ["${project.projectDir}/dist"]
+
+clean.doFirst {
+    delete "${project.projectDir}/dist"
+}
 
 task veryClean(type: Delete) {
-    delete node.workDir, "node_modules", "typings"
+    delete node.workDir, "node_modules", ".gradle/npm"
 }
 
 veryClean.dependsOn(clean)
