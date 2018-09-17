@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {NodeListComponent} from './node-list/node-list.component';
 import {NodeDetailComponent} from './node-detail/node-detail.component';
 import {EdgeDetailComponent} from './edge-detail/edge-detail.component';
+import {InfoComponent} from './info/info.component';
 
 const appRoutes: Routes = [
     {
@@ -22,6 +23,10 @@ const appRoutes: Routes = [
     {
         path: 'edge/:from/:to',
         component: EdgeDetailComponent
+    },
+    {
+        path: 'info',
+        component: InfoComponent
     }
 ];
 

@@ -10,6 +10,7 @@ import {NodeListComponent} from './node-list/node-list.component';
 import {NodeDetailComponent} from './node-detail/node-detail.component';
 import {EdgeDetailComponent} from './edge-detail/edge-detail.component';
 import {GraphService} from './graph/graph.service';
+import {InfoComponent} from './info/info.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {GraphService} from './graph/graph.service';
     AppComponent,
     NodeListComponent,
     NodeDetailComponent,
-    EdgeDetailComponent
+    EdgeDetailComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,
