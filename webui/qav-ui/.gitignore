@@ -1,7 +1,0 @@
-
-node_modules
-nodejs
-typings
-
-src/app/**/*.js
-src/app/**/*.map
