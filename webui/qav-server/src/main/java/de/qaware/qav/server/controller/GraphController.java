@@ -10,6 +10,7 @@ import de.qaware.qav.server.exceptions.NotFoundException;
 import de.qaware.qav.server.mapper.DependencyMapper;
 import de.qaware.qav.server.mapper.NodeMapper;
 import de.qaware.qav.server.model.DependencyDTO;
+import de.qaware.qav.server.model.GraphInfoDTO;
 import de.qaware.qav.server.model.NodeDTO;
 import de.qaware.qav.util.FileNameUtil;
 import org.slf4j.Logger;
@@ -86,11 +87,14 @@ public class GraphController {
      * @return some basic info about the graph
      */
     @RequestMapping("/info")
-    public String getInfo() {
+    public GraphInfoDTO getInfo() {
         LOGGER.info("Request to /info");
-        return MessageFormat.format("Graph with: {0} nodes and {1} edges. Filename: {2}",
-                dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size(),
-                FileNameUtil.getCanonicalPath(filename));
+        GraphInfoDTO result = new GraphInfoDTO();
+        result.setInfo(
+                MessageFormat.format("Graph with: {0} nodes and {1} edges. Filename: {2}",
+                        dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size(),
+                        FileNameUtil.getCanonicalPath(filename)));
+        return result;
     }
 
     /**

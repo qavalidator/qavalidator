@@ -39,8 +39,8 @@ public class GraphControllerTest {
 
     @Test
     public void testHello() {
-        assertThat(graphController.getInfo(), startsWith("Graph with: 5 nodes and 3 edges. Filename: "));
-        assertThat(graphController.getInfo(), endsWith("testGraph1.json"));
+        assertThat(graphController.getInfo().getInfo(), startsWith("Graph with: 5 nodes and 3 edges. Filename: "));
+        assertThat(graphController.getInfo().getInfo(), endsWith("testGraph1.json"));
     }
 
     @Test
