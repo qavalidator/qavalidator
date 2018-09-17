@@ -6,7 +6,7 @@ apply plugin: 'java-library'
 
 dependencies {
     compile project(':qav-graph')
-    compile project(':webui:qav-webui')
+    compile project(':webui:qav-ui')
 
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
         exclude(group: "org.slf4j", module: "log4j-over-slf4j")

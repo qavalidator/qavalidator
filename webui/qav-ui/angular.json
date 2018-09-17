@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "qav-webui": {
+    "qav-ui": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -50,18 +50,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "qav-webui:build"
+            "browserTarget": "qav-ui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "qav-webui:build:production"
+              "browserTarget": "qav-ui:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "qav-webui:build"
+            "browserTarget": "qav-ui:build"
           }
         },
         "test": {
@@ -95,7 +95,7 @@
         }
       }
     },
-    "qav-webui-e2e": {
+    "qav-ui-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -103,11 +103,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "qav-webui:serve"
+            "devServerTarget": "qav-ui:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "qav-webui:serve:production"
+              "devServerTarget": "qav-ui:serve:production"
             }
           }
         },
@@ -123,5 +123,5 @@
       }
     }
   },
-  "defaultProject": "qav-webui"
+  "defaultProject": "qav-ui"
 }
