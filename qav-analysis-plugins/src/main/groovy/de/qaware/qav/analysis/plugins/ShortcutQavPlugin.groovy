@@ -23,7 +23,7 @@ import groovy.util.logging.Slf4j
                 The plugin `ShortcutQavPlugin` combines the most common preparations, and registers all of the above listed plugins.
 
                 * It registers other plugins (`apply`)
-                * It define filters: ignoreUtils, classes, modules, inputScope, , mavenScope, cycleFilter
+                * It define filters: ignoreUtils, classes, modules, inputScope, mavenScope, cycleFilter
                 * It defines filtered Graphs:
                   ** allClassesGraph: all nodes in `context.dependencyGraph` which represent a class, i.e. it filters all nodes:
                      *** Property "type" has value "class": it filters out all nodes which represent "component" instead of "class".
