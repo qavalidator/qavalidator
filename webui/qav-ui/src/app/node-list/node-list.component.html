@@ -1,12 +1,12 @@
 <h2>Nodes</h2>
 
-<form>
+<form class="mb-2">
   <div class="input-group">
     <input type="text" class="form-control" id="name" name="query"
            placeholder="Query" aria-describedby="basic-addon2"
            (keyup.enter)="onSubmitQuery()"
            [(ngModel)]="query">
-    <span class="btn btn-primary qav-background" id="basic-addon2" (click)="onSubmitQuery()">Search</span>
+    <span class="btn btn-primary qav-background qav-border" id="basic-addon2" (click)="onSubmitQuery()">Search</span>
   </div>
 </form>
 

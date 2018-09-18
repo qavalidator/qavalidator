@@ -13,22 +13,24 @@
     </tbody>
   </table>
 
-  <h3>Hierarchy</h3>
-  <div *ngIf="hasParents()">
-    <b>Parents:</b>
-    <ul>
-      <li *ngFor="let dep of node.parents">
-        <a [routerLink]="['/node', dep.sourceName]">{{dep.sourceName}}</a>
-      </li>
-    </ul>
-  </div>
-  <div *ngIf="hasChildren()">
-    <b>Children:</b>
-    <ul>
-      <li *ngFor="let dep of node.containedDeps">
-        <a [routerLink]="['/node', dep.targetName]">{{dep.targetName}}</a>
-      </li>
-    </ul>
+  <div *ngIf="hasParents() || hasChildren()">
+    <h3>Hierarchy</h3>
+    <div *ngIf="hasParents()">
+      <b>Parents:</b>
+      <ul>
+        <li *ngFor="let dep of node.parents">
+          <a [routerLink]="['/node', dep.sourceName]">{{dep.sourceName}}</a>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="hasChildren()">
+      <b>Children:</b>
+      <ul>
+        <li *ngFor="let dep of node.containedDeps">
+          <a [routerLink]="['/node', dep.targetName]">{{dep.targetName}}</a>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div *ngIf="hasIncomingDependencies()">
