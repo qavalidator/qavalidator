@@ -34,7 +34,8 @@ asciidoctor {
     options doctype: 'article'
     attributes "tools-dir": "${project.projectDir}/src/layout",
                "revnumber": "${project.version}",
-               "revdate": "${new Date().format('dd.MM.yyyy')}"
+               "revdate": "${new Date().format('dd.MM.yyyy')}",
+               "allow-uri-read": true
 }
 
 task packageDocumentation(type: Zip) {

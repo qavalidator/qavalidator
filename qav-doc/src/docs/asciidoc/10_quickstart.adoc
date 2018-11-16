@@ -10,7 +10,12 @@ This chapter provides examples that you can copy/paste to get started with QAval
 
 This is the latest released version:
 
+ifdef::backend-pdf[]
+https://bintray.com/qa-tse/qavalidator/qav-app/_latestVersion
+endif::[]
+ifndef::backend-pdf[]
 image::https://api.bintray.com/packages/qa-tse/qavalidator/qav-app/images/download.svg[link="https://bintray.com/qa-tse/qavalidator/qav-app/_latestVersion"]
+endif::[]
 
 
 [[usage-maven]]
