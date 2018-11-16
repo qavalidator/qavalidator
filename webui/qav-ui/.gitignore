@@ -5,6 +5,11 @@
 /tmp
 /out-tsc
 
+# Typescript-to-JavaScript artifacts:
+*.js.map
+/src/app/**/*.js
+
+
 # dependencies
 /node_modules
 /nodejs
