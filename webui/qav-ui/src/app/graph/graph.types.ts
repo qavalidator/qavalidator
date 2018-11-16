@@ -28,3 +28,10 @@ export class Dependency {
     baseDependencies: Dependency[];
     properties: Map<String, any>;
 }
+
+/**
+ * represent the Graph info.
+ */
+export class GraphInfo {
+  info: string;
+}

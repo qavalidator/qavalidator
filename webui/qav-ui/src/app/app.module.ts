@@ -1,43 +1,36 @@
-import 'reflect-metadata';
-import 'zone.js/dist/zone';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 
-import { NgModule }      from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
-import { HttpModule }    from '@angular/http';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import {AppComponent} from './app.component';
+import {routing} from './app.routing';
+import {NodeListComponent} from './node-list/node-list.component';
+import {NodeDetailComponent} from './node-detail/node-detail.component';
+import {EdgeDetailComponent} from './edge-detail/edge-detail.component';
+import {GraphService} from './graph/graph.service';
+import {InfoComponent} from './info/info.component';
 
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
-import { AppComponent }  from './app.component';
-import { EdgeDetailComponent} from './graph/edge-detail.component';
-import { NodeListComponent} from './graph/node-list.component';
-import { NodeDetailComponent} from './graph/node-detail.component';
-
-import { Config} from './config/config';
-import { GraphService }  from './graph/graph.service';
-import { routing } from './app.routing';
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        FormsModule,
-        HttpModule,
-        NgbModule.forRoot(),
-        routing
-    ],
-    declarations: [
-        AppComponent,
-        EdgeDetailComponent,
-        NodeListComponent,
-        NodeDetailComponent
-    ],
-    providers: [
-        Config,
-        GraphService,
-        {provide: LocationStrategy, useClass: HashLocationStrategy}
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    NodeListComponent,
+    NodeDetailComponent,
+    EdgeDetailComponent,
+    InfoComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    routing
+  ],
+  providers: [
+    GraphService,
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }

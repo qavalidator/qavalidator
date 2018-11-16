@@ -1,0 +1,69 @@
+<div *ngIf="node">
+  <h2>{{nodeId}}</h2>
+  <table class="table table-striped table-condensed">
+    <thead>
+    <tr>
+      <td><b>Key</b></td><td><b>Value</b></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let key of keys() ">
+      <td>{{key}}</td><td>{{node.properties[key]}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="hasParents() || hasChildren()">
+    <h3>Hierarchy</h3>
+    <div *ngIf="hasParents()">
+      <b>Parents:</b>
+      <ul>
+        <li *ngFor="let dep of node.parents">
+          <a [routerLink]="['/node', dep.sourceName]">{{dep.sourceName}}</a>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="hasChildren()">
+      <b>Children:</b>
+      <ul>
+        <li *ngFor="let dep of node.containedDeps">
+          <a [routerLink]="['/node', dep.targetName]">{{dep.targetName}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div *ngIf="hasIncomingDependencies()">
+    <h3>Incoming Dependencies</h3>
+    <table class="table table-striped table-condensed">
+      <thead>
+      <tr>
+        <td><b>Source</b></td><td><b>Dependency Type</b></td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let dep of node.incomingDeps">
+        <td><a [routerLink]="['/node', dep.sourceName]">{{dep.sourceName}}</a></td>
+        <td><a [routerLink]="['/edge', dep.sourceName, dep.targetName]">{{dep.typeName}}</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="hasOutgoingDependencies()">
+    <h3>Outgoing Dependencies</h3>
+    <table class="table table-striped table-condensed">
+      <thead>
+      <tr>
+        <td><b>Target</b></td><td><b>Dependency Type</b></td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let dep of node.outgoingDeps">
+        <td><a [routerLink]="['/node', dep.targetName]">{{dep.targetName}}</a></td>
+        <td><a [routerLink]="['/edge', dep.sourceName, dep.targetName]">{{dep.typeName}}</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
