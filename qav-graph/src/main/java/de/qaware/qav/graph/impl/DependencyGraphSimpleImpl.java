@@ -42,6 +42,9 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
     /**
      * Constructor.
      */
+    @SuppressWarnings("squid:S3366")
+    // Sonar warns that "this" may be used by another thread before the object is completely created. In this setting
+    // here, there won't be a problem.
     public DependencyGraphSimpleImpl() {
         baseGraph = this;
     }

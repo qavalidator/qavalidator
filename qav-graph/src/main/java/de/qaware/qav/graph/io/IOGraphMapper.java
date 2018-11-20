@@ -38,6 +38,8 @@ public class IOGraphMapper {
     /**
      * Nodes are represented as a map of their properties.
      *
+     * Sort the nodes according to their names, so that the output file is the reproducibly the same for the same graph.
+     *
      * @param nodes {@link Node}s
      * @return the list of property maps
      */
@@ -66,6 +68,13 @@ public class IOGraphMapper {
         }
     }
 
+    /**
+     * Create the edges in the {@link IOGraph}. Sort them according to the names of the connected nodes, so that the
+     * created output file is reproducibly the same for the same graph.
+     *
+     * @param edges the edges in the graph
+     * @return the list of {@link IOEdge}s.
+     */
     private List<IOEdge> createIOGraphEdges(Collection<Dependency> edges) {
         List<IOEdge> result = new ArrayList<>();
         edges.forEach(edge -> result.add(mapEdge(edge, true)));

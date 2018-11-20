@@ -109,7 +109,7 @@ public class DocGenerator {
      * @return the trimmed string
      */
     /* package*/
-    @SuppressWarnings("squid:S4248") // wants to move the RegExes into constants; would help readability here.
+    @SuppressWarnings("squid:S4248") // wants to move the RegExes into constants; would not help readability here.
     static String trimDesc(String s) {
         return s.replaceAll("^[ \t]+", "")
                 .replaceAll("\\n[ \t]+", "\n")
