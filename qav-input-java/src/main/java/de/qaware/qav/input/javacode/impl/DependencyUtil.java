@@ -30,6 +30,7 @@ public final class DependencyUtil {
      * @param className the class name.
      * @return true if the class may be ignored.
      */
+    @SuppressWarnings("squid:S4248") // wants to move the RegExes into constants; would help readability here.
     public static boolean isIgnorable(String className) {
         if (className == null) {
             return true;

@@ -8,6 +8,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
+ * Start the QAvalidator WebApplication server.
+ *
  * @author QAware GmbH
  */
 @SpringBootApplication

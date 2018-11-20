@@ -1,8 +1,7 @@
 package de.qaware.qav.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,14 +20,10 @@ import java.util.concurrent.Executors;
  * Therefore, it is <b>important to call the method {@link #finish()}</b> before the application is done -- otherwise,
  * the threads in the Thread Pool will wait for jobs, and the JVM process will not terminate!
  *
- * @author tilman
+ * @author QAware GmbH
  */
+@Slf4j
 public final class ProcessUtil {
-
-    /**
-     * Logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProcessUtil.class);
 
     /**
      * size of the thread pool.
@@ -55,6 +50,7 @@ public final class ProcessUtil {
      * Shut down the Thread Pool for background processes. Call this method at the end of your application! If you
      * don't, the JVM process will not terminate because there are still threads sitting around.
      */
+    @SuppressWarnings("squid:S3457") // wants parameters in the log statement; would not be helpful here.
     public static synchronized void finish() {
         if (threadPool != null) {
             threadPool.shutdown();

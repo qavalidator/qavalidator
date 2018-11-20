@@ -6,9 +6,8 @@ import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.util.FileNameUtil;
 import de.qaware.qav.util.FileSystemUtil;
 import de.qaware.qav.util.JarFileUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
@@ -19,9 +18,13 @@ import java.util.Map;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class JavaScopeReader {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JavaScopeReader.class);
+    /**
+     * Key in the parameter map to find the baseDir.
+     */
+    public static final String BASE_DIR_KEY = "baseDir";
 
     private final DependencyReader dependencyReader;
 
@@ -41,9 +44,9 @@ public class JavaScopeReader {
      * @param parameters the parameters, Ant-style with baseDir (mandatory), and includes (optional) and excludes (optional)
      */
     public void read(Map parameters) {
-        String baseDirName = (String) parameters.get("baseDir");
+        String baseDirName = (String) parameters.get(BASE_DIR_KEY);
         if (StringUtils.isEmpty(baseDirName)) {
-            LOGGER.warn("baseDir missing - no files will be read!");
+            LOGGER.warn("{} missing - no files will be read!", BASE_DIR_KEY);
         } else {
             File baseDir = new File(baseDirName);
             if (!baseDir.exists()) {

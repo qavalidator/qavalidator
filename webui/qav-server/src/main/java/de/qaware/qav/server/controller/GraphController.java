@@ -13,8 +13,7 @@ import de.qaware.qav.server.model.DependencyDTO;
 import de.qaware.qav.server.model.GraphInfoDTO;
 import de.qaware.qav.server.model.NodeDTO;
 import de.qaware.qav.util.FileNameUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,9 +38,8 @@ import java.util.List;
  * @author QAware GmbH
  */
 @RestController
+@Slf4j
 public class GraphController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(GraphController.class);
 
     private String filename;
 
@@ -88,12 +86,13 @@ public class GraphController {
      */
     @RequestMapping("/info")
     public GraphInfoDTO getInfo() {
-        LOGGER.info("Request to /info");
+        String info = MessageFormat.format("Graph with: {0} nodes and {1} edges. Filename: {2}",
+                dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size(),
+                FileNameUtil.getCanonicalPath(filename));
+
+        LOGGER.info("Request to /info: {}", info);
         GraphInfoDTO result = new GraphInfoDTO();
-        result.setInfo(
-                MessageFormat.format("Graph with: {0} nodes and {1} edges. Filename: {2}",
-                        dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size(),
-                        FileNameUtil.getCanonicalPath(filename)));
+        result.setInfo(info);
         return result;
     }
 

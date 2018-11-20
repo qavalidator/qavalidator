@@ -1,6 +1,8 @@
 package de.qaware.qav.graph.api;
 
 /**
+ * This class contains constants to be used all over in the QAvalidator code.
+ *
  * @author QAware GmbH
  */
 public final class Constants {

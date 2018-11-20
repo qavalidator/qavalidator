@@ -12,6 +12,8 @@ import java.io.PrintStream;
 import java.util.List;
 
 /**
+ * Run QAvalidator as a command line application.
+ *
  * @author QAware GmbH
  */
 @Component

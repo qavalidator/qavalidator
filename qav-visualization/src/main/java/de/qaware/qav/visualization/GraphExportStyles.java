@@ -83,6 +83,7 @@ public final class GraphExportStyles {
      * @param classname the class name
      * @return the id, to be used in a DOT or GraphML file
      */
+    @SuppressWarnings("squid:S4248") // wants to move the RegExes into constants; would help readability here.
     public static String getId(String classname) {
         return "_" + classname.replaceAll("<", "_")
                 .replaceAll(">", "_")
