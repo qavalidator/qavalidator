@@ -3,12 +3,11 @@ package de.qaware.qav.input.javacode.impl;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
+import lombok.extern.slf4j.Slf4j;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -19,12 +18,16 @@ import static de.qaware.qav.input.javacode.impl.DependencyUtil.isIgnorable;
 
 /**
  * Method Visitor which is called for each method and finds out which other types are referenced, and in which way.
+ * <p>
+ * References can be:
+ * <p>
+ * Annotations on the method, Annotations on method parameters, Method parameter types, The return type, Instructions
+ * which call methods on other types,
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class DependencyMethodVisitor extends MethodVisitor {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DependencyMethodVisitor.class);
 
     private final DependencyGraph dependencyGraph;
     private final boolean collapseInnerClasses;
