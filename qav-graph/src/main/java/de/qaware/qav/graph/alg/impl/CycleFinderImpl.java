@@ -5,9 +5,8 @@ import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.impl.DependencyGraphSimpleImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.alg.cycle.TarjanSimpleCycles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +17,20 @@ import java.util.List;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class CycleFinderImpl implements CycleFinder {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CycleFinderImpl.class);
 
     /**
      * This counter is for all instances, so that multiple cycle detection runs produce unique IDs.
      */
     private static int cycleCounter = 0;
 
+    /**
+     * The {@link DependencyGraph} to analyze. It must be a {@link DependencyGraphSimpleImpl} so that we can apply
+     * JGraphT's graph algorithms.
+     */
     private final DependencyGraphSimpleImpl dependencyGraph;
+
     private List<List<Node>> cycles;
     private Long duration;
 
@@ -46,6 +49,12 @@ public class CycleFinderImpl implements CycleFinder {
         detectCycles();
     }
 
+    /**
+     * Use a standard algorithm to find cycles.
+     *
+     * There is no cut-off, i.e. for very large graphs with many cycles, this analysis may take a really long time to
+     * finish.
+     */
     private void detectCycles() {
         LOGGER.info("Cycle detector: Graph with {} nodes and {} edges", dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size());
 

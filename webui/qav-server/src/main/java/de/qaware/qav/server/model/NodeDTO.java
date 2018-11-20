@@ -15,12 +15,34 @@ import java.util.Map;
 @ToString
 public class NodeDTO {
 
+    /**
+     * Name of the node.
+     */
     private String name;
 
+    /**
+     * Properties of the node.
+     */
     private Map<String, Object> properties;
 
+    /**
+     * There may be more parents, if the node is part of several architecture hierarchies.
+     */
     private List<DependencyDTO> parents;
+
+    /**
+     * Incoming dependencies.
+     */
     private List<DependencyDTO> incomingDeps;
+
+    /**
+     * Outgoing dependencies.
+     */
     private List<DependencyDTO> outgoingDeps;
+
+    /**
+     * "Contained Dependencies" are underlying dependencies which are the reason for a dependency in an architecture
+     * view.
+     */
     private List<DependencyDTO> containedDeps;
 }
