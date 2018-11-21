@@ -4,6 +4,8 @@ import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -11,8 +13,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.signature.SignatureReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,9 +32,8 @@ import static de.qaware.qav.input.javacode.impl.DependencyUtil.isIgnorable;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class DependencyClassVisitor extends ClassVisitor {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DependencyClassVisitor.class);
 
     private final DependencyGraph dependencyGraph;
     private final boolean collapseInnerClasses;
@@ -43,6 +42,7 @@ public class DependencyClassVisitor extends ClassVisitor {
      * The name of the currently analyzed class. Will be set in the call to the {@link #visit(int, int, String, String,
      * String, String[])} method.
      */
+    @Getter
     private String className;
 
     /**
@@ -77,10 +77,6 @@ public class DependencyClassVisitor extends ClassVisitor {
         // Inheritance: may be one class an many interfaces:
         addInheritanceDependency(superName);
         Arrays.stream(interfaces).forEach(this::addInheritanceDependency);
-    }
-
-    public String getClassName() {
-        return className;
     }
 
     @Override

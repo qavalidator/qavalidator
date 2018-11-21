@@ -22,7 +22,7 @@ import static de.qaware.qav.input.javacode.impl.DependencyUtil.isIgnorable;
  * References can be:
  * <p>
  * Annotations on the method, Annotations on method parameters, Method parameter types, The return type, Instructions
- * which call methods on other types,
+ * which call methods on other types, Exception types in a try/catch block.
  *
  * @author QAware GmbH
  */
@@ -35,6 +35,12 @@ public class DependencyMethodVisitor extends MethodVisitor {
     private final Node classNode;
     private final String methodName;
 
+    /**
+     * The currently analyzed line number.
+     * <p>
+     * It is set in {@link #visitLineNumber(int, Label)}, and is added to each dependency with the property name {@link
+     * de.qaware.qav.graph.api.Constants#LINE_NO}.
+     */
     private int lineNo = 0;
 
     /**
@@ -150,6 +156,15 @@ public class DependencyMethodVisitor extends MethodVisitor {
         this.lineNo = line;
     }
 
+    /**
+     * Add the dependency from {@link #classNode} to the target node with the given name.
+     * <p>
+     * If the target name is equal to the {@link #className}, or if the target name is ignorable, then the method does
+     * nothing.
+     *
+     * @param targetName     the name of the target node
+     * @param dependencyType the {@link DependencyType}
+     */
     private void addDependency(String targetName, DependencyType dependencyType) {
         String targetClassName = AsmUtil.toClassName(targetName, collapseInnerClasses);
         if (!className.equals(targetClassName) && !isIgnorable(targetClassName)) {
