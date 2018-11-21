@@ -84,6 +84,7 @@ public final class FileNameUtil {
      * @param values the values
      * @return the list
      */
+    @SuppressWarnings("unchecked")
     /*package*/ static List<String> getAsList(Object values) {
         if (values == null) {
             return new ArrayList<>();
@@ -92,7 +93,7 @@ public final class FileNameUtil {
         if (values instanceof String) {
             return Lists.newArrayList((String) values);
         } else if (values instanceof List) {
-            return (List<String>) values;
+            return (List<String>) values; // unchecked cast
         } else {
             throw new IllegalArgumentException("includes or excludes must be a String or a List<String> but is a " + values.getClass());
         }

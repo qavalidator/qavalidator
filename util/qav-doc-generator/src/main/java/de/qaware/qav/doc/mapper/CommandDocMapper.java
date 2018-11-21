@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Mapper for {@link QavCommand}, {@link QavCommand.Param} and {@link CommandDoc}.
+ * Mapper from the annotations {@link QavCommand} and the nested type <tt>QavCommand.Param</tt> to the DTO {@link
+ * CommandDoc}.
  *
  * @author QAware GmbH
  */
