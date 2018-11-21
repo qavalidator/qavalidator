@@ -102,6 +102,7 @@ subprojects {
 
         // Test dependencies
         googleTestingCompileVersion = '0.10'
+        assertjVersion = "3.11.1"
     }
 
     dependencies {

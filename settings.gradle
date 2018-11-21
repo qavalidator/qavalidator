@@ -4,7 +4,7 @@ rootProject.name = 'qavalidator'
 include "util:qav-test-util", "util:qav-util", "util:qav-doc-generator",
         "qav-graph",
         // input:
-        "qav-input-java", "qav-input-maven", "qav-input-typescript",
+        "qav-input-java", "qav-input-maven", "qav-input-typescript", "qav-input-traces",
         // processing:
         "qav-architecture", "qav-architecture-dsl",
         "qav-analysis-dsl", "qav-analysis-plugins",
