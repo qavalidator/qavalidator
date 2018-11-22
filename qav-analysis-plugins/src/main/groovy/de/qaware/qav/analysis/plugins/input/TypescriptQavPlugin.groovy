@@ -44,7 +44,7 @@ class TypescriptQavPlugin extends BasePlugin {
     }
 
     /**
-     * Lazy initialization for the Maven dependency graph
+     * Lazy initialization for the Typescript dependency graph
      *
      * @return the {@link DependencyGraph}
      */
