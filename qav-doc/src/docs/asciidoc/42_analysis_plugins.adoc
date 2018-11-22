@@ -18,6 +18,10 @@ include::{gendocdir}/JavaQavPlugin.adoc[]
 
 include::{gendocdir}/MavenQavPlugin.adoc[]
 
+include::{gendocdir}/TracesQavPlugin.adoc[]
+
+include::{gendocdir}/TypescriptQavPlugin.adoc[]
+
 
 == Creating and Working with Architecture Views on a Graph
 
