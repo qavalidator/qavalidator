@@ -50,6 +50,7 @@ public class GraphExportStylesTest {
         assertThat(GraphExportStyles.getId("com.my:module"), is("_com_my_module"));
         assertThat(GraphExportStyles.getId("com.my:my-module"), is("_com_my_my_module"));
         assertThat(GraphExportStyles.getId("com/my/my-module"), is("_com_my_my_module"));
+        assertThat(GraphExportStyles.getId("a(b)"), is("_a_b_"));
     }
 
     @Test

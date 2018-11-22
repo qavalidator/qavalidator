@@ -7,6 +7,7 @@ import de.qaware.qav.analysis.plugins.analysis.GraphFilterQavPlugin
 import de.qaware.qav.analysis.plugins.base.BasePlugin
 import de.qaware.qav.analysis.plugins.input.JavaQavPlugin
 import de.qaware.qav.analysis.plugins.input.MavenQavPlugin
+import de.qaware.qav.analysis.plugins.input.TracesQavPlugin
 import de.qaware.qav.analysis.plugins.input.TypescriptQavPlugin
 import de.qaware.qav.analysis.plugins.output.IOQavPlugin
 import de.qaware.qav.analysis.plugins.output.SonarMessagesQavPlugin
@@ -48,6 +49,7 @@ class ShortcutQavPlugin extends BasePlugin {
         // input
         new JavaQavPlugin().apply(analysis)
         new MavenQavPlugin().apply(analysis)
+        new TracesQavPlugin().apply(analysis)
         new TypescriptQavPlugin().apply(analysis)
 
         // output

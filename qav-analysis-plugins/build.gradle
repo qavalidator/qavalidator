@@ -13,6 +13,7 @@ dependencies {
     compile project(':qav-graph')
     compile project(':qav-input-java')
     compile project(':qav-input-maven')
+    compile project(':qav-input-traces')
     compile project(':qav-input-typescript')
     compile project(':util:qav-util')
     compile project(':qav-visualization')

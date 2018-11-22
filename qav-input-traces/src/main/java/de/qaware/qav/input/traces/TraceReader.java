@@ -85,7 +85,7 @@ public class TraceReader {
      * @param spans the list of {@link Span}s
      */
     private void analyzeTrace(List<Span> spans) {
-        LOGGER.info("Trace: {}, Spans: {}", spans.get(0).getTraceId(), spans.size());
+        LOGGER.debug("Trace: {}, Spans: {}", spans.get(0).getTraceId(), spans.size());
         Map<String, Span> spanMap = new HashMap<>();
         spans.forEach(it -> spanMap.put(it.getId(), it));
 
@@ -127,7 +127,7 @@ public class TraceReader {
      * @param span     the span; may be used to derive further properties
      */
     private void addDependency(String fromName, String toName, Span span) {
-        LOGGER.info("{} --> {}: {}", fromName, toName, span);
+        LOGGER.debug("{} --> {}: {}", fromName, toName, span);
 
         if (!fromName.equals(toName)) {
             Node fromNode = dependencyGraph.getOrCreateNodeByName(fromName);
