@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 public class Span {
 
+    public static final int NANOS_PER_MILLI = 1000;
     /**
      * The Zipkin TraceID.
      */
@@ -36,6 +37,8 @@ public class Span {
      */
     private String parentId;
 
+    @SuppressWarnings("squid:S1450")
+    // due to the setter we introduced for JSON, Sonar wants this field to be moved to the setter method
     private LocalDateTime timestamp;
     private Long duration;
 
@@ -52,6 +55,6 @@ public class Span {
      *           from it
      */
     public void setTimestamp(long ts) {
-        this.timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(ts / 1000), ZoneId.systemDefault());
+        this.timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(ts / NANOS_PER_MILLI), ZoneId.systemDefault());
     }
 }

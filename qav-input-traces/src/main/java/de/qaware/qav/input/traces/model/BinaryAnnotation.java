@@ -14,6 +14,8 @@ import java.time.ZoneId;
 @Data
 public class BinaryAnnotation {
 
+    @SuppressWarnings("squid:S1450")
+    // due to the setter we introduced for JSON, Sonar wants this field to be moved to the setter method
     private LocalDateTime timestamp;
 
     /**
