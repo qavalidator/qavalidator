@@ -14,6 +14,9 @@ import java.time.ZoneId;
 @Data
 public class BinaryAnnotation {
 
+    /** we need millis, but get nanos */
+    public static final int NANOS_PER_MILLI = 1000;
+
     @SuppressWarnings("squid:S1450")
     // due to the setter we introduced for JSON, Sonar wants this field to be moved to the setter method
     private LocalDateTime timestamp;
@@ -36,6 +39,6 @@ public class BinaryAnnotation {
      *           from it
      */
     public void setTimestamp(long ts) {
-        this.timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(ts / 1000), ZoneId.systemDefault());
+        this.timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(ts / NANOS_PER_MILLI), ZoneId.systemDefault());
     }
 }

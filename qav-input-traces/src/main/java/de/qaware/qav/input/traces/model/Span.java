@@ -15,7 +15,9 @@ import java.util.List;
 @Data
 public class Span {
 
+    /** we need millis, but get nanos */
     public static final int NANOS_PER_MILLI = 1000;
+
     /**
      * The Zipkin TraceID.
      */
