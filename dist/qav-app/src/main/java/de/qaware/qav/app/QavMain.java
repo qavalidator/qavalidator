@@ -1,8 +1,10 @@
 package de.qaware.qav.app;
 
 import de.qaware.qav.server.QavServer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 /**
  * Main class.
@@ -15,15 +17,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author QAware GmbH
  */
 @SpringBootApplication
+@Slf4j
 public class QavMain {
 
     /**
-     * property name to set the server port.
-     */
-    private static final String SERVER_PORT = "server.port";
-
-    /**
      * Main method.
+     * <p>
+     * Run the analysis, the web application, or both.
      *
      * @param args command line
      */
@@ -32,17 +32,15 @@ public class QavMain {
         boolean startServer = hasArgument("graph", args) || hasArgument("de.qaware.qav.graph.filename", args);
 
         if (runAnalysis || !startServer) {
-            String port = System.getProperty(SERVER_PORT); // may be null
-            System.setProperty(SERVER_PORT, "0");
-            SpringApplication.run(QavMain.class, args).close();
-            if (port == null) {
-                System.clearProperty(SERVER_PORT);
-            } else {
-                System.setProperty(SERVER_PORT, port);
-            }
+            LOGGER.info("Run analysis");
+            new SpringApplicationBuilder(QavMain.class)
+                    .web(false) // don't start the embedded Tomcat for the analysis run
+                    .run(args) // run the analysis
+                    .close(); // and finish when done.
         }
 
         if (startServer) {
+            LOGGER.info("Run web application");
             SpringApplication.run(QavServer.class, args);
         }
     }
