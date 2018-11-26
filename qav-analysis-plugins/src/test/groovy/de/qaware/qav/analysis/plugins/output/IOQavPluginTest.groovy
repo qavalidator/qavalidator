@@ -6,8 +6,8 @@ import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.graph.api.DependencyGraph
 import de.qaware.qav.graph.api.DependencyType
 import de.qaware.qav.graph.factory.DependencyGraphFactory
+import de.qaware.qav.util.FileSystemUtil
 import de.qaware.qav.visualization.Abbreviation
-import org.apache.commons.io.FileUtils
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -34,7 +34,7 @@ class IOQavPluginTest {
 
     @After
     void cleanup() {
-        FileUtils.deleteDirectory(testDir)
+        FileSystemUtil.deleteDirectoryQuietly(TEST_PATH)
     }
 
     @Test
@@ -72,7 +72,7 @@ class IOQavPluginTest {
         assert outputFile.exists()
 
         // test the default setting:
-        FileUtils.deleteDirectory(testDir)
+        FileSystemUtil.deleteDirectoryQuietly(TEST_PATH)
         testDir.mkdirs()
         ioQavPlugin.printNodes(graph, "testGraph.txt")
         assert outputFile.exists()

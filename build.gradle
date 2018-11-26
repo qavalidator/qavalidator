@@ -92,7 +92,6 @@ subprojects {
         jacksonVersion = "2.9.7"
         guavaVersion = "27.0-jre"
         commonsLang3Version = "3.8.1"
-        commonsIoVersion = "2.6"
 
         slf4jVersion = "1.7.25"
         logbackVersion = "1.2.3"

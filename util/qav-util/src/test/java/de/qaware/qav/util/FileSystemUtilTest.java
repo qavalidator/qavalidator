@@ -1,6 +1,6 @@
 package de.qaware.qav.util;
 
-import org.apache.commons.io.FileUtils;
+import com.google.common.io.Files;
 import org.junit.Test;
 
 import java.io.File;
@@ -8,8 +8,10 @@ import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -78,9 +80,22 @@ public class FileSystemUtilTest {
     }
 
     @Test
+    public void writeEmptyStringToFile() {
+        String testString = "";
+        String filename = "build/test_file1.txt";
+        FileSystemUtil.writeStringToFile(testString, filename);
+        assertTrue(new File(filename).exists());
+        try {
+            FileSystemUtil.readFileAsText(filename);
+        } catch(IllegalArgumentException e) {
+            assertThat(e.getMessage(), is("File 'build/test_file1.txt' is empty."));
+        }
+    }
+
+    @Test
     public void testWriteStringToFile() {
         String testString = "Hallo hallo\nHallo hallo";
-        String filename = "build/test_file.txt";
+        String filename = "build/test_file2.txt";
         FileSystemUtil.writeStringToFile(testString, filename);
         String result = FileSystemUtil.readFileAsText(filename);
         assertThat(result, is(testString));
@@ -102,7 +117,7 @@ public class FileSystemUtilTest {
     public void testReadBytesFromFile() throws IOException {
         String filename = "build/bytes_test_file";
         byte[] bytes = { 1, 2, 3, 10, 11, 12};
-        FileUtils.writeByteArrayToFile(new File(filename), bytes);
+        Files.write(bytes, new File(filename));
         byte[] result = FileSystemUtil.readBytesFromFile(filename);
         assertNotNull(result);
         assertThat(result, is(bytes));
@@ -119,4 +134,24 @@ public class FileSystemUtilTest {
         }
     }
 
+    @Test
+    public void deleteDirectoryQuietlyWhenNotExistent() {
+        String dirname = "build/d-test";
+        File dir = new File(dirname);
+        assertFalse(dir.exists());
+        FileSystemUtil.deleteDirectoryQuietly(dirname);
+        assertFalse(dir.exists());
+    }
+
+    @Test
+    public void deleteDirectoryQuietly() {
+        String dirname = "build/d-test";
+        File dir = new File(dirname);
+        assertFalse(dir.exists());
+        dir.mkdirs();
+        assertTrue(dir.exists());
+
+        FileSystemUtil.deleteDirectoryQuietly(dirname);
+        assertFalse(dir.exists());
+    }
 }

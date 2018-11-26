@@ -1,10 +1,10 @@
 package de.qaware.qav.doc.processor;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -45,7 +45,7 @@ public class DocFileWriter {
         createOutputDir();
         File outputFile = new File(outputDir, pluginName + ".adoc");
         try {
-            Files.write(doc, outputFile, Charsets.UTF_8);
+            Files.asCharSink(outputFile, Charset.defaultCharset()).write(doc);
         } catch (IOException e) {
             errorLogger.logError("Can't write to file " + outputFile.getAbsolutePath());
         }

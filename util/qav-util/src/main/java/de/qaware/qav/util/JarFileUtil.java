@@ -1,7 +1,6 @@
 package de.qaware.qav.util;
 
 import com.google.common.io.ByteStreams;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -117,16 +116,17 @@ public final class JarFileUtil {
         InputStream inputStream = jarFile.getInputStream(entry);
         byte[] entryAsBytes = ByteStreams.toByteArray(inputStream);
         File tempFile = new File(tempDirectory, entry.getName());
-        FileUtils.writeByteArrayToFile(tempFile, entryAsBytes);
+        com.google.common.io.Files.write(entryAsBytes, tempFile);
         LOGGER.debug("Created temp file: {}", tempFile.getAbsolutePath());
         return tempFile;
     }
 
     private static void delete(File tempFile) {
-        if (!FileUtils.deleteQuietly(tempFile)) {
-            LOGGER.debug("Could not delete: {}", tempFile.getAbsolutePath());
-        } else {
+        try {
+            Files.delete(tempFile.toPath());
             LOGGER.debug("Deleted: {}", tempFile.getAbsolutePath());
+        } catch(IOException e) {
+            LOGGER.debug("Could not delete: {}", tempFile.getAbsolutePath());
         }
     }
 

@@ -9,11 +9,11 @@ import de.qaware.qav.doc.QavPluginDoc
 import de.qaware.qav.graph.api.DependencyGraph
 import de.qaware.qav.graph.io.GraphReaderWriter
 import de.qaware.qav.graph.io.NodePrinter
+import de.qaware.qav.util.FileSystemUtil
 import de.qaware.qav.visualization.Abbreviation
 import de.qaware.qav.visualization.GraphExporter
 import de.qaware.qav.visualization.LegendCreator
 import groovy.util.logging.Slf4j
-import org.apache.commons.io.FileUtils
 
 /**
  * QAvalidator Language elements for Input / Output / Beautifying.
@@ -208,7 +208,7 @@ class IOQavPlugin extends BasePlugin {
         } else {
             try {
                 if (clean) {
-                    FileUtils.deleteDirectory(dir)
+                    FileSystemUtil.deleteDirectoryQuietly(path)
                 }
                 dir.mkdirs()
                 this.outputDir = dir.canonicalPath

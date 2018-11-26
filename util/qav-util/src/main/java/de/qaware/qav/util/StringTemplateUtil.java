@@ -3,10 +3,10 @@ package de.qaware.qav.util;
 import com.google.common.base.Charsets;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -29,33 +29,36 @@ public final class StringTemplateUtil {
     }
 
     /**
-     * Loads the STG file; that should be on the classpath (i.e. could also be in the resources or jar file).
-     * The STG file uses "&lt;" / "&gt;" characters.
+     * Loads the STG file; that should be on the classpath (i.e. could also be in the resources or jar file). The STG
+     * file uses "&lt;" / "&gt;" characters.
      *
-     * @param templateName  the name of the template file
+     * @param templateName the name of the template file
      * @return the {@link StringTemplateGroup}
      */
     public static StringTemplateGroup loadTemplateGroupAngleBracket(String templateName) {
-        InputStreamReader reader = getTemplateInputStreamReader(templateName);
-        StringTemplateGroup result = new StringTemplateGroup(reader);
-        IOUtils.closeQuietly(reader);
 
-        return result;
+        try (InputStreamReader reader = getTemplateInputStreamReader(templateName)) {
+            return new StringTemplateGroup(reader);
+        } catch(IOException e) {
+            LOGGER.error("Error reading resource {}", templateName);
+        }
+        return null;
     }
 
     /**
-     * Loads the STG file; that should be on the classpath (i.e. could also be in the resources or jar file).
-     * The STG file uses "$" instead of "&lt;" / "&gt;", which is handy for HTML templates.
+     * Loads the STG file; that should be on the classpath (i.e. could also be in the resources or jar file). The STG
+     * file uses "$" instead of "&lt;" / "&gt;", which is handy for HTML templates.
      *
-     * @param templateName  the name of the template file
+     * @param templateName the name of the template file
      * @return the {@link StringTemplateGroup}
      */
     public static StringTemplateGroup loadTemplateGroupDollarSign(String templateName) {
-        InputStreamReader reader = getTemplateInputStreamReader(templateName);
-        StringTemplateGroup result = new StringTemplateGroup(reader, DefaultTemplateLexer.class);
-        IOUtils.closeQuietly(reader);
-
-        return result;
+        try (InputStreamReader reader = getTemplateInputStreamReader(templateName)) {
+            return new StringTemplateGroup(reader, DefaultTemplateLexer.class);
+        } catch(IOException e) {
+            LOGGER.error("Error reading resource {}", templateName);
+            return null;
+        }
     }
 
     private static InputStreamReader getTemplateInputStreamReader(String templateName) {

@@ -31,12 +31,14 @@ final class SonarLogUtil {
      *
      * @param outputDir directory where to put the output file
      */
-    public static void setOutputDir(String outputDir) {
+    static void setOutputDir(String outputDir) {
         checkNotNull(outputDir, "outputDir")
 
         logFile = new File(outputDir, LOGFILE_NAME)
 
         // truncate the log file:
+        def parentDir = logFile.parentFile
+        parentDir.mkdirs()
         FileSystemUtil.writeStringToFile("", logFile.getAbsolutePath())
     }
 
@@ -45,7 +47,7 @@ final class SonarLogUtil {
      *
      * @param message the message
      */
-    public static void error(String message) {
+    static void error(String message) {
         logMessage(ERROR_PREFIX + message)
     }
 
@@ -54,7 +56,7 @@ final class SonarLogUtil {
      *
      * @param message the message
      */
-    public static void warn(String message) {
+    static void warn(String message) {
         logMessage(WARNING_PREFIX + message)
     }
 

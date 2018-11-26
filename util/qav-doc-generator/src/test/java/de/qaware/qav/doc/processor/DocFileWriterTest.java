@@ -1,8 +1,7 @@
 package de.qaware.qav.doc.processor;
 
 import com.google.common.io.Files;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import de.qaware.qav.util.FileSystemUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -25,16 +24,16 @@ public class DocFileWriterTest {
 
     private static final Logger LOGGER = getLogger(DocFileWriterTest.class);
 
-    private AnnotationProcessorErrorLogger errorLogger = message -> LOGGER.error(message);
+    private AnnotationProcessorErrorLogger errorLogger = LOGGER::error;
     private String outputDirName;
     private File outputDir;
 
     @Before
-    public void setup() throws IOException {
+    public void setup() {
         outputDirName = "build/tmp/testDir";
         outputDir = new File(outputDirName);
 
-        FileUtils.deleteDirectory(outputDir);
+        FileSystemUtil.deleteDirectoryQuietly(outputDirName);
         assertThat(outputDir.exists(), is(false));
     }
 

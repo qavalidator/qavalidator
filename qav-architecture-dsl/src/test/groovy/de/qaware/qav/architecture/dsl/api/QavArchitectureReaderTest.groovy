@@ -35,7 +35,7 @@ class QavArchitectureReaderTest {
         try {
             new QavArchitectureReader("/not/existing", null)
         } catch (IllegalArgumentException e) {
-            assert e.getMessage() =~ /File '.+not.existing' not found/
+            assert e.getMessage() =~ /File or resource not found: .+not.existing/
         }
     }
 }

@@ -1,10 +1,11 @@
 package de.qaware.qav.util;
 
+import com.google.common.io.CharStreams;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -99,8 +100,9 @@ public final class ProcessUtil {
         try {
             Process process = processBuilder.start();
             result = process.waitFor();
-            stdOut = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
-            stdError = IOUtils.toString(process.getErrorStream(), Charset.defaultCharset());
+
+            stdOut = CharStreams.toString(new InputStreamReader(process.getInputStream(), Charset.defaultCharset()));
+            stdError = CharStreams.toString(new InputStreamReader(process.getErrorStream(), Charset.defaultCharset()));
         } catch (IOException e) {
             LOGGER.error("Error starting the postprocessing command '{}': {}", cmd.get(0), e.getMessage());
         } catch (InterruptedException e) {

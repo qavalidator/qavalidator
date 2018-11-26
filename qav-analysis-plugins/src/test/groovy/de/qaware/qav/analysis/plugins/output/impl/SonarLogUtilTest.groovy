@@ -1,6 +1,7 @@
 package de.qaware.qav.analysis.plugins.output.impl
 
-import org.apache.commons.io.FileUtils
+import de.qaware.qav.util.FileSystemUtil
+import groovy.util.logging.Slf4j
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertTrue
  *
  * @author Fabian Huch fabian.huch@qaware.de
  */
+@Slf4j
 class SonarLogUtilTest {
 
     private static final String TEST_PATH = "build/SonarLogUtilTest/output"
@@ -26,12 +28,12 @@ class SonarLogUtilTest {
     void setUp() throws Exception {
         testDir = new File(TEST_PATH)
         testFile = new File(testDir, SonarLogUtil.LOGFILE_NAME)
-        FileUtils.deleteDirectory(testDir)
+        FileSystemUtil.deleteDirectoryQuietly(TEST_PATH)
     }
 
     @After
     void tearDown() throws Exception {
-        FileUtils.deleteDirectory(testDir)
+        FileSystemUtil.deleteDirectoryQuietly(TEST_PATH)
     }
 
     @Test
