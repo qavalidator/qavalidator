@@ -105,9 +105,9 @@ public class FileSystemUtilTest {
     public void testWriteStringToFileAppend() {
         String testString = "Hallo hallo\n";
         String filename = "build/test_file.txt";
-        FileSystemUtil.writeStringToFile(testString, filename, false);
-        FileSystemUtil.writeStringToFile(testString, filename, true);
-        FileSystemUtil.writeStringToFile(testString, filename, true);
+        FileSystemUtil.writeStringToFile(testString, filename);
+        FileSystemUtil.appendStringToFile(testString, filename);
+        FileSystemUtil.appendStringToFile(testString, filename);
 
         String result = FileSystemUtil.readFileAsText(filename);
         assertThat(result, is(testString + testString + testString));

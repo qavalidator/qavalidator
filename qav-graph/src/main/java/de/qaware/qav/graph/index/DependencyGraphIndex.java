@@ -3,6 +3,7 @@ package de.qaware.qav.graph.index;
 import com.google.common.base.Stopwatch;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.Node;
+import de.qaware.qav.util.FileSystemUtil;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -19,10 +20,12 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.store.MMapDirectory;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -64,18 +67,15 @@ public class DependencyGraphIndex {
 
     /**
      * Setup up the Lucene index.
-     *
+     * <p>
      * Put all {@link Node}s of the {@link #graph} into the index.
      */
     private void initIndex() {
         Stopwatch stopwatch = Stopwatch.createStarted();
         analyzer = new StandardAnalyzer();
 
-        // Store the index in memory:
-        directory = new RAMDirectory();
-        // To store an index on disk, use the method FSDirectory#open() instead.
-
         try {
+            createIndexDirectory();
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
             IndexWriter indexWriter = new IndexWriter(directory, config);
 
@@ -87,6 +87,25 @@ public class DependencyGraphIndex {
         }
 
         LOGGER.debug("Index built, took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+    }
+
+    /**
+     * Create a temporary directory for the index. Add a shutdown hook to remove this directory on system exit.
+     * <p>
+     * An in-memory index would do, but Lucene's RAMDirectory is deprecated.
+     *
+     * @throws IOException if creating the directory fails
+     */
+    private void createIndexDirectory() throws IOException {
+        Path indexDirectory = Files.createTempDirectory("qav");
+        final String rootDirName = indexDirectory.toAbsolutePath().toString();
+        LOGGER.info("Creating index directory {}", rootDirName);
+        directory = new MMapDirectory(indexDirectory);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            LOGGER.info("Deleting index directory {}", rootDirName);
+            FileSystemUtil.deleteDirectoryQuietly(rootDirName);
+        }));
     }
 
     private void indexAllNodes(IndexWriter indexWriter) throws IOException {

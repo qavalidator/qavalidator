@@ -1,6 +1,7 @@
 package de.qaware.qav.graph.io;
 
 import com.google.common.base.Charsets;
+import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Prints nodes.
+ * Prints nodes in plain text into a file.
  *
  * @author QAware GmbH
  */
@@ -46,7 +47,7 @@ public class NodePrinter {
      */
     public void printNodes() {
         try {
-            Files.write("", this.outputFile, Charsets.UTF_8);
+            Files.asCharSink(this.outputFile, Charsets.UTF_8).write("");
             dependencyGraph.getAllNodes().forEach(this::printNode);
         } catch (IOException e) {
             throw new IllegalStateException("Error writing to file " + this.outputFile.getAbsolutePath(), e);
@@ -92,9 +93,14 @@ public class NodePrinter {
         }
     }
 
+    /**
+     * Appends a string to the output file {@link #outputFile}.
+     *
+     * @param s the string
+     */
     private void append(String s) {
         try {
-            Files.append(s, this.outputFile, Charsets.UTF_8);
+            Files.asCharSink(this.outputFile, Charsets.UTF_8, FileWriteMode.APPEND).write(s);
         } catch(IOException e) {
             throw new IllegalStateException("Error writing to file " + this.outputFile.getAbsolutePath(), e);
         }

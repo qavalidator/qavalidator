@@ -1,7 +1,7 @@
 package de.qaware.qav.util;
 
 import com.google.common.io.ByteStreams;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Work with JAR files: Find class files and nested JAR files.
@@ -26,9 +25,8 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public final class JarFileUtil {
-
-    private static final Logger LOGGER = getLogger(JarFileUtil.class);
 
     /**
      * util class, no instances.
@@ -126,7 +124,7 @@ public final class JarFileUtil {
             Files.delete(tempFile.toPath());
             LOGGER.debug("Deleted: {}", tempFile.getAbsolutePath());
         } catch(IOException e) {
-            LOGGER.debug("Could not delete: {}", tempFile.getAbsolutePath());
+            LOGGER.error("Could not delete: {}", tempFile.getAbsolutePath(), e);
         }
     }
 

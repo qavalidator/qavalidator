@@ -6,12 +6,10 @@ import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.EdgeFilter;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.api.NodeFilter;
+import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DirectedMaskSubgraph;
-import org.jgrapht.graph.MaskFunctor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,10 +23,12 @@ import java.util.stream.Collectors;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class DependencyGraphSimpleImpl implements DependencyGraph {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DependencyGraphSimpleImpl.class);
-
+    /**
+     * Lookup table from name to node.
+     */
     private final Map<String, Node> nodeMap = new HashMap<>();
 
     private DirectedGraph<Node, Dependency> graph = new DefaultDirectedGraph<>(Dependency.class);
@@ -92,7 +92,7 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
      * Add a new dependency to the graph.
      * <p>
      * If there already is a dependency between these two nodes, the {@link DependencyType} is "upgraded" in case the
-     * new dependency has a higher value (see {@link DependencyType#ordinal}.
+     * new dependency has a higher value (see {@link DependencyType#ordinal()}.
      *
      * @param from source
      * @param to   target
@@ -157,17 +157,10 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
     @Override
     public DependencyGraph filter(final NodeFilter filter) {
         DependencyGraphSimpleImpl clone = new DependencyGraphSimpleImpl(this.baseGraph);
-        clone.setGraph(new DirectedMaskSubgraph<>(graph, new MaskFunctor<Node, Dependency>() {
-            @Override
-            public boolean isEdgeMasked(Dependency edge) {
-                return !filter.isAccepted(edge.getSource()) || !filter.isAccepted(edge.getTarget());
-            }
-
-            @Override
-            public boolean isVertexMasked(Node vertex) {
-                return !filter.isAccepted(vertex);
-            }
-        }));
+        clone.setGraph(
+                new DirectedMaskSubgraph<>(graph,
+                        node -> !filter.isAccepted(node),
+                        edge -> !filter.isAccepted(edge.getSource()) || !filter.isAccepted(edge.getTarget())));
 
         return clone;
     }
@@ -175,17 +168,10 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
     @Override
     public DependencyGraph filter(final EdgeFilter filter) {
         DependencyGraphSimpleImpl clone = new DependencyGraphSimpleImpl(this.baseGraph);
-        clone.setGraph(new DirectedMaskSubgraph<>(graph, new MaskFunctor<Node, Dependency>() {
-            @Override
-            public boolean isEdgeMasked(Dependency edge) {
-                return !filter.isAccepted(edge);
-            }
-
-            @Override
-            public boolean isVertexMasked(Node vertex) {
-                return false;
-            }
-        }));
+        clone.setGraph(
+                new DirectedMaskSubgraph<>(graph,
+                        node -> false,
+                        dependency -> !filter.isAccepted(dependency)));
 
         return clone;
     }

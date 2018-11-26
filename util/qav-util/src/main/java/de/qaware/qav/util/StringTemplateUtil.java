@@ -1,10 +1,9 @@
 package de.qaware.qav.util;
 
 import com.google.common.base.Charsets;
+import lombok.extern.slf4j.Slf4j;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,12 +14,8 @@ import java.io.InputStreamReader;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public final class StringTemplateUtil {
-
-    /**
-     * Logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(StringTemplateUtil.class);
 
     /**
      * util class with only static methods.
@@ -40,7 +35,7 @@ public final class StringTemplateUtil {
         try (InputStreamReader reader = getTemplateInputStreamReader(templateName)) {
             return new StringTemplateGroup(reader);
         } catch(IOException e) {
-            LOGGER.error("Error reading resource {}", templateName);
+            LOGGER.error("Error reading resource {}", templateName, e);
         }
         return null;
     }
@@ -56,7 +51,7 @@ public final class StringTemplateUtil {
         try (InputStreamReader reader = getTemplateInputStreamReader(templateName)) {
             return new StringTemplateGroup(reader, DefaultTemplateLexer.class);
         } catch(IOException e) {
-            LOGGER.error("Error reading resource {}", templateName);
+            LOGGER.error("Error reading resource {}", templateName, e);
             return null;
         }
     }

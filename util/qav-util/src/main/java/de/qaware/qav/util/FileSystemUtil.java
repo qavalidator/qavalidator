@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.stream.Stream;
 
 /**
  * Util methods for dealing with files and directories, and with resources from classpath.
@@ -49,7 +50,7 @@ public final class FileSystemUtil {
         try (InputStream is = FileSystemUtil.class.getResourceAsStream(removeClasspathPrefix(filename))) {
             return is != null;
         } catch (IOException e) {
-            LOGGER.error("Error reading resource {}", filename);
+            LOGGER.error("Error reading resource {}", filename, e);
             return false;
         }
     }
@@ -154,34 +155,35 @@ public final class FileSystemUtil {
         }
     }
 
-
     /**
      * Writes the given String into the file. Swallows IOExceptions, just logs an error.
      *
      * @param content  the String to write
      * @param filename the file to write to
-     */
-    public static void writeStringToFile(String content, String filename) {
-        writeStringToFile(content, filename, false);
-    }
-
-    /**
-     * Writes the given String into the file. Swallows IOExceptions, just logs an error.
-     *
-     * @param content  the String to write
-     * @param filename the file to write to
-     * @param append   <tt>true</tt> to append, <tt>false</tt> to overwrite
      */
     @SuppressWarnings("squid:S1166") // wants log or rethrow exception. It's logged well enough here.
-    public static void writeStringToFile(String content, String filename, boolean append) {
+    public static void writeStringToFile(String content, String filename) {
         File outputFile = new File(filename);
         outputFile.getParentFile().mkdirs();
         try {
-            if (append) {
-                Files.asCharSink(outputFile, Charset.defaultCharset(), FileWriteMode.APPEND).write(content);
-            } else {
-                Files.asCharSink(outputFile, Charset.defaultCharset()).write(content);
-            }
+            Files.asCharSink(outputFile, Charset.defaultCharset()).write(content);
+        } catch (IOException e) {
+            LOGGER.error("Could not write on file '{}': {}", outputFile.getAbsolutePath(), e.getMessage());
+        }
+    }
+
+    /**
+     * Appends the given String into the file. Swallows IOExceptions, just logs an error.
+     *
+     * @param content  the String to write
+     * @param filename the file to write to
+     */
+    @SuppressWarnings("squid:S1166") // wants log or rethrow exception. It's logged well enough here.
+    public static void appendStringToFile(String content, String filename) {
+        File outputFile = new File(filename);
+        outputFile.getParentFile().mkdirs();
+        try {
+            Files.asCharSink(outputFile, Charset.defaultCharset(), FileWriteMode.APPEND).write(content);
         } catch (IOException e) {
             LOGGER.error("Could not write on file '{}': {}", outputFile.getAbsolutePath(), e.getMessage());
         }
@@ -213,9 +215,8 @@ public final class FileSystemUtil {
     public static void deleteDirectoryQuietly(String rootDirName) {
         File rootDir = new File(rootDirName);
         if (rootDir.exists()) {
-            try {
-                java.nio.file.Files.walk(rootDir.toPath())
-                        .sorted(Comparator.reverseOrder())
+            try (Stream<Path> paths = java.nio.file.Files.walk(rootDir.toPath())) {
+                paths.sorted(Comparator.reverseOrder())
                         .map(Path::toFile)
                         .forEach(File::delete);
             } catch (IOException e) {

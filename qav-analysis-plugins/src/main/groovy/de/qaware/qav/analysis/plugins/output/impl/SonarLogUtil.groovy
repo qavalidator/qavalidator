@@ -27,7 +27,7 @@ final class SonarLogUtil {
     }
 
     /**
-     * Creates a new log file.
+     * Creates a new empty log file.
      *
      * @param outputDir directory where to put the output file
      */
@@ -67,6 +67,6 @@ final class SonarLogUtil {
      */
     private static void logMessage(String message) {
         checkNotNull(message, "message")
-        FileSystemUtil.writeStringToFile(message + "\n", logFile.getAbsolutePath(), true)
+        FileSystemUtil.appendStringToFile(message + "\n", logFile.getAbsolutePath())
     }
 }
