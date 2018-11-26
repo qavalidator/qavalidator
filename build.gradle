@@ -77,10 +77,9 @@ subprojects {
 
     ext {
         // Version numbers
-        springBootVersion = "1.5.8.RELEASE"
-        springVersion = "4.3.12.RELEASE"
-        springDataVersion = "1.13.8.RELEASE"
-        jacksonVersion = "2.8.9"
+        springBootVersion = "2.1.0.RELEASE"
+        springVersion = "5.1.2.RELEASE"
+        springDataVersion = "2.1.2.RELEASE"
 
         groovyVersion = "2.4.12"
         asmVersion = "5.1"
@@ -91,6 +90,7 @@ subprojects {
         stringtemplateVersion = "3.2"
         antVersion ="1.9.7"
 
+        jacksonVersion = "2.8.9"
         guavaVersion = "20.0"
         commonsLang3Version = "3.5"
         commonsIoVersion = "2.5"

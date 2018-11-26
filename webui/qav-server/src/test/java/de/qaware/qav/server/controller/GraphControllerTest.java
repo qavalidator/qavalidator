@@ -16,9 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
@@ -82,7 +82,7 @@ public class GraphControllerTest {
 
     @Test
     public void testGetNodes() {
-        Page<Node> resultPage = graphController.getNodes("name:v*", new PageRequest(0, 30));
+        Page<Node> resultPage = graphController.getNodes("name:v*", PageRequest.of(0, 30));
         assertThat(resultPage, notNullValue());
         assertThat(resultPage.getTotalElements(), is(5L));
         assertThat(resultPage.getTotalPages(), is(1));
@@ -93,7 +93,7 @@ public class GraphControllerTest {
 
     @Test
     public void testGetNodesMorePages() {
-        Page<Node> resultPage = graphController.getNodes("name:v*", new PageRequest(0, 3));
+        Page<Node> resultPage = graphController.getNodes("name:v*", PageRequest.of(0, 3));
 
         // page 1:
         assertThat(resultPage, notNullValue());
@@ -105,7 +105,7 @@ public class GraphControllerTest {
         assertThat(nodes, hasSize(3));
 
         // page 2:
-        resultPage = graphController.getNodes("name:v*", new PageRequest(1, 3));
+        resultPage = graphController.getNodes("name:v*", PageRequest.of(1, 3));
         assertThat(resultPage, notNullValue());
         assertThat(resultPage.getTotalElements(), is(5L));
         assertThat(resultPage.getTotalPages(), is(2));
@@ -117,7 +117,7 @@ public class GraphControllerTest {
 
     @Test
     public void testGetNodesNotFound() {
-        Page<Node> resultPage = graphController.getNodes("name:xx*", new PageRequest(0, 3));
+        Page<Node> resultPage = graphController.getNodes("name:xx*", PageRequest.of(0, 3));
 
         // page 1:
         assertThat(resultPage, notNullValue());
@@ -130,7 +130,7 @@ public class GraphControllerTest {
 
     @Test
     public void testGetNodesBehindLastPage() {
-        Page<Node> resultPage = graphController.getNodes("name:v*", new PageRequest(1, 30));
+        Page<Node> resultPage = graphController.getNodes("name:v*", PageRequest.of(1, 30));
 
         // page 1:
         assertThat(resultPage, notNullValue());
@@ -144,7 +144,7 @@ public class GraphControllerTest {
 
     @Test
     public void testGetNodesNoQuery() {
-        Page<Node> resultPage = graphController.getNodes(null, new PageRequest(0, 30));
+        Page<Node> resultPage = graphController.getNodes(null, PageRequest.of(0, 30));
         assertThat(resultPage, notNullValue());
         assertThat(resultPage.getTotalElements(), is(5L));
         assertThat(resultPage.getTotalPages(), is(1));
@@ -155,7 +155,7 @@ public class GraphControllerTest {
 
     @Test
     public void testGetNodesWithOnlyName() {
-        Page<Node> resultPage = graphController.getNodes("v*", new PageRequest(0, 30));
+        Page<Node> resultPage = graphController.getNodes("v*", PageRequest.of(0, 30));
         assertThat(resultPage, notNullValue());
         assertThat(resultPage.getTotalElements(), is(5L));
         assertThat(resultPage.getTotalPages(), is(1));

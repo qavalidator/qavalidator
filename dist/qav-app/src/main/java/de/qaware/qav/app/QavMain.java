@@ -3,6 +3,7 @@ package de.qaware.qav.app;
 import de.qaware.qav.server.QavServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
@@ -34,7 +35,7 @@ public class QavMain {
         if (runAnalysis || !startServer) {
             LOGGER.info("Run analysis");
             new SpringApplicationBuilder(QavMain.class)
-                    .web(false) // don't start the embedded Tomcat for the analysis run
+                    .web(WebApplicationType.NONE) // don't start the embedded Tomcat for the analysis batch run
                     .run(args) // run the analysis
                     .close(); // and finish when done.
         }

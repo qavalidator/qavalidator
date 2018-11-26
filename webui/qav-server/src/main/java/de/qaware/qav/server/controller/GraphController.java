@@ -170,7 +170,7 @@ public class GraphController {
 
         resultList.sort(Comparator.comparing(AbstractGraphElement::getName));
 
-        int startIndex = pageable.getOffset();
+        int startIndex = (int) pageable.getOffset();
         if (startIndex > resultList.size()) {
             startIndex = resultList.size();
         }

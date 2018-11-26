@@ -9,16 +9,16 @@ buildscript {
         }
         jcenter()
     }
-
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
 }
-apply plugin: 'org.springframework.boot'
+
+plugins {
+    id 'org.springframework.boot' version '2.1.0.RELEASE'
+}
+
 apply plugin: 'java-library'
 
-bootRepackage {
-    executable = true
+bootJar {
+    launchScript()
 }
 
 dependencies {
@@ -32,7 +32,7 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
-uploadArchives.dependsOn bootRepackage
+uploadArchives.dependsOn bootJar
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
