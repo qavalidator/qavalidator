@@ -5,9 +5,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-import static org.hamcrest.Matchers.is
+import static org.assertj.core.api.Assertions.assertThat
 import static org.junit.Assert.assertFalse
-import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
 
 /**
@@ -55,8 +54,8 @@ class SonarLogUtilTest {
         SonarLogUtil.warn("MAVEN CYCLES 42")
 
         BufferedReader reader = new BufferedReader(new FileReader(testFile))
-        assertThat(reader.readLine(), is("ERROR INPUT CYCLES 3"))
-        assertThat(reader.readLine(), is("WARN MAVEN CYCLES 42"))
+        assertThat(reader.readLine()).isEqualTo("ERROR INPUT CYCLES 3")
+        assertThat(reader.readLine()).isEqualTo("WARN MAVEN CYCLES 42")
         reader.close()
     }
 }
