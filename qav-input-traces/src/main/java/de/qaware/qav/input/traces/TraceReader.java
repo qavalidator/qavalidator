@@ -2,6 +2,7 @@ package de.qaware.qav.input.traces;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
@@ -26,6 +27,18 @@ import java.util.Map;
  */
 @Slf4j
 public class TraceReader {
+
+    /** The value for the property "type" */
+    public static final String TYPE_SPAN = "span";
+
+    /** The value for the property "scope" */
+    public static final String SCOPE_TRACE = "trace";
+
+    /** The key to assign the service parent */
+    public static final String TRACES_PARENT_KEY = "trace.parent";
+
+    /** Assign this name if no other can be determined. */
+    public static final String PLACEHOLDER_NAME = "<<empty>>";
 
     private final ObjectMapper mapper;
     private final DependencyGraph dependencyGraph;
@@ -89,21 +102,55 @@ public class TraceReader {
         Map<String, Span> spanMap = new HashMap<>();
         spans.forEach(it -> spanMap.put(it.getId(), it));
 
-        for (Span span : spans) {
-            String fromName = "<<empty>>";
+        spans.forEach(span -> {
             String fromId = span.getParentId();
             Span parent = spanMap.get(fromId);
-            if (parent != null) {
-                fromName = getServiceName(parent);
+            addDependency(parent, span);
+        });
+    }
+
+    /**
+     * Add a dependency to the {@link #dependencyGraph}.
+     *
+     * @param fromSpan the start point
+     * @param toSpan   the end point
+     */
+    private void addDependency(Span fromSpan, Span toSpan) {
+        String fromEndpointName = fromSpan != null ? getEndpointUrl(fromSpan) : PLACEHOLDER_NAME;
+        String toEndpointName = getEndpointUrl(toSpan);
+
+        String fromServiceName = fromSpan != null ? getServiceName(fromSpan) : PLACEHOLDER_NAME;
+        String toServiceName = getServiceName(toSpan);
+
+        if (!fromEndpointName.equals(toEndpointName)) {
+            LOGGER.debug("{} --> {}: {}", fromEndpointName, toEndpointName, toSpan);
+
+            Node fromNode = getNode(fromEndpointName);
+            if (!fromEndpointName.equals(fromServiceName)) {
+                fromNode.setProperty(TRACES_PARENT_KEY, fromServiceName);
             }
-            String toName = getServiceName(span);
-            addDependency(fromName, toName, span);
+
+            Node toNode = getNode(toEndpointName);
+            if (!toEndpointName.equals(toServiceName)) {
+                toNode.setProperty(TRACES_PARENT_KEY, toServiceName);
+            }
+            dependencyGraph.addDependency(fromNode, toNode, DependencyType.READ_WRITE);
         }
+    }
+
+    private String getEndpointUrl(Span span) {
+        BinaryAnnotation annotation = findEntry(span.getBinaryAnnotations(), "http.path");
+        if (annotation != null) {
+            return annotation.getEndpoint().getServiceName() + ":/" + annotation.getValue();
+        }
+
+        // fallback:
+        return getServiceName(span);
     }
 
     private String getServiceName(Span span) {
         if (span == null) {
-            return "<<empty>>";
+            return PLACEHOLDER_NAME;
         }
 
         List<BinaryAnnotation> binaryAnnotations = span.getBinaryAnnotations();
@@ -111,28 +158,40 @@ public class TraceReader {
             return "<" + span.getName() + ">";
         }
 
-        int idx = 1;
-        if (binaryAnnotations.size() == 1) {
-            idx = 0;
+        BinaryAnnotation annotation = findEntry(span.getBinaryAnnotations(), "span.tag.service");
+        if (annotation == null) {
+            int idx = binaryAnnotations.size() == 1 ? 0 : 1;
+            annotation = binaryAnnotations.get(idx);
         }
+        return annotation.getEndpoint().getServiceName();
 
-        return binaryAnnotations.get(idx).getEndpoint().getServiceName();
+    }
+
+    private BinaryAnnotation findEntry(List<BinaryAnnotation> annotations, String key) {
+        if (annotations == null) {
+            return null;
+        }
+        return annotations.stream()
+                .filter(annotation -> annotation.getKey().equals(key))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
-     * Add the dependency to the {@link DependencyGraph}.
+     * Get the node for the given name.
+     * <p>
+     * Creates it, if it does not exist. Sets properties on the node, if it is new.
      *
-     * @param fromName source name
-     * @param toName   target name
-     * @param span     the span; may be used to derive further properties
+     * @param name name of the node
+     * @return the {@link Node}
      */
-    private void addDependency(String fromName, String toName, Span span) {
-        LOGGER.debug("{} --> {}: {}", fromName, toName, span);
-
-        if (!fromName.equals(toName)) {
-            Node fromNode = dependencyGraph.getOrCreateNodeByName(fromName);
-            Node toNode = dependencyGraph.getOrCreateNodeByName(toName);
-            dependencyGraph.addDependency(fromNode, toNode, DependencyType.READ_WRITE);
+    private Node getNode(String name) {
+        Node result = dependencyGraph.getNode(name);
+        if (result == null) {
+            result = dependencyGraph.getOrCreateNodeByName(name);
+            result.setProperty(Constants.TYPE, TYPE_SPAN);
+            result.setProperty(Constants.SCOPE, SCOPE_TRACE);
         }
+        return result;
     }
 }

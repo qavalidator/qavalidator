@@ -1,6 +1,9 @@
 package de.qaware.qav.input.traces;
 
+import de.qaware.qav.graph.api.Constants;
+import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
+import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
 import org.junit.Before;
@@ -55,9 +58,16 @@ public class TraceReaderTest {
 
         Node n1 = dependencyGraph.getNode("<<empty>>");
         assertThat(n1).isNotNull();
+        assertThat(n1.hasProperty(Constants.TYPE)).isTrue();
+        assertThat(n1.getProperty(Constants.TYPE)).isEqualTo(TraceReader.TYPE_SPAN);
+        assertThat(n1.hasProperty(Constants.SCOPE)).isTrue();
+        assertThat(n1.getProperty(Constants.SCOPE)).isEqualTo(TraceReader.SCOPE_TRACE);
+
         Node n2 = dependencyGraph.getNode("kong");
         assertThat(n2).isNotNull();
 
-        assertThat(dependencyGraph.getEdge(n1, n2)).isNotNull();
+        Dependency edge = dependencyGraph.getEdge(n1, n2);
+        assertThat(edge).isNotNull();
+        assertThat(edge.getDependencyType()).isEqualTo(DependencyType.READ_WRITE);
     }
 }
