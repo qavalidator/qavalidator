@@ -46,4 +46,15 @@ public class NodePropertyInFilterTest {
         propertyInFilter.addFilter("p2", "something different");
         assertFalse(propertyInFilter.isAccepted(node));
     }
+
+    @Test
+    public void testListProperties() {
+        Node node = new Node("x");
+        node.addListProperty("p1", "v1");
+        node.addListProperty("p1", "v2");
+
+        NodePropertyInFilter propertyInFilter = new NodePropertyInFilter();
+        propertyInFilter.addFilter("p1", "v1");
+        assertTrue(propertyInFilter.isAccepted(node));
+    }
 }

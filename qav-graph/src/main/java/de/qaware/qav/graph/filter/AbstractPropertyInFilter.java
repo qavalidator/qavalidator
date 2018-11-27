@@ -3,6 +3,7 @@ package de.qaware.qav.graph.filter;
 import de.qaware.qav.graph.api.AbstractGraphElement;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +52,7 @@ public abstract class AbstractPropertyInFilter<T extends AbstractGraphElement> {
     }
 
     /**
-     * decides whether the element will be accepted.
+     * Decides whether the element will be accepted.
      *
      * @param graphElement the element to decide upon
      * @return <tt>true</tt> if the element will be in, <tt>false</tt> if it is out
@@ -60,7 +61,24 @@ public abstract class AbstractPropertyInFilter<T extends AbstractGraphElement> {
         return properties.entrySet().stream()
                 .allMatch(entry -> {
                     Object property = graphElement.getProperty(entry.getKey());
-                    return property != null && property.equals(entry.getValue());
+                    return isOrContains(property, entry.getValue());
                 });
+    }
+
+    /**
+     * Checks if the objects are equal, or if the first parameter is a list, and the second is contained in that list.
+     *
+     * @param o     object
+     * @param value value to check for
+     * @return true if the object is or contains the value.
+     */
+    private boolean isOrContains(Object o, Object value) {
+        if (o == null) {
+            return false;
+        } else if (o instanceof List) {
+            return ((List) o).contains(value);
+        } else {
+            return o.equals(value);
+        }
     }
 }
