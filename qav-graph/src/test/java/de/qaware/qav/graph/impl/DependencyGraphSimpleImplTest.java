@@ -129,22 +129,35 @@ public class DependencyGraphSimpleImplTest {
     @Test
     public void testFilter() {
         setupSimpleGraph();
+        Node n4 = graph.getOrCreateNodeByName("v4");
+        Node n5 = graph.getOrCreateNodeByName("v5");
+        graph.addDependency(n2, n4, DependencyType.READ_WRITE);
+        graph.addDependency(n2, n5, DependencyType.READ_WRITE);
 
         DependencyGraph filteredGraph = graph.filter(new NotFilter(new NodeNameInFilter("v2", "v5")));
         assertThat(graph.getNode("v1"), is(new Node("v1")));
         assertThat(graph.getNode("v2"), is(new Node("v2")));
         assertThat(graph.getNode("v3"), is(new Node("v3")));
+        assertThat(graph.getNode("v4"), is(n4));
+        assertThat(graph.getNode("v5"), is(n5));
+        assertThat(graph.getNode("v6"), nullValue());
 
         assertThat(filteredGraph.getNode("v1"), is(new Node("v1")));
         assertThat(filteredGraph.getNode("v2"), nullValue());
         assertThat(filteredGraph.getNode("v3"), is(new Node("v3")));
+        assertThat(filteredGraph.getNode("v4"), is(new Node("v4")));
+        assertThat(filteredGraph.getNode("v5"), nullValue());
 
+        assertThat(filteredGraph.getEdge(n1, n3), notNullValue()); // both nodes are in the filtered graph
         assertThat(graph.getEdge(n1, n2), notNullValue()); // edge exists
-        assertThat(filteredGraph.getEdge(n1, n2), nullValue()); // but not visible in the filtered graph because v2 is filtered
-        assertThat(filteredGraph.getEdge(n1, n3), notNullValue()); // because both nodes are in the filtered graph
+        assertThat(filteredGraph.getEdge(n1, n2), nullValue()); // but invisible in the filtered graph because target node is filtered
+        assertThat(graph.getEdge(n2, n4), notNullValue()); // edge exists
+        assertThat(filteredGraph.getEdge(n2, n4), nullValue()); // but invisible because source node is filtered
+        assertThat(graph.getEdge(n2, n5), notNullValue()); // edge exists
+        assertThat(filteredGraph.getEdge(n2, n5), nullValue()); // but invisible because both nodes are filtered
 
         try {
-            filteredGraph.getOrCreateNodeByName("v4");
+            filteredGraph.getOrCreateNodeByName("v6");
             fail("filtered graph is unmodifiable.");
         } catch (UnsupportedOperationException e) {
             assertThat(e.getMessage(), is("this graph is unmodifiable"));
