@@ -4,7 +4,7 @@ plugins {
     id 'net.researchgate.release' version '2.6.0'
     // provides configurations for annotation processing, and passes the annotation processor to
     // the javac "-processorpath" option:
-    id "net.ltgt.apt" version "0.13"
+    id "net.ltgt.apt" version "0.19"
     id "com.jfrog.bintray" version "1.8.0"
 }
 
@@ -110,8 +110,8 @@ subprojects {
 
     dependencies {
         // Lombok
+        annotationProcessor "org.projectlombok:lombok:${project.ext.lombokVersion}"
         compileOnly "org.projectlombok:lombok:${project.ext.lombokVersion}"
-        apt "org.projectlombok:lombok:${project.ext.lombokVersion}"
 
         // Tests
         testCompile "junit:junit:${project.ext.junitVersion}"

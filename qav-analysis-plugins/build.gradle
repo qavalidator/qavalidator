@@ -20,8 +20,8 @@ dependencies {
 
     testCompile project(path: ':util:qav-test-util', configuration: 'testOutput')
 
-    compileOnly project(':util:qav-doc-generator') // qav-doc-generator contains the annotations; not required at runtime.
-    apt project(':util:qav-doc-generator')         // qav-doc-generator contains the doc generator; not required at runtime.
+    compileOnly project(':util:qav-doc-generator')         // qav-doc-generator contains the annotations; not required at runtime.
+    annotationProcessor project(':util:qav-doc-generator') // qav-doc-generator contains the doc generator; not required at runtime.
 
     compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
     compile "ch.qos.logback:logback-core:${project.ext.logbackVersion}"
