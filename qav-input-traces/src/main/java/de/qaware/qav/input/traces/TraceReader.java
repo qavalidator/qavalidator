@@ -32,13 +32,16 @@ public class TraceReader {
     public static final String TYPE_SPAN = "span";
 
     /** The value for the property "scope" */
-    public static final String SCOPE_TRACE = "trace";
+    public static final String SCOPE_TRACE_ENDPOINT = "trace.endpoint";
+
+    /** The value for the property "scope" */
+    public static final String SCOPE_TRACE_SERVICE = "trace.service";
 
     /** The key to assign the service parent */
     public static final String TRACES_PARENT_KEY = "trace.parent";
 
     /** Assign this name if no other can be determined. */
-    public static final String PLACEHOLDER_NAME = "<<empty>>";
+    public static final String PLACEHOLDER_NAME = "__EMPTY__";
 
     private final ObjectMapper mapper;
     private final DependencyGraph dependencyGraph;
@@ -111,6 +114,8 @@ public class TraceReader {
 
     /**
      * Add a dependency to the {@link #dependencyGraph}.
+     * <p>
+     * Adds two dependencies: one on the level of endpoint URLs, and the other on the level of services.
      *
      * @param fromSpan the start point
      * @param toSpan   the end point
@@ -125,19 +130,34 @@ public class TraceReader {
         if (!fromEndpointName.equals(toEndpointName)) {
             LOGGER.debug("{} --> {}: {}", fromEndpointName, toEndpointName, toSpan);
 
-            Node fromNode = getNode(fromEndpointName);
-            if (!fromEndpointName.equals(fromServiceName)) {
-                fromNode.setProperty(TRACES_PARENT_KEY, fromServiceName);
-            }
+            // add the nodes and the hierarchy relations:
+            Node fromEndpointNode = getNode(fromEndpointName, SCOPE_TRACE_ENDPOINT);
+            Node fromServiceNode = getNode(fromServiceName, SCOPE_TRACE_SERVICE);
+            addContains(fromServiceNode, fromEndpointNode);
 
-            Node toNode = getNode(toEndpointName);
-            if (!toEndpointName.equals(toServiceName)) {
-                toNode.setProperty(TRACES_PARENT_KEY, toServiceName);
+            Node toEndpointNode = getNode(toEndpointName, SCOPE_TRACE_ENDPOINT);
+            Node toServiceNode = getNode(toServiceName, SCOPE_TRACE_SERVICE);
+            addContains(toServiceNode, toEndpointNode);
+
+            // add dependencies on endpoint level:
+            dependencyGraph.addDependency(fromEndpointNode, toEndpointNode, DependencyType.READ_WRITE);
+
+            // add dependencies on service level:
+            if (!fromServiceName.equals(toServiceName)) {
+                dependencyGraph.addDependency(fromServiceNode, toServiceNode, DependencyType.READ_WRITE);
             }
-            dependencyGraph.addDependency(fromNode, toNode, DependencyType.READ_WRITE);
         }
     }
 
+    /**
+     * Get the endpoint name.
+     * <p>
+     * Concatenates the service name with the REST URL. If it can't identify the REST URL, then it falls back to the
+     * {@link #getServiceName(Span)} method.
+     *
+     * @param span the {@link Span}
+     * @return the endpoint name
+     */
     private String getEndpointUrl(Span span) {
         BinaryAnnotation annotation = findEntry(span.getBinaryAnnotations(), "http.path");
         if (annotation != null) {
@@ -148,6 +168,14 @@ public class TraceReader {
         return getServiceName(span);
     }
 
+    /**
+     * Get the service name.
+     * <p>
+     * It's the service name as Zipkin has it in the endpoint description.
+     *
+     * @param span the {@link Span}
+     * @return the service name
+     */
     private String getServiceName(Span span) {
         if (span == null) {
             return PLACEHOLDER_NAME;
@@ -155,10 +183,12 @@ public class TraceReader {
 
         List<BinaryAnnotation> binaryAnnotations = span.getBinaryAnnotations();
         if (binaryAnnotations == null || binaryAnnotations.isEmpty()) {
-            return "<" + span.getName() + ">";
+            return "[" + span.getName() + "]";
         }
 
         BinaryAnnotation annotation = findEntry(span.getBinaryAnnotations(), "span.tag.service");
+
+        // fallback: just take anything that could be a sensible service name
         if (annotation == null) {
             int idx = binaryAnnotations.size() == 1 ? 0 : 1;
             annotation = binaryAnnotations.get(idx);
@@ -178,20 +208,31 @@ public class TraceReader {
     }
 
     /**
+     * Create hierarchy relation between service nodes and endpoints nodes.
+     *
+     * @param serviceNode  the service (will be parent)
+     * @param endpointNode the endpoint (will be child)
+     */
+    private void addContains(Node serviceNode, Node endpointNode) {
+        if (!endpointNode.getName().equals(serviceNode.getName())) {
+            endpointNode.setProperty(TRACES_PARENT_KEY, serviceNode.getName());
+            dependencyGraph.addDependency(serviceNode, endpointNode, DependencyType.CONTAINS);
+        }
+    }
+
+    /**
      * Get the node for the given name.
      * <p>
      * Creates it, if it does not exist. Sets properties on the node, if it is new.
      *
-     * @param name name of the node
+     * @param name      name of the node
+     * @param scopeName name of the scope where the node belongs
      * @return the {@link Node}
      */
-    private Node getNode(String name) {
-        Node result = dependencyGraph.getNode(name);
-        if (result == null) {
-            result = dependencyGraph.getOrCreateNodeByName(name);
-            result.setProperty(Constants.TYPE, TYPE_SPAN);
-            result.setProperty(Constants.SCOPE, SCOPE_TRACE);
-        }
+    private Node getNode(String name, String scopeName) {
+        Node result = dependencyGraph.getOrCreateNodeByName(name);
+        result.setProperty(Constants.TYPE, TYPE_SPAN);
+        result.addListProperty(Constants.SCOPE, scopeName);
         return result;
     }
 }
