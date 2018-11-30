@@ -1,6 +1,5 @@
 package de.qaware.qav.util;
 
-import com.google.common.base.Charsets;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
@@ -8,6 +7,7 @@ import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Util methods to deal with ANTLR StringTemplates.
@@ -65,6 +65,6 @@ public final class StringTemplateUtil {
             throw new IllegalArgumentException(msg);
         }
 
-        return new InputStreamReader(is, Charsets.UTF_8);
+        return new InputStreamReader(is, StandardCharsets.UTF_8);
     }
 }

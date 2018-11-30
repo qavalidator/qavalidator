@@ -1,11 +1,11 @@
 package de.qaware.qav.sonar.parser;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -63,7 +63,7 @@ public final class LogFileParser {
     private static void analyseFile(QavSonarResult result, File resultFile) {
         LOGGER.info("Reading file: {}", resultFile.getAbsolutePath());
         try {
-            List<String> lines = Files.readLines(resultFile, Charsets.UTF_8);
+            List<String> lines = Files.readLines(resultFile, StandardCharsets.UTF_8);
             countWarningAndErrors(result, lines);
         } catch (IOException e) {
             LOGGER.error("Can't read file {}: {}", resultFile.getAbsolutePath(), e.getMessage());

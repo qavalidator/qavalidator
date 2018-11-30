@@ -1,6 +1,5 @@
 package de.qaware.qav.graph.io;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
 import de.qaware.qav.graph.api.Dependency;
@@ -9,6 +8,7 @@ import de.qaware.qav.graph.api.Node;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -47,7 +47,7 @@ public class NodePrinter {
      */
     public void printNodes() {
         try {
-            Files.asCharSink(this.outputFile, Charsets.UTF_8).write("");
+            Files.asCharSink(this.outputFile, StandardCharsets.UTF_8).write("");
             dependencyGraph.getAllNodes().forEach(this::printNode);
         } catch (IOException e) {
             throw new IllegalStateException("Error writing to file " + this.outputFile.getAbsolutePath(), e);
@@ -100,7 +100,7 @@ public class NodePrinter {
      */
     private void append(String s) {
         try {
-            Files.asCharSink(this.outputFile, Charsets.UTF_8, FileWriteMode.APPEND).write(s);
+            Files.asCharSink(this.outputFile, StandardCharsets.UTF_8, FileWriteMode.APPEND).write(s);
         } catch(IOException e) {
             throw new IllegalStateException("Error writing to file " + this.outputFile.getAbsolutePath(), e);
         }

@@ -68,7 +68,7 @@ public final class FileNameUtil {
      */
     private static void setIncludesExcludes(Object values, Consumer<String[]> setter) {
         List<String> list = getAsList(values);
-        if (list != null && !list.isEmpty()) {
+        if (!list.isEmpty()) {
             setter.accept(list.toArray(new String[]{}));
         }
     }

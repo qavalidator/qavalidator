@@ -1,9 +1,9 @@
 package de.qaware.qav.graph.filter;
 
-import com.google.common.collect.Lists;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.api.NodeFilter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class AndFilter implements NodeFilter {
 
-    private final List<NodeFilter> baseFilters = Lists.newArrayList();
+    private final List<NodeFilter> baseFilters = new ArrayList<>();
 
     /**
      * Value constructor.
