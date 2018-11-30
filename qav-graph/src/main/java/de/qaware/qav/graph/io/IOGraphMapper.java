@@ -6,12 +6,12 @@ import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * Maps between a {@link DependencyGraph} and an {@link IOGraph}.
@@ -37,18 +37,18 @@ public class IOGraphMapper {
 
     /**
      * Nodes are represented as a map of their properties.
-     *
-     * Sort the nodes according to their names, so that the output file is the reproducibly the same for the same graph.
+     * <p>
+     * Sort the nodes according to their names, so that the output file is the reproducibly the same for the same
+     * graph.
      *
      * @param nodes {@link Node}s
      * @return the list of property maps
      */
     private List<Map<String, Object>> createIOGraphNodes(Collection<Node> nodes) {
-        List<Map<String, Object>> result = new ArrayList<>();
-        nodes.forEach(node -> result.add(mapNode(node)));
-
-        result.sort(Comparator.comparing(o -> ((String) o.get("name"))));
-        return result;
+        return nodes.stream()
+                .map(this::mapNode)
+                .sorted(Comparator.comparing(o -> ((String) o.get("name"))))
+                .collect(Collectors.toList());
     }
 
     private Map<String, Object> mapNode(Node node) {
@@ -76,10 +76,10 @@ public class IOGraphMapper {
      * @return the list of {@link IOEdge}s.
      */
     private List<IOEdge> createIOGraphEdges(Collection<Dependency> edges) {
-        List<IOEdge> result = new ArrayList<>();
-        edges.forEach(edge -> result.add(mapEdge(edge, true)));
-        result.sort(Comparator.comparing(o -> o.getFrom() + '#' + o.getTo()));
-        return result;
+        return edges.stream()
+                .map(it -> this.mapEdge(it, true))
+                .sorted(Comparator.comparing(o -> o.getFrom() + '#' + o.getTo()))
+                .collect(Collectors.toList());
     }
 
     private IOEdge mapEdge(Dependency edge, boolean mapBaseDependencies) {
@@ -94,9 +94,11 @@ public class IOGraphMapper {
             edge.getProperties().forEach((key, value) -> properties.put(key, mapValue(value)));
             result.setProps(properties);
 
-            List<IOEdge> baseDependencies = new ArrayList<>();
-            edge.getBaseDependencies().forEach(baseDep -> baseDependencies.add(mapEdge(baseDep, false)));
-            baseDependencies.sort(Comparator.comparing(o -> o.getFrom() + '#' + o.getTo()));
+            List<IOEdge> baseDependencies = edge.getBaseDependencies().stream()
+                    .map(it -> mapEdge(it, false))
+                    .sorted(Comparator.comparing(o -> o.getFrom() + '#' + o.getTo()))
+                    .collect(Collectors.toList());
+
             result.setBaseDependencies(baseDependencies);
         }
 
@@ -105,9 +107,8 @@ public class IOGraphMapper {
 
     /**
      * Maps an {@link IOGraph} to a {@link DependencyGraph}.
-     *
-     * First add the nodes, then the dependencies,
-     * before setting the baseDependencies relations.
+     * <p>
+     * First add the nodes, then the dependencies, before setting the baseDependencies relations.
      *
      * @param ioGraph the {@link IOGraph}
      * @return the {@link DependencyGraph}

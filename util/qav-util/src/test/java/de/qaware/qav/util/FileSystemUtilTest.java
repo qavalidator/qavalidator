@@ -59,6 +59,12 @@ public class FileSystemUtilTest {
         assertThat(result, containsString("group TEST"));
     }
 
+    @Test
+    public void readFileAsTextFromFileAtAlternateLocationButFindAtFirst() {
+        String result = FileSystemUtil.readFileAsText("src/test/resources/stg/Test.stg", "src/test/resources/stg");
+        assertThat(result, containsString("group TEST"));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void readFileAsTextNotFound() {
         FileSystemUtil.readFileAsText("/not/existing/file.txt");
@@ -87,7 +93,7 @@ public class FileSystemUtilTest {
         assertTrue(new File(filename).exists());
         try {
             FileSystemUtil.readFileAsText(filename);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), is("File 'build/test_file1.txt' is empty."));
         }
     }
@@ -116,7 +122,7 @@ public class FileSystemUtilTest {
     @Test
     public void testReadBytesFromFile() throws IOException {
         String filename = "build/bytes_test_file";
-        byte[] bytes = { 1, 2, 3, 10, 11, 12};
+        byte[] bytes = {1, 2, 3, 10, 11, 12};
         Files.write(bytes, new File(filename));
         byte[] result = FileSystemUtil.readBytesFromFile(filename);
         assertNotNull(result);
@@ -129,7 +135,7 @@ public class FileSystemUtilTest {
         try {
             FileSystemUtil.readBytesFromFile(filename);
             fail("IllegalArgumentException expected");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             assertThat(e.getMessage().startsWith("Error reading file "), is(true));
         }
     }
