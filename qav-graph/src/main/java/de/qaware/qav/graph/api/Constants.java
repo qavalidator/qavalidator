@@ -23,6 +23,11 @@ public final class Constants {
     public static final String TYPE_CLASS = "class";
 
     /**
+     * property value for {@link #TYPE} "method"
+     */
+    public static final String TYPE_METHOD = "method";
+
+    /**
      * property name for annotations
      */
     public static final String ANNOTATION = "annotation";

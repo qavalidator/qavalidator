@@ -15,6 +15,7 @@ import java.util.List;
 import static de.qaware.qav.graph.api.Constants.LINE_NO;
 import static de.qaware.qav.graph.api.Constants.TYPE;
 import static de.qaware.qav.graph.api.Constants.TYPE_CLASS;
+import static de.qaware.qav.graph.api.Constants.TYPE_METHOD;
 import static de.qaware.qav.input.javacode.impl.DependencyUtil.isIgnorable;
 
 /**
@@ -35,6 +36,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
     private final String className;
     private final Node classNode;
     private final String methodName;
+    private final Node methodNode;
 
     /**
      * The currently analyzed line number.
@@ -48,18 +50,22 @@ public class DependencyMethodVisitor extends MethodVisitor {
      * Constructor.
      *
      * @param dependencyGraph      the {@link DependencyGraph} to write the dependencies to
-     * @param className            name of the class to visit
+     * @param fullClassName        full name of the class to visit (i.e., not collapsed!)
      * @param methodName           name of the method to visit
      * @param collapseInnerClasses <tt>true</tt> to collapse inner classes onto the outer class
      */
-    public DependencyMethodVisitor(DependencyGraph dependencyGraph, String className, String methodName, boolean collapseInnerClasses) {
+    public DependencyMethodVisitor(DependencyGraph dependencyGraph, String fullClassName, String methodName, boolean collapseInnerClasses) {
         super(Opcodes.ASM7);
-        this.className = className;
-        this.methodName = methodName;
         this.dependencyGraph = dependencyGraph;
+        this.className = AsmUtil.toClassName(fullClassName, collapseInnerClasses);
+        this.methodName = methodName;
+        this.collapseInnerClasses = collapseInnerClasses;
+
         this.classNode = dependencyGraph.getOrCreateNodeByName(className);
         this.classNode.setProperty(TYPE, TYPE_CLASS);
-        this.collapseInnerClasses = collapseInnerClasses;
+
+        // create a node for the method, and add a CONTAINS relation from the owning class
+        this.methodNode = getMethodNode(fullClassName, methodName);
     }
 
     @Override
@@ -80,11 +86,16 @@ public class DependencyMethodVisitor extends MethodVisitor {
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
         LOGGER.debug("Line: {}, Opcode: {}, owner: {}, name: {}, desc: {}, itf: {}", lineNo, opcode, owner, name, desc, itf);
 
-        DependencyType dependencyType = getDepType(name);
-        addDependency(owner, dependencyType);
+        // add a dependency to the class of the called method
+        DependencyType dependencyType = getDependencyType(name);
+        addTypeDependency(owner, dependencyType);
 
+        // for each parameter of the called method: add a dependency to the type of that parameter
         List<String> paramTypes = AsmUtil.getParameterTypeNames(desc, collapseInnerClasses);
-        paramTypes.forEach(it -> addDependency(it, DependencyType.REFERENCE));
+        paramTypes.forEach(it -> addTypeDependency(it, DependencyType.REFERENCE));
+
+        // add a dependency on method level
+        addMethodDependency(owner, name, dependencyType);
     }
 
     /**
@@ -96,7 +107,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
      * @param methodName the method name
      * @return the {@link DependencyType}
      */
-    private DependencyType getDepType(String methodName) {
+    private DependencyType getDependencyType(String methodName) {
         if ("<init>".equals(methodName) || "<clinit>".equals(methodName)) {
             return DependencyType.CREATE;
         }
@@ -116,7 +127,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
     public void visitTypeInsn(int opcode, String type) {
         String targetName = AsmUtil.toClassName(type, collapseInnerClasses);
         if (opcode == Opcodes.INSTANCEOF && !isIgnorable(targetName)) {
-            addDependency(targetName, DependencyType.REFERENCE);
+            addTypeDependency(targetName, DependencyType.REFERENCE);
         }
     }
 
@@ -132,11 +143,11 @@ public class DependencyMethodVisitor extends MethodVisitor {
         String ownerClassName = AsmUtil.toClassName(owner, collapseInnerClasses);
         if (!className.equals(ownerClassName) && !isIgnorable(ownerClassName)) {
             if (opcode == Opcodes.PUTFIELD || opcode == Opcodes.PUTSTATIC) {
-                addDependency(ownerClassName, DependencyType.READ_WRITE);
+                addTypeDependency(ownerClassName, DependencyType.READ_WRITE);
             } else if (opcode == Opcodes.GETFIELD || opcode == Opcodes.GETSTATIC) {
-                addDependency(ownerClassName, DependencyType.READ_ONLY);
+                addTypeDependency(ownerClassName, DependencyType.READ_ONLY);
             } else {
-                addDependency(ownerClassName, DependencyType.REFERENCE);
+                addTypeDependency(ownerClassName, DependencyType.REFERENCE);
             }
         }
     }
@@ -145,7 +156,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
     public void visitLdcInsn(Object value) {
         if (value instanceof Type) {
             Type type = (Type) value;
-            addDependency(type.getInternalName(), DependencyType.REFERENCE);
+            addTypeDependency(type.getInternalName(), DependencyType.REFERENCE);
         }
     }
 
@@ -156,7 +167,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
         // type is null for finally blocks
         if (type != null) {
             LOGGER.debug("TryCatchBlock: type: {}", type);
-            addDependency(type, DependencyType.READ_ONLY);
+            addTypeDependency(type, DependencyType.READ_ONLY);
         }
     }
 
@@ -164,6 +175,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
     public void visitLineNumber(int line, Label start) {
         this.lineNo = line;
     }
+
 
     /**
      * Add the dependency from {@link #classNode} to the target node with the given name.
@@ -174,13 +186,56 @@ public class DependencyMethodVisitor extends MethodVisitor {
      * @param targetName     the name of the target node
      * @param dependencyType the {@link DependencyType}
      */
-    private void addDependency(String targetName, DependencyType dependencyType) {
+    private void addTypeDependency(String targetName, DependencyType dependencyType) {
         String targetClassName = AsmUtil.toClassName(targetName, collapseInnerClasses);
         if (!className.equals(targetClassName) && !isIgnorable(targetClassName)) {
             LOGGER.debug("Add dependency: {}#{} --[{}]--> {}", className, methodName, dependencyType, targetClassName);
             Node targetNode = dependencyGraph.getOrCreateNodeByName(targetClassName);
             targetNode.setProperty(TYPE, TYPE_CLASS);
-            dependencyGraph.addDependency(classNode, targetNode, dependencyType).addListProperty(LINE_NO, lineNo);
+            dependencyGraph.addDependency(classNode, targetNode, dependencyType)
+                    .addListProperty(LINE_NO, lineNo);
         }
+    }
+
+    /**
+     * Add the dependency from the {@link #methodNode} to the target node for the given called method.
+     * <p>
+     * Do so only if the target class is not ignorable. This way, we don't collect calls to methods in classes which
+     * we're not interested in. The method name is always constructed with the full class name, i.e. inner class names
+     * are never folded (regardless of {@link #collapseInnerClasses}).
+     *
+     * @param targetClassName  class name which owns the called method
+     * @param targetMethodName the name of the called method
+     * @param dependencyType   the {@link DependencyType}
+     */
+    private void addMethodDependency(String targetClassName, String targetMethodName, DependencyType dependencyType) {
+        if (!isIgnorable(targetClassName)) {
+            Node targetMethodNode = getMethodNode(targetClassName, targetMethodName);
+            LOGGER.debug("Add dependency: {} --[{}]--> {}", methodNode.getName(), dependencyType, targetMethodNode.getName());
+            dependencyGraph.addDependency(methodNode, targetMethodNode, dependencyType)
+                    .addListProperty(LINE_NO, lineNo);
+        }
+    }
+
+    /**
+     * Get the node for the method, and add the CONTAINS relation from the owning class (i.e., where the method is
+     * defined). Creates the method node, if necessary, and the class node, if necessary.
+     * <p>
+     * Set "type" properties on these nodes, for "class" and "method", respectively.
+     *
+     * @param className  the class which defines the method
+     * @param methodName the method name
+     * @return the {@link Node}
+     */
+    private Node getMethodNode(String className, String methodName) {
+        String fqMethodName = AsmUtil.toClassName(className, false) + "#" + methodName;
+        Node result = dependencyGraph.getOrCreateNodeByName(fqMethodName);
+        result.setProperty(TYPE, TYPE_METHOD);
+
+        Node owningClassNode = dependencyGraph.getOrCreateNodeByName(AsmUtil.toClassName(className, collapseInnerClasses));
+        owningClassNode.setProperty(TYPE, TYPE_CLASS);
+        dependencyGraph.addDependency(owningClassNode, result, DependencyType.CONTAINS);
+
+        return result;
     }
 }

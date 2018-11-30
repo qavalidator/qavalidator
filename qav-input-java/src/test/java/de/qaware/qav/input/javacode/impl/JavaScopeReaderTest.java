@@ -56,7 +56,7 @@ public class JavaScopeReaderTest {
     public void testAnnotations() {
         dependencyGraph = initJavaScopeReader(MyAnnotations.class, false);
 
-        assertThat(dependencyGraph.getAllNodes().size(), is(7));
+        assertThat(dependencyGraph.getAllNodes().size(), is(11));
 
         Node my = getNode("de.qaware.qav.test.annotations.MyAnnotations");
         Node a = getNode("de.qaware.qav.test.annotations.A");
@@ -85,7 +85,7 @@ public class JavaScopeReaderTest {
     public void testExceptions() {
         dependencyGraph = initJavaScopeReader(MyClass.class, false);
 
-        assertThat(dependencyGraph.getAllNodes().size(), is(4));
+        assertThat(dependencyGraph.getAllNodes().size(), is(10));
 
         Node myClass = getNode("de.qaware.qav.test.exceptions.MyClass");
         Node rt1 = getNode("de.qaware.qav.test.exceptions.MyRTE1"); // from throw new MyRTE1()
@@ -101,7 +101,7 @@ public class JavaScopeReaderTest {
     public void testFieldAccess() {
         dependencyGraph = initJavaScopeReader(MyField.class, false);
 
-        assertThat(dependencyGraph.getAllNodes().size(), is(9));
+        assertThat(dependencyGraph.getAllNodes().size(), is(19));
 
         Node myField = getNode("de.qaware.qav.test.fields.MyField");
         Node a = getNode("de.qaware.qav.test.fields.A");
@@ -122,7 +122,7 @@ public class JavaScopeReaderTest {
     @Test
     public void testGenericsFields() {
         dependencyGraph = initJavaScopeReader(MyGenericsFields.class, false);
-        assertThat(dependencyGraph.getAllNodes().size(), is(11));
+        assertThat(dependencyGraph.getAllNodes().size(), is(25));
 
         Node my = getNode("de.qaware.qav.test.generics.MyGenericsFields");
         Node a = getNode("de.qaware.qav.test.generics.A");
@@ -144,7 +144,7 @@ public class JavaScopeReaderTest {
     @Test
     public void testGenericsMethods() {
         dependencyGraph = initJavaScopeReader(MyGenericsMethods.class, false);
-        assertThat(dependencyGraph.getAllNodes().size(), is(11));
+        assertThat(dependencyGraph.getAllNodes().size(), is(25));
 
         Node my = getNode("de.qaware.qav.test.generics.MyGenericsMethods");
         Node a = getNode("de.qaware.qav.test.generics.A");
@@ -161,8 +161,8 @@ public class JavaScopeReaderTest {
     @Test
     public void testInheritance() {
         dependencyGraph = initJavaScopeReader(MyInheritance.class, true);
-        assertThat(dependencyGraph.getAllNodes().size(), is(8));
-        assertThat(dependencyGraph.getAllEdges().size(), is(6));
+        assertThat(dependencyGraph.getAllNodes().size(), is(17));
+        assertThat(dependencyGraph.getAllEdges().size(), is(18));
 
         Node a = getNode("de.qaware.qav.test.inheritance.A");
         Node b = getNode("de.qaware.qav.test.inheritance.B");
@@ -184,8 +184,8 @@ public class JavaScopeReaderTest {
     @Test
     public void testInnerClasses() {
         dependencyGraph = initJavaScopeReader(MyInner.class, false);
-        assertThat(dependencyGraph.getAllNodes().size(), is(3));
-        assertThat(dependencyGraph.getAllEdges().size(), is(3));
+        assertThat(dependencyGraph.getAllNodes().size(), is(9));
+        assertThat(dependencyGraph.getAllEdges().size(), is(13));
 
         Node my = getNode("de.qaware.qav.test.inner.MyInner");
         Node myNested = getNode("de.qaware.qav.test.inner.MyInner$Inner");
@@ -198,8 +198,8 @@ public class JavaScopeReaderTest {
     @Test
     public void testCollapseInnerClasses() {
         dependencyGraph = initJavaScopeReader(MyInner.class, true);
-        assertThat(dependencyGraph.getAllNodes().size(), is(2));
-        assertThat(dependencyGraph.getAllEdges().size(), is(1));
+        assertThat(dependencyGraph.getAllNodes().size(), is(8));
+        assertThat(dependencyGraph.getAllEdges().size(), is(11));
 
         Node my = getNode("de.qaware.qav.test.inner.MyInner");
         assertNoNode("de.qaware.qav.test.inner.MyInner$Inner");
@@ -212,7 +212,7 @@ public class JavaScopeReaderTest {
     public void testInstructions() {
         dependencyGraph = initJavaScopeReader(MyInstructions.class, false);
 
-        assertThat(dependencyGraph.getAllNodes().size(), is(5));
+        assertThat(dependencyGraph.getAllNodes().size(), is(14));
 
         Node my = getNode("de.qaware.qav.test.instructions.MyInstructions");
         Node a = getNode("de.qaware.qav.test.instructions.A");
@@ -231,7 +231,7 @@ public class JavaScopeReaderTest {
     public void testMethodSignatures() {
         dependencyGraph = initJavaScopeReader(MyMethods.class, false);
 
-        assertThat(dependencyGraph.getAllNodes().size(), is(14));
+        assertThat(dependencyGraph.getAllNodes().size(), is(34));
 
         Node myMethods = getNode("de.qaware.qav.test.methods.MyMethods");
         Node a = getNode("de.qaware.qav.test.methods.A");
@@ -258,7 +258,7 @@ public class JavaScopeReaderTest {
     public void testPrimitives() {
         dependencyGraph = initJavaScopeReader(MyPrimitives.class, false);
 
-        assertThat(dependencyGraph.getAllNodes(), hasSize(2));
+        assertThat(dependencyGraph.getAllNodes(), hasSize(4));
         Node myPrimitives = getNode("de.qaware.qav.test.primitives.MyPrimitives");
         Node myBoxed= getNode("de.qaware.qav.test.primitives.MyBoxed");
 
@@ -271,7 +271,7 @@ public class JavaScopeReaderTest {
         dependencyGraph = initJavaScopeReader(MyReference.class, false);
 
         // classes: A, B, MyReference, java.io.PrintStream
-        assertThat(dependencyGraph.getAllNodes().size(), is(5));
+        assertThat(dependencyGraph.getAllNodes().size(), is(13));
 
         Node myReference = getNode("de.qaware.qav.test.reference.MyReference");
         Node a = getNode("de.qaware.qav.test.reference.A");

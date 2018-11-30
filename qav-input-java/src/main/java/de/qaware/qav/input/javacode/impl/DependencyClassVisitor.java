@@ -45,6 +45,9 @@ public class DependencyClassVisitor extends ClassVisitor {
     @Getter
     private String className;
 
+    /** The full name of the currently analyzed class, i.e. without collapsing inner class names. */
+    private String fullClassName;
+
     /**
      * The {@link Node} representing the currently analyzed class.
      */
@@ -68,6 +71,7 @@ public class DependencyClassVisitor extends ClassVisitor {
         LOGGER.debug("Class:  Version: {}, Access: {}, Name: {}, Signature: {}, superName: {}, Interfaces: {}",
                 version, access, name, signature, superName, Arrays.asList(interfaces));
 
+        this.fullClassName = name;
         this.className = AsmUtil.toClassName(name, collapseInnerClasses);
         this.classNode = dependencyGraph.getOrCreateNodeByName(className);
         this.classNode.setProperty(TYPE, TYPE_CLASS);
@@ -114,7 +118,7 @@ public class DependencyClassVisitor extends ClassVisitor {
             Arrays.stream(exceptions).forEach(this::addParameterTypeDependency);
         }
 
-        return new DependencyMethodVisitor(dependencyGraph, className, name, collapseInnerClasses);
+        return new DependencyMethodVisitor(dependencyGraph, fullClassName, name, collapseInnerClasses);
     }
 
     /**
