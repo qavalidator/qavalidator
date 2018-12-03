@@ -1,0 +1,32 @@
+[
+  [
+    {
+      "traceId": "1fdc12227d467f6bf223f3bc05db7b93",
+      "id": "62a14f5979596f6d",
+      "name": "/info/dm",
+      "timestamp": 1542295145222000,
+      "duration": 1762000,
+      "annotations": [
+        {
+          "timestamp": 1542295145222000,
+          "value": "cs",
+          "endpoint": {
+            "serviceName": "kong",
+            "ipv4": "10.1.4.1",
+            "port": 36954
+          }
+        },
+        {
+          "timestamp": 1542295146984000,
+          "value": "cr",
+          "endpoint": {
+            "serviceName": "kong",
+            "ipv4": "10.1.4.1",
+            "port": 36954
+          }
+        }
+      ]
+      // no "binaryAnnotations"
+    }
+ ]
+]

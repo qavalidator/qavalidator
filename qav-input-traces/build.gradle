@@ -13,6 +13,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
 
     testCompile group: "org.assertj", name: "assertj-core", version: assertjVersion
+    testCompile project(':qav-visualization')
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

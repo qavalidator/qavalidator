@@ -1,5 +1,6 @@
 package de.qaware.qav.input.traces;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.qaware.qav.graph.api.Constants;
@@ -53,7 +54,7 @@ public class TraceReader {
      */
     public TraceReader(DependencyGraph dependencyGraph) {
         this.dependencyGraph = dependencyGraph;
-        this.mapper = new ObjectMapper();
+        this.mapper = new ObjectMapper().enable(JsonParser.Feature.ALLOW_COMMENTS);
     }
 
     /**
@@ -177,10 +178,6 @@ public class TraceReader {
      * @return the service name
      */
     private String getServiceName(Span span) {
-        if (span == null) {
-            return PLACEHOLDER_NAME;
-        }
-
         List<BinaryAnnotation> binaryAnnotations = span.getBinaryAnnotations();
         if (binaryAnnotations == null || binaryAnnotations.isEmpty()) {
             return "[" + span.getName() + "]";

@@ -1,0 +1,454 @@
+[
+  [
+    {
+      "traceId": "6aa31bc63bf5d5cb516083a8b9aa9b4a",
+      "id": "3447ce6fcf11604f",
+      "name": "/abc/user",
+      "timestamp": 1542295144689000,
+      "duration": 32000,
+      "annotations": [
+        {
+          "timestamp": 1542295144689000,
+          "value": "cs",
+          "endpoint": {
+            "serviceName": "kong",
+            "ipv4": "10.1.6.1",
+            "port": 51632
+          }
+        },
+        {
+          "timestamp": 1542295144721000,
+          "value": "cr",
+          "endpoint": {
+            "serviceName": "kong",
+            "ipv4": "10.1.6.1",
+            "port": 51632
+          }
+        }
+      ],
+      "binaryAnnotations": [
+        {
+          "key": "span.tag.environment",
+          "value": "integration",
+          "endpoint": {
+            "serviceName": "kong",
+            "ipv4": "10.1.6.1",
+            "port": 51632
+          }
+        },
+        {
+          "key": "span.tag.service",
+          "value": "kong",
+          "endpoint": {
+            "serviceName": "kong",
+            "ipv4": "10.1.6.1",
+            "port": 51632
+          }
+        },
+        {
+          "key": "span.tag.tenant",
+          "value": "smarthub_test_nuance",
+          "endpoint": {
+            "serviceName": "kong",
+            "ipv4": "10.1.6.1",
+            "port": 51632
+          }
+        },
+        {
+          "key": "span.tag.testing",
+          "value": "true",
+          "endpoint": {
+            "serviceName": "kong",
+            "ipv4": "10.1.6.1",
+            "port": 51632
+          }
+        }
+      ]
+    },
+    {
+      "traceId": "6aa31bc63bf5d5cb516083a8b9aa9b4a",
+      "id": "c05829a840fbff6f",
+      "name": "get /user/api/v1/history",
+      "parentId": "3447ce6fcf11604f",
+      "timestamp": 1542295144690009,
+      "duration": 30130,
+      "annotations": [
+        {
+          "timestamp": 1542295144690009,
+          "value": "sr",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "timestamp": 1542295144701075,
+          "value": "UserTokenValidatorImpl.validateToken took 7 ms",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "timestamp": 1542295144720139,
+          "value": "ss",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        }
+      ],
+      "binaryAnnotations": [
+        {
+          "key": "ca",
+          "value": true,
+          "endpoint": {
+            "serviceName": "",
+            "ipv4": "10.1.6.1",
+            "port": 60890
+          }
+        },
+        {
+          "key": "http.method",
+          "value": "GET",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "http.path",
+          "value": "/abc/user/api/v1/history",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "mvc.controller.class",
+          "value": "HistoryUserController",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "mvc.controller.method",
+          "value": "listEntries",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "span.tag.environment",
+          "value": "integration",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "span.tag.service",
+          "value": "abc-core",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "svh.tag.userId",
+          "value": "AnonUserId[id=dOwI+LcmYHyT]",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        }
+      ]
+    },
+    {
+      "traceId": "6aa31bc63bf5d5cb516083a8b9aa9b4a",
+      "id": "280a4aacc645c1dd",
+      "name": "elasticsearchconversationrepository.findwithtime",
+      "parentId": "90462b3cd997281c",
+      "timestamp": 1542295144700000,
+      "duration": 3956,
+      "binaryAnnotations": [
+        {
+          "key": "class",
+          "value": "ElasticSearchConversationRepository",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "method",
+          "value": "findWithTime",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "span.tag.environment",
+          "value": "integration",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "span.tag.service",
+          "value": "abc-conversation-history",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        }
+      ]
+    },
+    {
+      "traceId": "6aa31bc63bf5d5cb516083a8b9aa9b4a",
+      "id": "111997538f4ac3b8",
+      "name": "elasticsearchconversationrepository.findoldestbyre",
+      "parentId": "90462b3cd997281c",
+      "timestamp": 1542295144710000,
+      "duration": 2123,
+      "binaryAnnotations": [
+        {
+          "key": "class",
+          "value": "ElasticSearchConversationRepository",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "method",
+          "value": "findOldestByRequestTime",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "span.tag.environment",
+          "value": "integration",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "span.tag.service",
+          "value": "abc-conversation-history",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        }
+      ]
+    },
+    {
+      "traceId": "6aa31bc63bf5d5cb516083a8b9aa9b4a",
+      "id": "10fce72f50df41cd",
+      "name": "elasticsearchconversationrepository.findoldestbyre",
+      "parentId": "90462b3cd997281c",
+      "timestamp": 1542295144713000,
+      "duration": 3034,
+      "binaryAnnotations": [
+        {
+          "key": "class",
+          "value": "ElasticSearchConversationRepository",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "method",
+          "value": "findOldestByResponseTime",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "span.tag.environment",
+          "value": "integration",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "span.tag.service",
+          "value": "abc-conversation-history",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        }
+      ]
+    },
+    {
+      "traceId": "6aa31bc63bf5d5cb516083a8b9aa9b4a",
+      "id": "d30895136305184a",
+      "name": "hystrix",
+      "parentId": "c05829a840fbff6f",
+      "timestamp": 1542295144701000,
+      "binaryAnnotations": [
+        {
+          "key": "span.tag.environment",
+          "value": "integration",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "span.tag.service",
+          "value": "abc-core",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        }
+      ]
+    },
+    {
+      "traceId": "6aa31bc63bf5d5cb516083a8b9aa9b4a",
+      "id": "75f9bb60ba70fb76",
+      "name": "get /v1/conversation/search",
+      "parentId": "d30895136305184a",
+      "timestamp": 1542295144702013,
+      "duration": 17597,
+      "annotations": [
+        {
+          "timestamp": 1542295144702013,
+          "value": "cs",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "timestamp": 1542295144702412,
+          "value": "sr",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "timestamp": 1542295144719210,
+          "value": "ss",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "timestamp": 1542295144719610,
+          "value": "cr",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        }
+      ],
+      "binaryAnnotations": [
+        {
+          "key": "ca",
+          "value": true,
+          "endpoint": {
+            "serviceName": "",
+            "ipv4": "10.1.12.186",
+            "port": 35230
+          }
+        },
+        {
+          "key": "http.method",
+          "value": "GET",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "http.method",
+          "value": "GET",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "http.path",
+          "value": "/v1/conversation/search",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "http.path",
+          "value": "/v1/conversation/search",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "mvc.controller.class",
+          "value": "ConversationRestController",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "mvc.controller.method",
+          "value": "searchWithTime",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "span.tag.environment",
+          "value": "integration",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "span.tag.environment",
+          "value": "integration",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        },
+        {
+          "key": "span.tag.service",
+          "value": "abc-conversation-history",
+          "endpoint": {
+            "serviceName": "abc-conversation-history",
+            "ipv4": "10.1.17.193"
+          }
+        },
+        {
+          "key": "span.tag.service",
+          "value": "abc-core",
+          "endpoint": {
+            "serviceName": "abc-core",
+            "ipv4": "10.1.12.186"
+          }
+        }
+      ]
+    }
+  ]
+]
