@@ -7,9 +7,9 @@ import de.qaware.qav.graph.api.EdgeFilter;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.api.NodeFilter;
 import lombok.extern.slf4j.Slf4j;
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.graph.AbstractGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DirectedMaskSubgraph;
+import org.jgrapht.graph.MaskSubgraph;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +31,7 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
      */
     private final Map<String, Node> nodeMap = new HashMap<>();
 
-    private DirectedGraph<Node, Dependency> graph = new DefaultDirectedGraph<>(Dependency.class);
+    private AbstractGraph<Node, Dependency> graph = new DefaultDirectedGraph<>(Dependency.class);
 
     /**
      * The underlying graph. This is needed to add nodes or edges to filtered graphs. If this is the "original" graph,
@@ -158,7 +158,7 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
     public DependencyGraph filter(final NodeFilter filter) {
         DependencyGraphSimpleImpl clone = new DependencyGraphSimpleImpl(this.baseGraph);
         clone.setGraph(
-                new DirectedMaskSubgraph<>(graph,
+                new MaskSubgraph<>(graph,
                         node -> !filter.isAccepted(node),
                         edge -> !filter.isAccepted(edge.getSource()) || !filter.isAccepted(edge.getTarget())));
 
@@ -169,7 +169,7 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
     public DependencyGraph filter(final EdgeFilter filter) {
         DependencyGraphSimpleImpl clone = new DependencyGraphSimpleImpl(this.baseGraph);
         clone.setGraph(
-                new DirectedMaskSubgraph<>(graph,
+                new MaskSubgraph<>(graph,
                         node -> false,
                         dependency -> !filter.isAccepted(dependency)));
 
@@ -182,9 +182,9 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
      * Put all nodes in {@link #nodeMap} so that the methods {@link #getNode(String)}, {@link #hasNode(String)} etc.
      * know about them.
      *
-     * @param graph the {@link DirectedGraph}
+     * @param graph the {@link AbstractGraph}
      */
-    protected void setGraph(DirectedGraph<Node, Dependency> graph) {
+    protected void setGraph(AbstractGraph<Node, Dependency> graph) {
         this.graph = graph;
 
         for (Node node : graph.vertexSet()) {
@@ -203,11 +203,11 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
     }
 
     /**
-     * Only for those who know what they are doing. Handy to apply algorithms.
+     * Only for those who know what they are doing. Handy to apply algorithms from the JGraphT library.
      *
      * @return the underlying JGraphT graph.
      */
-    public DirectedGraph<Node, Dependency> getGraph() {
+    public AbstractGraph<Node, Dependency> getGraph() {
         return graph;
     }
 
