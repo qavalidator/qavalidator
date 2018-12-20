@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * REST controller to access the Dependency Graph.
  * <p>
- * This controller reads the JSON file and keeps it in memory. It creates an in-memory Lucene index to offer a nice and
+ * This controller reads the JSON file and keeps it in memory. It creates a temporary Lucene index to offer a nice and
  * flexible search interface.
  *
  * @author QAware GmbH
@@ -84,7 +84,7 @@ public class GraphController {
      *
      * @return some basic info about the graph
      */
-    @RequestMapping("/info")
+    @GetMapping(value = "/info")
     public GraphInfoDTO getInfo() {
         String info = MessageFormat.format("Graph with: {0} nodes and {1} edges. Filename: {2}",
                 dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size(),
@@ -103,7 +103,7 @@ public class GraphController {
      * @return the node
      * @throws NotFoundException if the node was not found
      */
-    @RequestMapping("/node")
+    @GetMapping(value = "/node")
     public NodeDTO getNode(@RequestParam(value = "name") String name) {
         LOGGER.info("Node: {}", name);
 
@@ -129,7 +129,7 @@ public class GraphController {
      * @return the {@link DependencyDTO} if the edge was found.
      * @throws NotFoundException if one of the nodes or the edge was not found.
      */
-    @RequestMapping("/edge")
+    @GetMapping(value = "/edge")
     public DependencyDTO getEdge(@RequestParam("from") String from,
                                  @RequestParam("to") String to) {
         LOGGER.info("Edge: from {} to {}", from, to);
@@ -155,7 +155,7 @@ public class GraphController {
      * @param pageable page information; optional, defaults to page 0 and size 20
      * @return the result page
      */
-    @RequestMapping("/nodes")
+    @GetMapping(value = "/nodes")
     public Page<Node> getNodes(@RequestParam(value = "q", required = false) String query,
                                Pageable pageable) {
         LOGGER.info("Get all nodes. Query: {}, Paging: {}", query, pageable);
