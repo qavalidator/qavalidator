@@ -190,7 +190,7 @@ public class GraphMLExporter {
      */
     private void writeEdges() {
         dependencyGraph.getAllEdges().stream()
-                .filter(dependency -> !dependency.getDependencyType().equals(DependencyType.CONTAINS))
+                .filter(dependency -> dependency.getDependencyType() != DependencyType.CONTAINS)
                 .forEach(dependency -> outGraphST.setAttribute(EDGES_ATT, createEdgeST(dependency)));
     }
 

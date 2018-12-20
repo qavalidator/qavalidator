@@ -1,10 +1,10 @@
 package de.qaware.qav.graph.filter;
 
-import com.google.common.collect.Lists;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.EdgeFilter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class DependencyTypeEdgeOutFilter implements EdgeFilter {
 
-    private final List<DependencyType> unwantedTypes = Lists.newArrayList();
+    private final List<DependencyType> unwantedTypes = new ArrayList<>();
 
     /**
      * Constructor.
@@ -28,6 +28,6 @@ public class DependencyTypeEdgeOutFilter implements EdgeFilter {
 
     @Override
     public boolean isAccepted(Dependency edge) {
-        return unwantedTypes.stream().noneMatch(unwantedType -> edge.getDependencyType().equals(unwantedType));
+        return unwantedTypes.stream().noneMatch(unwantedType -> edge.getDependencyType() == unwantedType);
     }
 }

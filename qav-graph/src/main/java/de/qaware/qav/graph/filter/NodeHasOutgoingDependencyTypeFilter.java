@@ -28,6 +28,6 @@ public class NodeHasOutgoingDependencyTypeFilter implements NodeFilter {
 
     @Override
     public boolean isAccepted(Node node) {
-        return dependencyGraph.getOutgoingEdges(node).stream().anyMatch(dep -> dep.getDependencyType().equals(dependencyType));
+        return dependencyGraph.getOutgoingEdges(node).stream().anyMatch(dep -> dep.getDependencyType() == dependencyType);
     }
 }

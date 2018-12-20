@@ -150,7 +150,7 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
      */
     private Set<Dependency> filterDependencies(Set<Dependency> dependencies, DependencyType dependencyType) {
         return dependencies.stream()
-                .filter(dep -> dep.getDependencyType().equals(dependencyType))
+                .filter(dep -> dep.getDependencyType() == dependencyType)
                 .collect(Collectors.toSet());
     }
 
