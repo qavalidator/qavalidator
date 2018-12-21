@@ -7,8 +7,10 @@ import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
 import de.qaware.qav.graph.api.DependencyGraph
+import de.qaware.qav.graph.factory.DependencyGraphFactory
 import de.qaware.qav.graph.io.GraphReaderWriter
 import de.qaware.qav.graph.io.NodePrinter
+import de.qaware.qav.util.FileNameUtil
 import de.qaware.qav.util.FileSystemUtil
 import de.qaware.qav.visualization.Abbreviation
 import de.qaware.qav.visualization.GraphExporter
@@ -16,12 +18,12 @@ import de.qaware.qav.visualization.LegendCreator
 import groovy.util.logging.Slf4j
 
 /**
- * QAvalidator Language elements for Input / Output / Beautifying.
+ * QAvalidator language elements for Input and Output.
  *
  * @author QAware GmbH
  */
 @QavPluginDoc(name = "IOQavPlugin",
-        description = "QAvalidator Language elements for Input/Output, writing JSON, DOT, or text-format Node infos")
+        description = "QAvalidator language elements for Input/Output, reading and writing JSON, DOT, or text-format Node infos")
 @Slf4j
 class IOQavPlugin extends BasePlugin {
 
@@ -36,6 +38,7 @@ class IOQavPlugin extends BasePlugin {
         analysis.register("abbreviation", this.&registerAbbreviation)
         analysis.register("printNodes", this.&printNodes)
         analysis.register("writeFile", this.&writeFile)
+        analysis.register("readFile", this.&readFile)
         analysis.register("writeDot", this.&writeDot)
         analysis.register("writeGraphLegend", this.&writeGraphLegend)
         analysis.register("outputDir", this.&setOutputDir)
@@ -102,6 +105,50 @@ class IOQavPlugin extends BasePlugin {
             ])
     void writeFile(DependencyGraph dependencyGraph, String filename) {
         GraphReaderWriter.write(dependencyGraph, this.outputDir + "/" + filename)
+    }
+
+    /**
+     * Read the graph from the given file.
+     *
+     * @param filename the filename
+     * @return the new graph
+     */
+    @QavCommand(name = "readFile",
+            description = "Read the graph from the given file.",
+            parameters = [
+                    @QavCommand.Param(name = "filename", description = "the filename")
+            ],
+            result = "the new graph")
+    DependencyGraph readFile(String filename) {
+        DependencyGraph dependencyGraph = DependencyGraphFactory.createGraph()
+        return GraphReaderWriter.merge(dependencyGraph, filename)
+    }
+
+    /**
+     * Read the graphs from the given files, and merge all of them into the same graph.
+     *
+     * Accepts a map with a `baseDir` and `includes` and `excludes` patterns which work in Ant-style;
+     * this defines where it recursively searches all dependencyGraph JSON files.
+     *
+     * @param parameters the input files, defined Ant-style with baseDir, includes and excludes
+     * @return the given graph
+     */
+    @QavCommand(name = "readFile",
+            description = "Read the graph from the given file, and merges it into the given graph.",
+            parameters = [
+                    @QavCommand.Param(name = "parameters", description = """
+                        Accepts a map with a `baseDir` and `includes` and `excludes` patterns which work in Ant-style; 
+                        this defines where it recursively searches all dependencyGraph JSON files.
+                    """)
+            ],
+            result = "the new graph")
+    DependencyGraph readFile(Map parameters) {
+        DependencyGraph dependencyGraph = DependencyGraphFactory.createGraph()
+        FileNameUtil.identifyFiles(parameters).each {
+            log.info("Reading file ${it.absolutePath}")
+            GraphReaderWriter.merge(dependencyGraph, it.absolutePath)
+        }
+        return dependencyGraph
     }
 
     /**

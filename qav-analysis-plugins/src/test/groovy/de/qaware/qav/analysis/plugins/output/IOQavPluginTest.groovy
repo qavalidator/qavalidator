@@ -41,7 +41,7 @@ class IOQavPluginTest {
     void testApply() {
         def analysis = new TestAnalysis()
         ioQavPlugin.apply(analysis)
-        assert analysis.closureMap.size() == 6
+        assert analysis.closureMap.size() == 7
     }
 
     @Test

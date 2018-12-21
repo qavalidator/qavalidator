@@ -23,6 +23,10 @@ while [[ -n "$1" ]] ; do
             java -jar $JAR --analysis="$QAV_APP_DIR/src/qa/qav-app/qav-app_analysis.groovy" --outputDir="$OUTPUT_DIR"
             ;;
 
+        merge)
+            java -jar $JAR --analysis="analysis/merge_test.groovy" --outputDir="$OUTPUT_DIR"
+            ;;
+
         *)
             echo "Wrong parameter: $param"
             ;;
