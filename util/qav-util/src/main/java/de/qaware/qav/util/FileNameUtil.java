@@ -8,10 +8,12 @@ import org.springframework.util.AntPathMatcher;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -50,14 +52,10 @@ public final class FileNameUtil {
 
         String[] files = scanner.getIncludedFiles();
 
-        List<File> result = new ArrayList<>();
-        for (String filename : files) {
-            result.add(new File(baseDir, filename));
-        }
-
-        result.sort(Comparator.comparing(File::getAbsolutePath));
-
-        return result;
+        return Arrays.stream(files)
+                .map(filename -> new File(baseDir, filename))
+                .sorted(Comparator.comparing(File::getAbsolutePath))
+                .collect(Collectors.toList());
     }
 
     /**
