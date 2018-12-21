@@ -9,9 +9,8 @@ import de.qaware.qav.graph.factory.DependencyGraphFactory;
 import de.qaware.qav.util.FileSystemUtil;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 /**
  * Tests for {@link GraphReaderWriter}.
@@ -48,21 +47,74 @@ public class GraphReaderWriterTest {
         GraphReaderWriter.write(graph, "build/testGraph1.json");
         DependencyGraph readGraph = GraphReaderWriter.read("build/testGraph1.json");
 
-        assertThat(readGraph.getAllNodes().size(), is(graph.getAllNodes().size()));
-        assertThat(readGraph.getAllEdges().size(), is(graph.getAllEdges().size()));
-        assertThat(readGraph.getEdge(readGraph.getNode("v1"), readGraph.getNode("v3")).getProperty("prop1"), is(1));
-        assertThat(readGraph.getEdge(readGraph.getNode("v1"), readGraph.getNode("v3")).getProperty("prop2"), is("Two"));
+        assertThat(readGraph.getAllNodes()).hasSameSizeAs(graph.getAllNodes());
+        assertThat(readGraph.getAllEdges()).hasSameSizeAs(graph.getAllEdges());
+        assertThat(readGraph.getEdge(readGraph.getNode("v1"), readGraph.getNode("v3")).getProperty("prop1")).isEqualTo(1);
+        assertThat(readGraph.getEdge(readGraph.getNode("v1"), readGraph.getNode("v3")).getProperty("prop2")).isEqualTo("Two");
         Node v1 = readGraph.getNode("v1");
-        assertThat(v1, notNullValue());
-        assertThat(v1.getProperty("list-key-1"), is(Lists.newArrayList("a", "b", "c")));
-        assertThat(v1.getProperty("list-key-2"), is(Lists.newArrayList(1, 2, 3)));
+        assertThat(v1).isNotNull();
+        assertThat(v1.getProperty("list-key-1")).isEqualTo(Lists.newArrayList("a", "b", "c"));
+        assertThat(v1.getProperty("list-key-2")).isEqualTo(Lists.newArrayList(1, 2, 3));
 
         GraphReaderWriter.write(readGraph, "build/testGraph2.json");
 
         String s1 = FileSystemUtil.readFileAsText("build/testGraph1.json");
         String s2 = FileSystemUtil.readFileAsText("build/testGraph2.json");
 
-        assertThat(s1, is(s2));
+        assertThat(s1).isEqualTo(s2);
+    }
+
+    /**
+     * merging the same graph does not change anything
+     */
+    @Test
+    public void testMergeSame() {
+        DependencyGraph graph = DependencyGraphFactory.createGraph();
+
+        GraphReaderWriter.merge(graph, "src/test/resources/graphs/testGraph1.json");
+        assertThat(graph.getAllNodes()).hasSize(5);
+
+        GraphReaderWriter.merge(graph, "src/test/resources/graphs/testGraph1.json");
+        assertThat(graph.getAllNodes()).hasSize(5);
+    }
+
+    /**
+     * merging two graphs without overlap
+     */
+    @Test
+    public void testMergeNoOverlap() {
+        DependencyGraph graph = DependencyGraphFactory.createGraph();
+
+        GraphReaderWriter.merge(graph, "src/test/resources/graphs/testGraph1.json");
+        assertThat(graph.getAllNodes()).hasSize(5);
+
+        GraphReaderWriter.merge(graph, "src/test/resources/graphs/testGraph2.json");
+        assertThat(graph.getAllNodes()).hasSize(10);
+    }
+
+    @Test
+    public void testMergeWithOverlap() {
+        DependencyGraph graph = DependencyGraphFactory.createGraph();
+
+        GraphReaderWriter.merge(graph, "src/test/resources/graphs/testGraph1.json");
+        assertThat(graph.getAllNodes()).hasSize(5);
+        assertThat(graph.getNode("v1").getProperty("list-key-1")).isEqualTo(Lists.newArrayList("a", "b", "c"));
+        assertThat(graph.getNode("v1").getProperty("KEY")).isEqualTo(5);
+
+        // look into graph3:
+        DependencyGraph graph3 = DependencyGraphFactory.createGraph();
+        GraphReaderWriter.merge(graph3, "src/test/resources/graphs/testGraph3.json");
+        assertThat(graph3.getAllNodes()).hasSize(2);
+        assertThat(graph3.getNode("v1")).isNotNull();
+        assertThat(graph3.getNode("v1").getProperty("list-key-1")).isEqualTo(Lists.newArrayList("c", "d"));
+        assertThat(graph3.getNode("v6")).isNotNull();
+        assertThat(graph3.getNode("v1").getProperty("KEY")).isEqualTo(6);
+
+        // now merge graph 3 into graph 1:
+        GraphReaderWriter.merge(graph, "src/test/resources/graphs/testGraph3.json");
+        assertThat(graph.getAllNodes()).hasSize(6);
+        assertThat(graph.getNode("v1").getProperty("list-key-1")).isEqualTo(Lists.newArrayList("a", "b", "c", "d"));
+        assertThat(graph.getNode("v1").getProperty("KEY")).isEqualTo(Lists.newArrayList(5, 6));
     }
 
 }

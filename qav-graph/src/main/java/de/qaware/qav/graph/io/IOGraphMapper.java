@@ -4,7 +4,6 @@ import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
-import de.qaware.qav.graph.factory.DependencyGraphFactory;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -106,17 +105,16 @@ public class IOGraphMapper {
     }
 
     /**
-     * Maps an {@link IOGraph} to a {@link DependencyGraph}.
+     * Merge an {@link IOGraph} to a {@link DependencyGraph}.
      * <p>
      * First add the nodes, then the dependencies, before setting the baseDependencies relations.
      *
-     * @param ioGraph the {@link IOGraph}
+     * @param dependencyGraph the {@link DependencyGraph} to merge the {@link IOGraph} into
+     * @param ioGraph         the {@link IOGraph}
      * @return the {@link DependencyGraph}
      */
 
-    public DependencyGraph createDependencyGraph(IOGraph ioGraph) {
-        DependencyGraph dependencyGraph = DependencyGraphFactory.createGraph();
-
+    public DependencyGraph mergeDependencyGraph(DependencyGraph dependencyGraph, IOGraph ioGraph) {
         addNodes(dependencyGraph, ioGraph);
         addDependencies(dependencyGraph, ioGraph);
         addBaseDependencies(dependencyGraph, ioGraph);
@@ -130,7 +128,11 @@ public class IOGraphMapper {
 
             nodeMap.forEach((key, value) -> {
                 if (!"name".equals(key)) {
-                    node.setProperty(key, value);
+                    if (node.hasProperty(key)) {
+                        node.addListProperty(key, value);
+                    } else {
+                        node.setProperty(key, value);
+                    }
                 }
             });
         });

@@ -1,5 +1,6 @@
 package de.qaware.qav.graph.api;
 
+import com.google.common.collect.Lists;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -116,5 +117,27 @@ public class NodeTest {
 
         assertThat(((List<Object>) n1.getProperty("p1")).size(), is(3));
         assertThat(((List<Object>) n1.getProperty("p1")).containsAll(Arrays.asList(1, 2, 3)), is(true));
+    }
+
+    @Test
+    public void testAddListPropertyResolvesInputList() {
+        Node n1 = new Node("n1");
+        n1.addListProperty("p1", 1);
+        n1.addListProperty("p1", 2);
+        n1.addListProperty("p1", Lists.newArrayList(2, 3));
+        assertThat(n1.getProperty("p1"), is(Lists.newArrayList(1, 2, 3)));
+    }
+
+    @Test
+    public void testAddListPropertyNoChangeIfValueIsEqual() {
+        Node n1 = new Node("n1");
+        n1.setProperty("p1", 1);
+        assertThat(n1.getProperty("p1"), is(1));
+
+        n1.addListProperty("p1", 1);
+        assertThat(n1.getProperty("p1"), is(1)); // did not change into list if the value remains unchanged
+
+        n1.addListProperty("p1", 2);
+        assertThat(n1.getProperty("p1"), is(Lists.newArrayList(1, 2)));
     }
 }

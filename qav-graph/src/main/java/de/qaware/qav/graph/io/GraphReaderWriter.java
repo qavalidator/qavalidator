@@ -5,14 +5,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import de.qaware.qav.graph.api.DependencyGraph;
+import de.qaware.qav.graph.factory.DependencyGraphFactory;
 import de.qaware.qav.util.FileNameUtil;
 import de.qaware.qav.util.FileSystemUtil;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Writes a graph to a file, and reads a graph from the file.
@@ -27,9 +26,9 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public final class GraphReaderWriter {
 
-    private static final Logger LOGGER = getLogger(GraphReaderWriter.class);
     private static final IOGraphMapper IO_GRAPH_MAPPER = new IOGraphMapper();
 
     /**
@@ -72,6 +71,18 @@ public final class GraphReaderWriter {
      * @return a new {@link DependencyGraph} instance.
      */
     public static DependencyGraph read(String filename) {
+        DependencyGraph targetGraph = DependencyGraphFactory.createGraph();
+        return merge(targetGraph, filename);
+    }
+
+    /**
+     * Reads teh graph from the given file and merges it into the given {@link DependencyGraph}.
+     *
+     * @param targetGraph the graph to merge into
+     * @param filename    name of the file to read
+     * @return the given targetGraph
+     */
+    public static DependencyGraph merge(DependencyGraph targetGraph, String filename) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 
@@ -82,6 +93,6 @@ public final class GraphReaderWriter {
             throw new IllegalStateException("Error reading from file: " + FileNameUtil.getCanonicalPath(filename), e);
         }
 
-        return IO_GRAPH_MAPPER.createDependencyGraph(ioGraph);
+        return IO_GRAPH_MAPPER.mergeDependencyGraph(targetGraph, ioGraph);
     }
 }

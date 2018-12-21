@@ -1,0 +1,50 @@
+/*
+ * Test graph
+ */
+{
+  "nodes" : [ {
+    "KEY" : 5,
+    "asdf" : true,
+    "list-key-1" : [ "a", "b", "c" ],
+    "list-key-2" : [ 1, 2, 3 ],
+    "name" : "v6"
+  }, {
+    "name" : "v7"
+  }, {
+    "name" : "v8"
+  }, {
+    "name" : "v9"
+  }, {
+    "name" : "v10"
+  } ],
+  "edges" : [ {
+    "from" : "v6",
+    "to" : "v7",
+    "type" : "READ_ONLY",
+    "props" : { },
+    "baseDependencies" : [ ]
+  }, {
+    "from" : "v6",
+    "to" : "v8",
+    "type" : "CREATE",
+    "props" : {
+      "prop1" : 1,
+      "prop2" : "Two"
+    },
+    "baseDependencies" : [ {
+      "from" : "v9",
+      "to" : "v10",
+      "type" : "READ_WRITE",
+      "props" : { },
+      "baseDependencies" : [ ]
+    } ]
+  }, {
+    "from" : "v9",
+    "to" : "v10",
+    "type" : "READ_WRITE",
+    "props" : {
+      "lineNo" : 45
+    },
+    "baseDependencies" : [ ]
+  } ]
+}

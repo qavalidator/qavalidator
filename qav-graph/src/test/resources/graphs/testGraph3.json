@@ -1,0 +1,21 @@
+/*
+ * Test graph
+ */
+{
+  "nodes" : [ {
+    "KEY" : 6,
+    "asdf" : true,
+    "list-key-1" : [ "c", "d" ],
+    "name" : "v1"
+  }, {
+    "name" : "v6"
+  }
+  ],
+  "edges" : [ {
+    "from" : "v1",
+    "to" : "v6",
+    "type" : "READ_ONLY",
+    "props" : { },
+    "baseDependencies" : [ ]
+  } ]
+}

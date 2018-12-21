@@ -96,8 +96,13 @@ public abstract class AbstractGraphElement {
     }
 
     /**
-     * Adds the value to the list of values. Only adds if the value was not in the list before. Creates the list if it
-     * does not exist so far. Changes the value to a {@link List} if it wasn't a List before.
+     * Adds the value to the list of values.
+     * <p>
+     * If the new value is a list, then add each entry (instead of adding the list as one nested entry). Only add new
+     * entries if the value was not in the list before.
+     * <p>
+     * Creates the list if it does not exist so far. Changes the value to a {@link List} if it wasn't a List before -
+     * but only if the value did not change.
      *
      * @param key   name of the property
      * @param value value to add.
@@ -114,6 +119,8 @@ public abstract class AbstractGraphElement {
         if (object == null) {
             list = new ArrayList<>();
             properties.put(key, list);
+        } else if (object.equals(value)) {
+            return; // don't replace with a list if the value is the same, i.e. if there is no change.
         } else if (object instanceof List) {
             list = (List<Object>) object;
         } else {
@@ -122,7 +129,16 @@ public abstract class AbstractGraphElement {
             list.add(object);
             properties.put(key, list);
         }
-        if (!list.contains(value)) {
+
+        // add new value. If it's a list, add each entry of that list:
+        if (value instanceof List) {
+            List<Object> newValues = (List<Object>) value;
+            newValues.forEach(v -> {
+                if (!list.contains(v)) {
+                    list.add(v);
+                }
+            });
+        } else if (!list.contains(value)) {
             list.add(value);
         }
     }
