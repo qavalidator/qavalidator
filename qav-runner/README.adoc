@@ -1,11 +1,5 @@
-= QAvalidator Core
+= QAvalidator Runner
 
-This is the QAvalidator core.
+This is the API to QAvalidator.
 
-It contains
-
-* The architecture DSL
-* The analysis DSL and the plugins
-* The Dependency Graph and all operations to deal with it
-* The input scope readers for Java `.class` files and Maven POMs.
-
+It contains the configuration classes to kick off a QAvalidator analysis.

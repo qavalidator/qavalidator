@@ -9,6 +9,12 @@ Breaking Changes::
 ** `reportLeftOvers`: was deprecated in 1.2.0
 ** `printNodes`: removed variant which was deprecated in 1.2.0
 
+New Features::
+* Read Zipkin traces (experimental! Things will change here!)
+
+Changes::
+* Library upgrades, UI upgrade.
+
 
 == Release 1.2.7 -- 31.01.2018
 

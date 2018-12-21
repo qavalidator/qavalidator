@@ -12,8 +12,11 @@ This chapter lists features and improvements which are comping up but not yet pl
 * What-If analysis:
   ** i.e. virtual refactorings and the analysis of the effects.
   ** see also the batch-renaming tool at QAware. That input could be used here.
+* Combine static and dynamic analysis:
+  ** read traces and include them in the analysis.
 * More input scopes:
-  ** Analyse JavaScript or TypeScript source code.
+  ** Analyse JavaScript source code.
+  ** Find dependencies between TypeScript code and Java code and/or REST endpoints, or regarding the message types (DTOs).
 
 
 == Code
