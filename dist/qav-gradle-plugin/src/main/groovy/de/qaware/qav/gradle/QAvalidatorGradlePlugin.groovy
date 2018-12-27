@@ -3,7 +3,6 @@ package de.qaware.qav.gradle
 import de.qaware.qav.runner.QAvalidator
 import de.qaware.qav.runner.QAvalidatorConfig
 import de.qaware.qav.runner.QAvalidatorResult
-import de.qaware.qav.server.QavServer
 import org.apache.catalina.webresources.TomcatURLStreamHandlerFactory
 import org.apache.commons.lang3.StringUtils
 import org.gradle.api.GradleException
@@ -55,7 +54,7 @@ class QAvalidatorGradlePlugin implements Plugin<Project> {
                 // call this to avoid calling it a second time:
                 TomcatURLStreamHandlerFactory.disable()
 
-                SpringApplication.run(QavServer.class)
+                SpringApplication.run(QavServerConfiguration.class)
 
                 waitForKill()
             }

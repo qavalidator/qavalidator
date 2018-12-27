@@ -12,8 +12,7 @@ include "util:qav-test-util", "util:qav-util", "util:qav-doc-generator",
         "qav-visualization",
         // runners:
         "qav-runner",
+        "webui:qav-ui",
         "dist:qav-app", "dist:qav-gradle-plugin",
-        // read the results:
-        "webui:qav-ui", "webui:qav-server",
         "qav-doc", "qav-sonar-plugin"
 

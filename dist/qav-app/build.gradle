@@ -23,12 +23,21 @@ bootJar {
 
 dependencies {
     compile project(':qav-runner')
-    compile project(':webui:qav-server')
+    compile project(':webui:qav-ui')
 
     compile ("org.springframework.boot:spring-boot-starter:${springBootVersion}") {
         exclude(group: "org.slf4j", module: "log4j-over-slf4j")
         exclude(group: "org.slf4j", module: "jul-to-slf4j")
     }
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
+        exclude(group: "org.slf4j", module: "log4j-over-slf4j")
+        exclude(group: "org.slf4j", module: "jul-to-slf4j")
+    }
+    compile("org.springframework.boot:spring-boot-starter-data-neo4j:${springBootVersion}") {
+        exclude(group: "org.slf4j", module: "log4j-over-slf4j")
+        exclude(group: "org.slf4j", module: "jul-to-slf4j")
+    }
+
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
