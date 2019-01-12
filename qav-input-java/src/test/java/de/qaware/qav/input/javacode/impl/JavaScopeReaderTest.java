@@ -271,11 +271,12 @@ public class JavaScopeReaderTest {
         dependencyGraph = initJavaScopeReader(MyReference.class, false);
 
         // classes: A, B, MyReference, java.io.PrintStream
-        assertThat(dependencyGraph.getAllNodes().size(), is(4));
+        assertThat(dependencyGraph.getAllNodes().size(), is(5));
 
         Node myReference = getNode("de.qaware.qav.test.reference.MyReference");
         Node a = getNode("de.qaware.qav.test.reference.A");
         Node b = getNode("de.qaware.qav.test.reference.B");
+        Node c = getNode("de.qaware.qav.test.reference.C");
         Node printer = getNode("java.io.PrintStream");
 
         // the compiler optimizes the access to the static final String. There is no relation to A any more.
@@ -283,6 +284,7 @@ public class JavaScopeReaderTest {
         assertNoRelation(myReference, a);
         assertRelation(myReference, b, DependencyType.READ_ONLY);
         assertRelation(myReference, printer, DependencyType.READ_WRITE);
+        assertRelation(c, a, DependencyType.REFERENCE);
     }
 
     private DependencyGraph initJavaScopeReader(Class<?> startClass, boolean collapseInnerClasses) {

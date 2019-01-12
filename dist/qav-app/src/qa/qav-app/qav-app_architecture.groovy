@@ -19,12 +19,16 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
         api "de.qaware.qav.analysis.dsl.api.**"
         api "de.qaware.qav.analysis.dsl.model.**"
         impl "de.qaware.qav.analysis.dsl.impl.**"
+
+        uses "Graph.factory"
     }
 
     component("AnalysisPlugins") {
         api "de.qaware.qav.analysis.plugins.**"
 
-        uses "Graph.filter", "Graph.base", "JavaInput"
+        uses "Graph.base", "Graph.alg", "Graph.filter", "Graph.factory", "Graph.io",
+                "JavaInput", "MavenInput", "TracesInput", "TypescriptInput"
+        usesImpl "JavaInput" // the Java plugin instantiates the JavaScopeReader implementation
     }
 
     component("ArchitectureDSL") {

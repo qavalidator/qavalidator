@@ -8,6 +8,7 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 import java.util.List;
 
@@ -137,6 +138,14 @@ public class DependencyMethodVisitor extends MethodVisitor {
             } else {
                 addDependency(ownerClassName, DependencyType.REFERENCE);
             }
+        }
+    }
+
+    @Override
+    public void visitLdcInsn(Object value) {
+        if (value instanceof Type) {
+            Type type = (Type) value;
+            addDependency(type.getInternalName(), DependencyType.REFERENCE);
         }
     }
 
