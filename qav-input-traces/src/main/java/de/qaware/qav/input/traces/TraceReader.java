@@ -64,13 +64,7 @@ public class TraceReader {
      * @throws IllegalArgumentException if the file does not exist.
      */
     public void read(String filename) {
-
-        // check for existence
-        if (!FileSystemUtil.checkFileOrResourceExists(filename)) {
-            String msg = "File not found: " + FileNameUtil.getCanonicalPath(filename);
-            LOGGER.error(msg);
-            throw new IllegalArgumentException(msg);
-        }
+        FileSystemUtil.assertFileOrResourceExists(filename);
 
         // read the file
         try {
