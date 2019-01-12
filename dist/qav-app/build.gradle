@@ -23,7 +23,7 @@ bootJar {
 
 dependencies {
     compile project(':qav-runner')
-    compile project(':webui:qav-ui')
+    compile project(':qav-ui')
 
     compile ("org.springframework.boot:spring-boot-starter:${springBootVersion}") {
         exclude(group: "org.slf4j", module: "log4j-over-slf4j")

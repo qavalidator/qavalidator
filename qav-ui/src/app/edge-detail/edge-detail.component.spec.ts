@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EdgeDetailComponent } from './edge-detail.component';
+import {EdgeDetailComponent} from './edge-detail.component';
 
 describe('EdgeDetailComponent', () => {
   let component: EdgeDetailComponent;
