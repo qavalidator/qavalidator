@@ -12,6 +12,7 @@ analysis("Step 0: Initialize") {
             includes: ["**/de/qaware/qav/**/*.class", "**/qav-*.jar"]
 
     outputDir "build/results-${systemName}"
+    abbreviation "de.qaware.qav", "Q"
 }
 
 analysis("Step 1: Analyze Package Architecture") {

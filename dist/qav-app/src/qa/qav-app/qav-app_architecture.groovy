@@ -68,13 +68,17 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
         }
         component("MavenInput") {api "de.qaware.qav.input.maven.**"}
         component("TypescriptInput") {api "de.qaware.qav.input.typescript.**"}
+        component("TracesInput") {api "de.qaware.qav.input.traces.**"}
 
         uses "Graph.base"
     }
 
-    component("Server") {
-        api "de.qaware.qav.server.**"
+    component("App") {
         uses "Graph.base", "Graph.io", "Graph.index"
+
+        component("Server") { api "de.qaware.qav.app.server.**" }
+        component("CmdLine") { api "de.qaware.qav.app.cmdline.**" }
+        component("Main") { api "de.qaware.qav.app.QavMain" }
     }
 
     component("Util") {
