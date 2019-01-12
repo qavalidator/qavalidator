@@ -6,11 +6,9 @@ import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * This class checks an architecture graph that all components are actually implemented. I.e. we don't want to have
@@ -18,9 +16,8 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class AllComponentsImplementedChecker extends Checker {
-
-    private static final Logger LOGGER = getLogger(AllComponentsImplementedChecker.class);
 
     /**
      * Constructor.

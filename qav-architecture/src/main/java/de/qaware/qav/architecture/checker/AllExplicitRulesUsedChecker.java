@@ -4,12 +4,10 @@ import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.graph.api.Constants;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.Node;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Checks that all rules which are explicitly defined in an architecture model are actually used in the code base.
@@ -17,9 +15,8 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class AllExplicitRulesUsedChecker extends Checker {
-
-    private static final Logger LOGGER = getLogger(AllExplicitRulesUsedChecker.class);
 
     /**
      * Constructor.
@@ -43,7 +40,6 @@ public class AllExplicitRulesUsedChecker extends Checker {
         architecture.getAllComponents().forEach(cmp -> checkUsedRules(cmp.getName()));
     }
 
-    @SuppressWarnings("unchecked")
     private void checkUsedRules(String componentName) {
         Node node = dependencyGraph.getNode(componentName);
         if (node == null) {
@@ -55,8 +51,8 @@ public class AllExplicitRulesUsedChecker extends Checker {
             return;
         }
 
-        List<String> uses = node.getProperty(Constants.USES_API, new ArrayList<String>());
-        List<String> usedRules = node.getProperty(Constants.USED_RULES, new ArrayList<String>());
+        List<String> uses = node.getProperty(Constants.USES_API, new ArrayList<>());
+        List<String> usedRules = node.getProperty(Constants.USED_RULES, new ArrayList<>());
 
         uses.stream()
                 .filter(it -> !usedRules.contains(it))

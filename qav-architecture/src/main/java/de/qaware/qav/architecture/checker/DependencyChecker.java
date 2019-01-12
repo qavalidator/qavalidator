@@ -6,13 +6,11 @@ import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * This class checks an architecture graph that all edges are allowed, i.e. that for each edge there is at least one
@@ -20,9 +18,8 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class DependencyChecker extends Checker {
-
-    private static final Logger LOGGER = getLogger(DependencyChecker.class);
 
     private List<Dependency> violatingDependencies;
 
@@ -91,7 +88,7 @@ public class DependencyChecker extends Checker {
         }
 
         while (source != null) {
-            if (source == scope) { // yes, compare íf it's the same instance.
+            if (source == scope) { // yes, compare if it's the same instance.
                 LOGGER.debug("Same namespace for {}: true", edge);
                 return true;
             }
@@ -112,7 +109,7 @@ public class DependencyChecker extends Checker {
      * @return true if a rule could be found which justifies all references in that dependency
      */
     private boolean checkAllReferencesAllowed(Dependency edge, String actualReferencesKey, String allowedReferencesKey) {
-        List<String> usedReferences = edge.getProperty(actualReferencesKey, new ArrayList<String>());
+        List<String> usedReferences = edge.getProperty(actualReferencesKey, new ArrayList<>());
         LOGGER.debug("Checking rules for edge: {} and references {}", edge, usedReferences);
         for (String usedRef : usedReferences) {
             if (!checkReferenceAllowed(edge.getSource(), usedRef, allowedReferencesKey)) {
@@ -133,7 +130,7 @@ public class DependencyChecker extends Checker {
      * @return true if a rule could be found which justifies the reference
      */
     private boolean checkReferenceAllowed(Node source, String usedRef, String allowedReferencesKey) {
-        ArrayList<String> allowedRefs = source.getProperty(allowedReferencesKey, new ArrayList<String>());
+        ArrayList<String> allowedRefs = source.getProperty(allowedReferencesKey, new ArrayList<>());
         LOGGER.debug("Checking reference: Node {}, outgoing reference: {}, allowedReferences: {}", source.getName(), usedRef, allowedRefs);
         if (allowedRefs.contains(usedRef)) {
             source.addListProperty(Constants.USED_RULES, usedRef);
