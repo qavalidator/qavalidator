@@ -4,8 +4,6 @@ apply plugin: 'groovy'
 dependencies {
     compile project(':util:qav-util')
 
-    testCompile project(path: ':util:qav-test-util', configuration: 'testOutput')
-
     compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
     compile "ch.qos.logback:logback-core:${project.ext.logbackVersion}"
     compile "ch.qos.logback:logback-classic:${project.ext.logbackVersion}"

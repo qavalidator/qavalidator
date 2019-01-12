@@ -1,7 +1,6 @@
 package de.qaware.qav.architecture.dsl.model
 
 import com.google.common.collect.Lists
-import de.qaware.qav.test.beans.BeanTestUtil
 import org.junit.Test
 
 /**
@@ -74,6 +73,12 @@ class ClassSetTest {
         ClassSet cs2 = new ClassSet("t1", Lists.newArrayList("my.api.*"))
         ClassSet cs3 = new ClassSet("t2", Lists.newArrayList("my.other.api.*"))
 
-        BeanTestUtil.checkEqualsMethod(cs1, cs2, cs3)
+        assert cs1 != null
+        assert cs1 == cs1
+        assert cs1 == cs2
+        assert cs1 != cs3
+
+        assert cs1.hashCode() == cs2.hashCode()
+        assert cs1.hashCode() != cs3.hashCode()
     }
 }

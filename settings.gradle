@@ -1,7 +1,7 @@
 // do this so that the project name is correct in Jenkins
 // (would be 'workspace' otherwise)
 rootProject.name = 'qavalidator'
-include "util:qav-test-util", "util:qav-util", "util:qav-doc-generator",
+include "util:qav-util", "util:qav-doc-generator",
         "qav-graph",
         // input:
         "qav-input-java", "qav-input-maven", "qav-input-typescript", "qav-input-traces",

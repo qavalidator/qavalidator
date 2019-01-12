@@ -1,3 +1,0 @@
-= QAvalidator Test Util
-
-This module contains classes we use in unit test.

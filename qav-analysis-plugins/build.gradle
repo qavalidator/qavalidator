@@ -18,8 +18,6 @@ dependencies {
     compile project(':util:qav-util')
     compile project(':qav-visualization')
 
-    testCompile project(path: ':util:qav-test-util', configuration: 'testOutput')
-
     compileOnly project(':util:qav-doc-generator')         // qav-doc-generator contains the annotations; not required at runtime.
     annotationProcessor project(':util:qav-doc-generator') // qav-doc-generator contains the doc generator; not required at runtime.
 
