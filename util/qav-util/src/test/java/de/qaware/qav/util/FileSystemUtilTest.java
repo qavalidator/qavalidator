@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -28,6 +29,18 @@ public class FileSystemUtilTest {
         assertThat(FileSystemUtil.checkFileOrResourceExists("classpath:/stg/Test.stg"), is(true));
         assertThat(FileSystemUtil.checkFileOrResourceExists("/not/existing/file"), is(false));
         assertThat(FileSystemUtil.checkFileOrResourceExists("classpath:/not/existing/resource"), is(false));
+    }
+
+    @Test
+    public void testAssertFileExists() {
+        FileSystemUtil.assertFileOrResourceExists("build.gradle");
+
+        try {
+            FileSystemUtil.assertFileOrResourceExists("/not/existing/file");
+            fail("IllegalArgumentException expected");
+        } catch(IllegalArgumentException e) {
+            assertThat(e.getMessage(), startsWith("File not found: "));
+        }
     }
 
     @Test

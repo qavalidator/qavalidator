@@ -56,6 +56,22 @@ public final class FileSystemUtil {
     }
 
     /**
+     * Checks if the given file exists.
+     * <p>
+     * If not, logs an error and throws an {@link IllegalArgumentException}.
+     *
+     * @param filename the filename to check
+     * @throws IllegalArgumentException if the file does not exist
+     */
+    public static void assertFileOrResourceExists(String filename) {
+        if (!checkFileOrResourceExists(filename)) {
+            String msg = "File not found: " + FileNameUtil.getCanonicalPath(filename);
+            LOGGER.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
+    /**
      * Read string from resource or file.
      *
      * @param filename if starts with "classpath:/", try as resource. If not, try to find file.
