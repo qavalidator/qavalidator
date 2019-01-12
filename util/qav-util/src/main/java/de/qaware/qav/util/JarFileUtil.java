@@ -18,8 +18,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Work with JAR files: Find class files and nested JAR files.
  * <p>
  * This class writes nested JAR files as temporary files, as the {@link JarFile} class does not support nested jars.
- * Deletes them after reading. Therefore, we need access to the "temp" directory, but this class will clean up and
- * not leave any files on disk.
+ * Deletes them after reading. Therefore, we need access to the "temp" directory, but this class will clean up and not
+ * leave any files on disk.
  * <p>
  * Alternatives like the Spring Boot JarFile class can't work with compressed nested JARs.
  *
@@ -47,12 +47,12 @@ public final class JarFileUtil {
     @SuppressWarnings("squid:S1166") // wants log or rethrow exception. It's logged well enough here.
     public static void readJarFile(File base, Map parameters, ClassHandler classHandler) {
         checkNotNull(base, "Jar file must be given");
-        LOGGER.info("Reading JAR file: {}", base.getAbsolutePath());
+        LOGGER.info("Reading JAR file: {}", FileNameUtil.getCanonicalPath(base.getAbsolutePath()));
 
         try {
             readJarFile(new JarFile(base), parameters, classHandler);
         } catch (IOException e) {
-            LOGGER.error("Error reading jar file: {}: {}", base.getAbsolutePath(), e.getMessage());
+            LOGGER.error("Error reading jar file: {}: {}", FileNameUtil.getCanonicalPath(base.getAbsolutePath()), e.getMessage());
         }
     }
 
@@ -114,18 +114,15 @@ public final class JarFileUtil {
         InputStream inputStream = jarFile.getInputStream(entry);
         byte[] entryAsBytes = ByteStreams.toByteArray(inputStream);
         File tempFile = new File(tempDirectory, entry.getName());
+        tempFile.getParentFile().mkdirs();
         com.google.common.io.Files.write(entryAsBytes, tempFile);
         LOGGER.debug("Created temp file: {}", tempFile.getAbsolutePath());
         return tempFile;
     }
 
     private static void delete(File tempFile) {
-        try {
-            Files.delete(tempFile.toPath());
-            LOGGER.debug("Deleted: {}", tempFile.getAbsolutePath());
-        } catch(IOException e) {
-            LOGGER.error("Could not delete: {}", tempFile.getAbsolutePath(), e);
-        }
+        FileSystemUtil.deleteDirectoryQuietly(tempFile.getAbsolutePath());
+        LOGGER.debug("Deleted: {}", tempFile.getAbsolutePath());
     }
 
 }
