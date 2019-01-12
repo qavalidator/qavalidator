@@ -4,7 +4,6 @@ import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
-import de.qaware.qav.graph.io.GraphReaderWriter;
 import de.qaware.qav.visualization.GraphExporter;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +14,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 /**
- * Tests for {@link TypescriptReader}
+ * Tests for {@link TypescriptInputReader}
  */
-public class TypescriptReaderTest {
+public class TypescriptInputReaderTest {
 
     private DependencyGraph dependencyGraph;
 
@@ -28,7 +27,7 @@ public class TypescriptReaderTest {
 
     @Test
     public void read() {
-        TypescriptReader reader = new TypescriptReader(dependencyGraph);
+        TypescriptInputReader reader = new TypescriptInputReader(dependencyGraph);
         reader.read("src/test/resources/typescript/ts-qav-export.xml");
 
         assertThat(dependencyGraph.getAllNodes().size()).isEqualTo(1588);
@@ -41,8 +40,7 @@ public class TypescriptReaderTest {
         assertThat(n2).isNotNull();
         assertThat(n2.getProperty("typescript-parent")).isNull();
 
-        GraphExporter.export(dependencyGraph, "build/typescript-test/ts-qav-export_2", new Architecture(), new ArrayList<>(), false);
-        GraphReaderWriter.write(dependencyGraph, "build/typescript-test/ts-qav-export_2.json");
+        GraphExporter.export(dependencyGraph, "build/typescript-test/ts-qav-export", new Architecture(), new ArrayList<>(), false);
     }
 
     @Test
@@ -51,7 +49,7 @@ public class TypescriptReaderTest {
             new TypescriptInputReader(dependencyGraph).read("not-existing-file.xml");
             fail("IllegalArgumentException expected");
         } catch(IllegalArgumentException e) {
-            assertThat(e.getMessage()).contains("not-existing-file.xml does not exist");
+            assertThat(e.getMessage()).startsWith("File not found: ");
         }
     }
 }

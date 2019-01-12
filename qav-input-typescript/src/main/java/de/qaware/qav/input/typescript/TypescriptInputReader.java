@@ -26,7 +26,7 @@ import java.util.Map;
  * build process) creates an XML export file with nodes and edges.
  */
 @Slf4j
-public class TypescriptReader {
+public class TypescriptInputReader {
 
     public static final String ROOT_NODE_NAME = "Typescript_ROOT";
     public static final String PARENT_PROPERTY = "typescript" + Constants.PARENT_SUFFIX;
@@ -42,7 +42,7 @@ public class TypescriptReader {
      *
      * @param dependencyGraph the target graph
      */
-    public TypescriptReader(DependencyGraph dependencyGraph) {
+    public TypescriptInputReader(DependencyGraph dependencyGraph) {
         this.dependencyGraph = dependencyGraph;
     }
 

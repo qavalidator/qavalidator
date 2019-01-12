@@ -1,18 +1,18 @@
 
-apply plugin: 'groovy'
+apply plugin: 'java-library'
 
 dependencies {
     compile project(':qav-architecture-dsl')
     compile project(':qav-graph')
 
-    testCompile project(':qav-visualization')
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"
+    compile "ch.qos.logback:logback-core:${logbackVersion}"
+    compile "ch.qos.logback:logback-classic:${logbackVersion}"
 
-    compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
-    compile "ch.qos.logback:logback-core:${project.ext.logbackVersion}"
-    compile "ch.qos.logback:logback-classic:${project.ext.logbackVersion}"
-
-    compile "org.codehaus.groovy:groovy-all:${project.ext.groovyVersion}"
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: jacksonVersion
+
+    testCompile group: "org.assertj", name: "assertj-core", version: assertjVersion
+    testCompile project(':qav-visualization')
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -20,14 +20,14 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
-    from groovydoc.destinationDir
+    from javadoc.destinationDir
 }
 
 artifacts {
     archives sourcesJar
-    archives groovydocJar
+    archives javadocJar
 }
 
 publishing {
@@ -35,7 +35,7 @@ publishing {
         qavInputTypescript(MavenPublication) {
             from components.java
             artifact sourcesJar
-            artifact groovydocJar
+            artifact javadocJar
 
             pom.withXml {
                 asNode().appendNode('name', "QAvalidator :: ${project.name}")
