@@ -31,11 +31,35 @@ public class TypescriptInputReader {
     public static final String ROOT_NODE_NAME = "Typescript_ROOT";
     public static final String PARENT_PROPERTY = "typescript" + Constants.PARENT_SUFFIX;
 
+    /**
+     * Map from Typescript analyzer's dependency types to QAvalidator's {@link DependencyType}
+     */
+    private static final Map<String, DependencyType> DEPENDENCY_TYPE_MAP = new HashMap<>();
+
     private final DependencyGraph dependencyGraph;
     private final XmlMapper xmlMapper = new XmlMapper();
     private final Map<String, Node> nodeMap = new HashMap<>();
 
     private String currentFilename;
+
+    /*
+     * initialize the static variable DEPENDENCY_TYPE_MAP
+     */
+    static {
+        DEPENDENCY_TYPE_MAP.put("Import", DependencyType.REFERENCE);
+        DEPENDENCY_TYPE_MAP.put("Extends", DependencyType.INHERIT);
+        DEPENDENCY_TYPE_MAP.put("Implements", DependencyType.INHERIT);
+        DEPENDENCY_TYPE_MAP.put("GenericParameter", DependencyType.REFERENCE);
+        DEPENDENCY_TYPE_MAP.put("Creates", DependencyType.CREATE);
+        DEPENDENCY_TYPE_MAP.put("Parameter", DependencyType.REFERENCE);
+        DEPENDENCY_TYPE_MAP.put("Returns", DependencyType.REFERENCE);
+        DEPENDENCY_TYPE_MAP.put("Calls", DependencyType.READ_WRITE);
+        DEPENDENCY_TYPE_MAP.put("Argument", DependencyType.REFERENCE);
+        DEPENDENCY_TYPE_MAP.put("Member", DependencyType.REFERENCE);
+        DEPENDENCY_TYPE_MAP.put("Variable", DependencyType.REFERENCE);
+        DEPENDENCY_TYPE_MAP.put("ReadWrite", DependencyType.READ_WRITE);
+        DEPENDENCY_TYPE_MAP.put("DependsOn", DependencyType.REFERENCE);
+    }
 
     /**
      * Reads typescript analysis from the specified XML file and puts the nodes and edges into the given target graph.
@@ -88,7 +112,7 @@ public class TypescriptInputReader {
 
         // Prepare properties to make dependency mapping easier:
         // For each element (class, property, method, etc): note in which File it belongs.
-        if (typescriptEntity.getType().equals("File")) {
+        if ("File".equals(typescriptEntity.getType())) {
             currentFilename = nodeName;
         } else {
             node.setProperty(PARENT_PROPERTY, currentFilename);
@@ -106,26 +130,5 @@ public class TypescriptInputReader {
 
         Dependency dep = dependencyGraph.addDependency(from, to, type);
         dep.setProperty("typescript.type", dependency.getType());
-    }
-
-    /**
-     * Map from Typescript analyzer's dependency types to QAvalidator's {@link DependencyType}
-     */
-    private static final Map<String, DependencyType> DEPENDENCY_TYPE_MAP = new HashMap<>();
-
-    static {
-        DEPENDENCY_TYPE_MAP.put("Import", DependencyType.REFERENCE);
-        DEPENDENCY_TYPE_MAP.put("Extends", DependencyType.INHERIT);
-        DEPENDENCY_TYPE_MAP.put("Implements", DependencyType.INHERIT);
-        DEPENDENCY_TYPE_MAP.put("GenericParameter", DependencyType.REFERENCE);
-        DEPENDENCY_TYPE_MAP.put("Creates", DependencyType.CREATE);
-        DEPENDENCY_TYPE_MAP.put("Parameter", DependencyType.REFERENCE);
-        DEPENDENCY_TYPE_MAP.put("Returns", DependencyType.REFERENCE);
-        DEPENDENCY_TYPE_MAP.put("Calls", DependencyType.READ_WRITE);
-        DEPENDENCY_TYPE_MAP.put("Argument", DependencyType.REFERENCE);
-        DEPENDENCY_TYPE_MAP.put("Member", DependencyType.REFERENCE);
-        DEPENDENCY_TYPE_MAP.put("Variable", DependencyType.REFERENCE);
-        DEPENDENCY_TYPE_MAP.put("ReadWrite", DependencyType.READ_WRITE);
-        DEPENDENCY_TYPE_MAP.put("DependsOn", DependencyType.REFERENCE);
     }
 }
