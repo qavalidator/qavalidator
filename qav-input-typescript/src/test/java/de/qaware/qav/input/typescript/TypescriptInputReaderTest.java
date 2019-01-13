@@ -8,6 +8,7 @@ import de.qaware.qav.visualization.GraphExporter;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,6 +51,17 @@ public class TypescriptInputReaderTest {
             fail("IllegalArgumentException expected");
         } catch(IllegalArgumentException e) {
             assertThat(e.getMessage()).startsWith("File not found: ");
+        }
+    }
+
+    @Test
+    public void testReadInvalidFile() {
+        try {
+            new TypescriptInputReader(dependencyGraph).read("src/test/resources/typescript/not-an-xml-file.noxml");
+            fail("IllegalArgumentException expected");
+        } catch(IllegalArgumentException e) {
+            assertThat(e.getCause()).isInstanceOf(IOException.class);
+            assertThat(e.getMessage()).startsWith("com.fasterxml.jackson.core.JsonParseException: Unexpected close tag </invalid-end-tag>; expected </start-tag>");
         }
     }
 }
