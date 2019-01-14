@@ -21,6 +21,7 @@ import java.util.Collection;
 public class GraphService {
 
     private Session session;
+    private SessionFactory sessionFactory;
 
     /**
      * Constructor.
@@ -28,8 +29,7 @@ public class GraphService {
     public GraphService() {
         Configuration configuration = Neo4jConfiguration.getConfiguration();
 
-        SessionFactory sessionFactory = new SessionFactory(configuration, "de.qaware.qav.graphdb.model");
-
+        this.sessionFactory = new SessionFactory(configuration, "de.qaware.qav.graphdb.model");
         this.session = sessionFactory.openSession();
     }
 
@@ -42,6 +42,13 @@ public class GraphService {
      */
     public GraphService(Session session) {
         this.session = session;
+    }
+
+    /**
+     * Close the connections of the {@link SessionFactory} so that the process can terminate.
+     */
+    public void close() {
+        this.sessionFactory.close();
     }
 
     /**

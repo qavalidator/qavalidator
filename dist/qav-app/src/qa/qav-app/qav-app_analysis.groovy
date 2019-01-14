@@ -54,4 +54,6 @@ analysis("Step 3: Export as DOT, GraphML, and JSON") {
 
     // this is to import it into qav-server for interactive exploration of the dependency graph
     writeFile(dependencyGraph, "dependencyGraph.json")
+
+    writeNeo4j(dependencyGraph, true)
 }

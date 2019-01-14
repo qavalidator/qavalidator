@@ -27,6 +27,7 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
         api "de.qaware.qav.analysis.plugins.**"
 
         uses "Graph.base", "Graph.alg", "Graph.filter", "Graph.factory", "Graph.io",
+                "Graph.DB",
                 "JavaInput", "MavenInput", "TracesInput", "TypescriptInput"
         usesImpl "JavaInput" // the Java plugin instantiates the JavaScopeReader implementation
     }
@@ -63,6 +64,10 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
         component("Graph.filter") {api "de.qaware.qav.graph.filter.**"}
         component("Graph.io") {api "de.qaware.qav.graph.io.**"}
         component("Graph.index") {api "de.qaware.qav.graph.index.**"}
+
+        component("Graph.DB") {
+            api "de.qaware.qav.graphdb.model.**", "de.qaware.qav.graphdb.persistence.**"
+        }
     }
 
     component("Input") {

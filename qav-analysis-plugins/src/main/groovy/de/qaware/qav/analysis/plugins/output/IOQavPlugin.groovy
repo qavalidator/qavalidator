@@ -10,6 +10,7 @@ import de.qaware.qav.graph.api.DependencyGraph
 import de.qaware.qav.graph.factory.DependencyGraphFactory
 import de.qaware.qav.graph.io.GraphReaderWriter
 import de.qaware.qav.graph.io.NodePrinter
+import de.qaware.qav.graphdb.persistence.GraphService
 import de.qaware.qav.util.FileNameUtil
 import de.qaware.qav.util.FileSystemUtil
 import de.qaware.qav.visualization.Abbreviation
@@ -41,6 +42,7 @@ class IOQavPlugin extends BasePlugin {
         analysis.register("readFile", this.&readFile)
         analysis.register("writeDot", this.&writeDot)
         analysis.register("writeGraphLegend", this.&writeGraphLegend)
+        analysis.register("writeNeo4j", this.&writeNeo4j)
         analysis.register("outputDir", this.&setOutputDir)
     }
 
@@ -211,6 +213,36 @@ class IOQavPlugin extends BasePlugin {
             ])
     void writeGraphLegend(String filenameBase = "legend") {
         new LegendCreator().export(this.outputDir + "/" + filenameBase)
+    }
+
+    /**
+     * Exports the given graph to a Neo4j DB. This database is accessed using the BOLT protocol; i.e. the Neo4j server
+     * must be running and must be accessible. The URI and credentials must be provided in the environment variables
+     * NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD.
+     *
+     * @param dependencyGraph the graph to export
+     * @param clearAll if true, delete all nodes in the DB. Defaults to false
+     */
+    @QavCommand(name = "writeNeo4j",
+            description = """
+                    Exports the given graph to a Neo4j DB. This database is accessed using the BOLT protocol; i.e. the 
+                    Neo4j server must be running and must be accessible. The URI and credentials must be provided in the 
+                    environment variables `NEO4J_URI`, `NEO4J_USERNAME`, `NEO4J_PASSWORD`.
+                """,
+            parameters = [
+                    @QavCommand.Param(name = "dependencyGraph", description = "the graph to export"),
+                    @QavCommand.Param(name = "clearAll", description = "if true, delete all nodes in the DB. Defaults to false")
+            ]
+    )
+    void writeNeo4j(DependencyGraph dependencyGraph, boolean clearAll = false) {
+        GraphService graphService = new GraphService()
+
+        if (clearAll) {
+            graphService.deleteAll()
+        }
+
+        graphService.saveGraph(dependencyGraph)
+        graphService.close()
     }
 
     /**

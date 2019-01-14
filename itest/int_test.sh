@@ -8,6 +8,10 @@ QAV_APP_DIR=$QAV_HOME/dist/qav-app
 
 JAR=$(ls $QAV_APP_DIR/build/libs/qav-app-*.jar | grep -v "javadoc.jar" | grep -v "sources.jar")
 
+export NEO4J_URI=bolt://localhost
+export NEO4J_USERNAME=neo4j
+export NEO4J_PASSWORD=secret
+
 while [[ -n "$1" ]] ; do
     param="$1"
     OUTPUT_DIR="$QAV_ITEST_DIR/itest-results/results-$param"

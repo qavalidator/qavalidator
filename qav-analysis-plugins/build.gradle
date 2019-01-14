@@ -11,6 +11,7 @@ dependencies {
     compile project(':qav-architecture')
     compile project(':qav-architecture-dsl')
     compile project(':qav-graph')
+    compile project(':qav-graph-db')
     compile project(':qav-input-java')
     compile project(':qav-input-maven')
     compile project(':qav-input-traces')
