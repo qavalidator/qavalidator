@@ -82,11 +82,10 @@ public class DependencyGraphIndex {
             indexAllNodes(indexWriter);
 
             indexWriter.close();
+            LOGGER.debug("Index built, took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         } catch (IOException e) {
             LOGGER.error("Indexing failed: ", e);
         }
-
-        LOGGER.debug("Index built, took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
     /**
@@ -137,39 +136,24 @@ public class DependencyGraphIndex {
      * @return the matching nodes
      */
     public Set<Node> findNodes(String queryString) {
-        try {
-            return doFindNodes(queryString);
+        try (DirectoryReader directoryReader = DirectoryReader.open(directory)) {
+            IndexSearcher indexSearcher = new IndexSearcher(directoryReader);
+
+            Query query = parseQuery(queryString);
+
+            ScoreDoc[] hits = indexSearcher.search(query, MAX_RESULTS, Sort.INDEXORDER).scoreDocs;
+
+            Set<Node> result = new HashSet<>();
+
+            for (ScoreDoc hit : hits) {
+                Document hitDoc = indexSearcher.doc(hit.doc);
+                String name = hitDoc.get("name");
+                result.add(graph.getNode(name));
+            }
+            return result;
         } catch (IOException e) {
             throw new IllegalArgumentException("Finding nodes failed for query: " + queryString, e);
         }
-    }
-
-    /**
-     * Execute the query against the Lucene index.
-     *
-     * @param queryString the query String
-     * @return the {@link Set} of {@link Node}s. May be empty, but never null.
-     * @throws IOException if there is a low-level IO error in Lucene
-     */
-    private Set<Node> doFindNodes(String queryString) throws IOException {
-        DirectoryReader directoryReader = DirectoryReader.open(directory);
-        IndexSearcher indexSearcher = new IndexSearcher(directoryReader);
-
-        Query query = parseQuery(queryString);
-
-        ScoreDoc[] hits = indexSearcher.search(query, MAX_RESULTS, Sort.INDEXORDER).scoreDocs;
-
-        Set<Node> result = new HashSet<>();
-
-        for (ScoreDoc hit : hits) {
-            Document hitDoc = indexSearcher.doc(hit.doc);
-            String name = hitDoc.get("name");
-            result.add(graph.getNode(name));
-        }
-
-        directoryReader.close();
-
-        return result;
     }
 
     /**

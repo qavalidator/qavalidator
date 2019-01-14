@@ -3,32 +3,30 @@ package de.qaware.qav.graph.index;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.impl.DependencyGraphSimpleImpl;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Set;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
- * @author QAware GmbH
+ * Tests for {@link DependencyGraphIndex}.
  */
 public class DependencyGraphIndexTest {
 
-    private DependencyGraph graph;
-    private DependencyGraphIndex index;
-    private Node v1;
-    private Node v2;
-    private Node v3;
-    private Node v4;
-    private Node v5;
-    private Node v6;
+    private static DependencyGraph graph;
+    private static DependencyGraphIndex index;
+    private static Node v1;
+    private static Node v2;
+    private static Node v3;
+    private static Node v4;
+    private static Node v5;
+    private static Node v6;
 
-    @Before
-    public void setup() {
+    @BeforeClass
+    public static void setup() {
         graph = new DependencyGraphSimpleImpl(graph);
 
         v1 = graph.getOrCreateNodeByName("v1");
@@ -58,33 +56,43 @@ public class DependencyGraphIndexTest {
     @Test
     public void findNodes() {
         Set<Node> nodes = index.findNodes("x:green");
-        assertThat(nodes, hasSize(1));
-        assertThat(nodes, contains(v1));
+        assertThat(nodes).hasSize(1);
+        assertThat(nodes).contains(v1);
 
         nodes = index.findNodes("x:yellow");
-        assertThat(nodes, hasSize(3));
-        assertThat(nodes, containsInAnyOrder(v3, v4, v5));
+        assertThat(nodes).hasSize(3);
+        assertThat(nodes).contains(v3, v4, v5);
     }
 
     @Test
     public void findNodesWithNumericFields() {
         Set<Node> nodes = index.findNodes("size:2");
-        assertThat(nodes, hasSize(1));
-        assertThat(nodes, contains(v2));
+        assertThat(nodes).hasSize(1);
+        assertThat(nodes).contains(v2);
     }
 
     @Test
     public void findNodesWithNumericFieldMultipleHits() {
         Set<Node> nodes = index.findNodes("size:250");
-        assertThat(nodes, hasSize(2));
-        assertThat(nodes, containsInAnyOrder(v5, v6));
+        assertThat(nodes).hasSize(2);
+        assertThat(nodes).contains(v5, v6);
     }
 
     @Test
     public void findNodesWithNumericRange() {
         Set<Node> nodes = index.findNodes("size:[80 TO 200]");
-        assertThat(nodes, hasSize(2));
-        assertThat(nodes, containsInAnyOrder(v3, v4));
+        assertThat(nodes).hasSize(2);
+        assertThat(nodes).contains(v3, v4);
+    }
+
+    @Test
+    public void invalidQuery() {
+        try {
+            index.findNodes("invalid:");
+            fail("IllegalArgumentException expected");
+        } catch(IllegalArgumentException e) {
+            assertThat(e.getMessage()).startsWith("Parsing of query failed: invalid:");
+        }
     }
 
 }
