@@ -10,7 +10,8 @@ Breaking Changes::
 ** `printNodes`: removed variant which was deprecated in 1.2.0
 
 New Features::
-* Read Zipkin traces (experimental! Things will change here!)
+* https://github.com/qavalidator/qavalidator/issues/6[#6]: Read Zipkin traces (experimental! Things will change here!)
+* https://github.com/qavalidator/qavalidator/issues/12[#12]: Export the DependencyGraph to Neo4j.
 
 Changes::
 * Library upgrades, UI upgrade.
