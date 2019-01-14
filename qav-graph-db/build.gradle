@@ -8,8 +8,8 @@ dependencies {
     compile "ch.qos.logback:logback-core:${logbackVersion}"
     compile "ch.qos.logback:logback-classic:${logbackVersion}"
 
-    compile "org.neo4j:neo4j-ogm-core:3.1.4"
-    runtime "org.neo4j:neo4j-ogm-bolt-driver:3.1.4"
+    compile "org.neo4j:neo4j-ogm-core:${springDataOgmVersion}"
+    runtime "org.neo4j:neo4j-ogm-bolt-driver:${springDataOgmVersion}"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
