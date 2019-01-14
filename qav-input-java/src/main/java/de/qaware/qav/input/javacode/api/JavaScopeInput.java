@@ -1,6 +1,7 @@
 package de.qaware.qav.input.javacode.api;
 
 import de.qaware.qav.graph.api.DependencyGraph;
+import de.qaware.qav.input.javacode.impl.JavaScopeReader;
 
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
  *
  * @author QAware GmbH
  */
-public interface JavaScopeInput {
+public class JavaScopeInput {
 
     /**
      * Read the files as defined by the parameters into the given graph.
@@ -19,5 +20,7 @@ public interface JavaScopeInput {
      * @param parameters           the parameters, Ant-style with baseDir (mandatory), and includes (optional) and
      *                             excludes (optional)
      */
-    void read(DependencyGraph dependencyGraph, boolean collapseInnerClasses, Map parameters);
+    public void read(DependencyGraph dependencyGraph, boolean collapseInnerClasses, Map parameters) {
+        new JavaScopeReader(dependencyGraph, collapseInnerClasses).read(parameters);
+    }
 }

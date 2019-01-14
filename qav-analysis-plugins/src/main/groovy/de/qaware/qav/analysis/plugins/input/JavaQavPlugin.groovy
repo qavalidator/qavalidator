@@ -5,7 +5,6 @@ import de.qaware.qav.analysis.plugins.base.BasePlugin
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
 import de.qaware.qav.input.javacode.api.JavaScopeInput
-import de.qaware.qav.input.javacode.impl.JavaScopeInputImpl
 
 /**
  * Provides the Java input for QAvalidator.
@@ -24,7 +23,7 @@ class JavaQavPlugin extends BasePlugin {
      * Uses the default implementation to read the Java input.
      */
     JavaQavPlugin() {
-        this.javaScopeInput = new JavaScopeInputImpl()
+        this.javaScopeInput = new JavaScopeInput()
     }
 
     /**
