@@ -79,27 +79,27 @@ public class DependencyGraphSimpleImplTest {
         assertNull(graph.getEdge(n2, n1));
 
         Dependency dep = graph.getAllEdges().iterator().next();
-        assertTrue(dep.getSource().equals(n1));
-        assertTrue(dep.getTarget().equals(n2));
-        assertTrue(dep.getDependencyType().equals(DependencyType.READ_ONLY));
+        assertEquals(dep.getSource(), n1);
+        assertEquals(dep.getTarget(), n2);
+        assertEquals(DependencyType.READ_ONLY, dep.getDependencyType());
 
         // Test overwriting the dependency type:
         graph.addDependency(n1, n2, DependencyType.CREATE); // type is "higher", old dependency will be changed
 
         assertThat(graph.getAllEdges(), hasSize(1)); // still 1! no additional dependency.
         dep = graph.getAllEdges().iterator().next();
-        assertTrue(dep.getSource().equals(n1));
-        assertTrue(dep.getTarget().equals(n2));
-        assertTrue(dep.getDependencyType().equals(DependencyType.CREATE));
+        assertEquals(dep.getSource(), n1);
+        assertEquals(dep.getTarget(), n2);
+        assertEquals(DependencyType.CREATE, dep.getDependencyType());
 
         // but it won't replace a "lower" dependency:
         graph.addDependency(n1, n2, DependencyType.READ_WRITE); // type is "lower", no change
 
         assertThat(graph.getAllEdges(), hasSize(1)); // still 1! no additional dependency.
         dep = graph.getAllEdges().iterator().next();
-        assertTrue(dep.getSource().equals(n1));
-        assertTrue(dep.getTarget().equals(n2));
-        assertTrue(dep.getDependencyType().equals(DependencyType.CREATE)); // still the higher dependency.
+        assertEquals(dep.getSource(), n1);
+        assertEquals(dep.getTarget(), n2);
+        assertEquals(DependencyType.CREATE, dep.getDependencyType()); // still the higher dependency.
     }
 
     @Test

@@ -160,7 +160,7 @@ public class DependencyGraphSimpleImpl implements DependencyGraph {
         clone.setGraph(
                 new MaskSubgraph<>(graph,
                         node -> !filter.isAccepted(node),
-                        edge -> !filter.isAccepted(edge.getSource()) || !filter.isAccepted(edge.getTarget())));
+                        edge -> false));
 
         return clone;
     }
