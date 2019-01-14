@@ -118,9 +118,7 @@ public class TypescriptInputReader {
             node.setProperty(PARENT_PROPERTY, currentFilename);
         }
 
-        if (typescriptEntity.getEntities() != null) {
-            typescriptEntity.getEntities().forEach(child -> inputNode(child, node));
-        }
+        typescriptEntity.getEntities().forEach(child -> inputNode(child, node));
     }
 
     private void mapDependency(TypescriptDependency dependency) {
