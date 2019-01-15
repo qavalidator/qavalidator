@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -54,7 +55,7 @@ public class GraphMapper {
      * @return the nodes
      */
     public Collection<AbstractNode> getNodes() {
-        return nodeMap.values();
+        return new HashSet<>(nodeMap.values());
     }
 
     /**
@@ -63,7 +64,7 @@ public class GraphMapper {
      * @return the relations
      */
     public List<ReferencesRelation> getReferencesRelations() {
-        return referencesRelations;
+        return new ArrayList<>(referencesRelations);
     }
 
     private AbstractNode createNode(Node n) {

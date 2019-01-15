@@ -9,7 +9,7 @@ import org.neo4j.ogm.config.Configuration;
  * Reads the values from environment variables. If they are not set, falls back to default values.
  */
 @Slf4j
-public class Neo4jConfiguration {
+public final class Neo4jConfiguration {
 
     public static final String ENV_URI = "NEO4J_URI";
     public static final String ENV_USERNAME = "NEO4J_USERNAME";
