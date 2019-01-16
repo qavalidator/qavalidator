@@ -5,7 +5,7 @@ plugins {
     // provides configurations for annotation processing, and passes the annotation processor to
     // the javac "-processorpath" option:
     id "net.ltgt.apt" version "0.19"
-    id "com.jfrog.bintray" version "1.8.0"
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
 sonarqube {
@@ -73,7 +73,8 @@ subprojects {
         }
     }
 
-    afterReleaseBuild.dependsOn uploadArchives
+    bintrayUpload.dependsOn jar
+    afterReleaseBuild.dependsOn bintrayUpload
 
     ext {
         // Version numbers

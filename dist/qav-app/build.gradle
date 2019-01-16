@@ -38,7 +38,7 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
-uploadArchives.dependsOn bootJar
+bintrayUpload.dependsOn bootJar
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
