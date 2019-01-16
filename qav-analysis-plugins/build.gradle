@@ -53,7 +53,7 @@ artifacts {
 
 publishing {
     publications {
-        qavAnalysisPluginsPublication(MavenPublication) {
+        qavAnalysisPlugins(MavenPublication) {
             from components.java
             artifact sourcesJar
             artifact groovydocJar
@@ -72,7 +72,7 @@ publishing {
 bintray {
     user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
     key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
-    publications = ['qavAnalysisPluginsPublication']
+    publications = ['qavAnalysisPlugins']
     dryRun = false
     publish = true
     pkg {

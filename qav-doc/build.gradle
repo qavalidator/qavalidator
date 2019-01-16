@@ -90,7 +90,7 @@ jar.dependsOn(packageDocumentation)
 
 publishing {
     publications {
-        qavDocPublication(MavenPublication) {
+        qavDoc(MavenPublication) {
             from components.java
             artifact packageDocumentation
             artifact docSources
@@ -109,7 +109,7 @@ publishing {
 bintray {
     user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
     key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
-    publications = ['qavDocPublication']
+    publications = ['qavDoc']
     dryRun = false
     publish = true
     pkg {

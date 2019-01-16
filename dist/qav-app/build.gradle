@@ -57,7 +57,7 @@ artifacts {
 
 publishing {
     publications {
-        qavPublication(MavenPublication) {
+        qavApp(MavenPublication) {
             from components.java
             artifact sourcesJar
             artifact javadocJar
@@ -76,7 +76,7 @@ publishing {
 bintray {
     user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
     key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
-    publications = ['qavPublication']
+    publications = ['qavApp']
     dryRun = false
     publish = true
     pkg {
