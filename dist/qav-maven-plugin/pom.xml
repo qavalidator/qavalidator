@@ -95,12 +95,22 @@
             </dependency>
             <dependency>
                 <groupId>de.qaware.qav</groupId>
+                <artifactId>qav-graph-db</artifactId>
+                <version>${qav.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.qaware.qav</groupId>
                 <artifactId>qav-input-java</artifactId>
                 <version>${qav.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.qaware.qav</groupId>
                 <artifactId>qav-input-maven</artifactId>
+                <version>${qav.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.qaware.qav</groupId>
+                <artifactId>qav-input-traces</artifactId>
                 <version>${qav.version}</version>
             </dependency>
             <dependency>
@@ -330,11 +340,19 @@
         </dependency>
         <dependency>
             <groupId>de.qaware.qav</groupId>
+            <artifactId>qav-graph-db</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.qav</groupId>
             <artifactId>qav-input-java</artifactId>
         </dependency>
         <dependency>
             <groupId>de.qaware.qav</groupId>
             <artifactId>qav-input-maven</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.qav</groupId>
+            <artifactId>qav-input-traces</artifactId>
         </dependency>
         <dependency>
             <groupId>de.qaware.qav</groupId>

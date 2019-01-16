@@ -2,7 +2,7 @@
 [[release-notes]]
 = Release Notes
 
-== Release 1.2.8 -- (work in progress)
+== Release 1.2.8 -- (16.01.2019)
 
 Breaking Changes::
 * removed deprecated commands:
