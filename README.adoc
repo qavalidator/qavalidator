@@ -36,9 +36,9 @@ Preparation::
 * Make sure the example files and i-tests are up-to-date.
 
 Perform the release::
-To create the release and to upload at into the company's Nexus, use this command:
+To create the release, use this command:
 
-  gradlew --console plain clean build release -PnexusUsername=USERNAME -PnexusPassword=PASSWORD
+  gradlew --console plain clean build release -Prelease.useAutomaticVersion=true
 
 Maven Plugin::
 To release the Maven plugin, edit the `pom.xml` and set the new version number.
