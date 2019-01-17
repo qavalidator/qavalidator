@@ -3,7 +3,7 @@
 
     <groupId>de.qaware.qav</groupId>
     <artifactId>qav-maven-plugin</artifactId>
-    <version>1.2.8-SNAPSHOT</version>
+    <version>1.2.9-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>QAvalidator :: Maven Plugin</name>
@@ -24,10 +24,10 @@
         <maven-compat.version>3.3.9</maven-compat.version>
 
         <!-- this is the QAvalidator Runner version that this plugin depends on. -->
-        <qav.version>1.2.7</qav.version>
+        <qav.version>1.2.9-SNAPSHOT</qav.version>
 
         <!-- this is the QAvalidator Maven Plugin version to be used for mvn -Pself qav:qav -->
-        <qav-plugin-on-self.version>1.2.8-SNAPSHOT</qav-plugin-on-self.version>
+        <qav-plugin-on-self.version>1.2.9-SNAPSHOT</qav-plugin-on-self.version>
     </properties>
 
     <dependencyManagement>
@@ -57,17 +57,16 @@
                 <version>${qav.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>de.qaware.qav</groupId>
-                <artifactId>qav-server</artifactId>
-                <version>${qav.version}</version>
-            </dependency>
-
             <!--
                  Add transitive dependencies explicitly.
                  The Gradle Plugin for Bintray publication sometimes sets the wrong scope,
                  so add them explicitly to be sure.
             -->
+            <dependency>
+                <groupId>de.qaware.qav</groupId>
+                <artifactId>qav-app</artifactId>
+                <version>${qav.version}</version>
+            </dependency>
             <dependency>
                 <groupId>de.qaware.qav</groupId>
                 <artifactId>qav-analysis-dsl</artifactId>
@@ -320,6 +319,10 @@
 
         <dependency>
             <groupId>de.qaware.qav</groupId>
+            <artifactId>qav-app</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.qav</groupId>
             <artifactId>qav-analysis-dsl</artifactId>
         </dependency>
         <dependency>
@@ -370,11 +373,6 @@
             <groupId>de.qaware.qav</groupId>
             <artifactId>qav-visualization</artifactId>
         </dependency>
-        <dependency>
-            <groupId>de.qaware.qav</groupId>
-            <artifactId>qav-server</artifactId>
-        </dependency>
-
 
         <!-- Test dependencies -->
         <dependency>

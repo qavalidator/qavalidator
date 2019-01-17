@@ -1,6 +1,6 @@
 package de.qaware.qav.maven;
 
-import de.qaware.qav.server.QavServer;
+import de.qaware.qav.app.server.QavServerConfiguration;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -37,7 +37,7 @@ public class QavServerMojo extends AbstractMojo {
         checkFileAvailable(graph);
         System.setProperty("graph", graph);
         System.setProperty("server.port", port);
-        SpringApplication.run(QavServer.class);
+        SpringApplication.run(QavServerConfiguration.class);
 
         waitForKill();
     }

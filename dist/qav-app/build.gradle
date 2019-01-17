@@ -19,6 +19,11 @@ apply plugin: 'java-library'
 
 bootJar {
     launchScript()
+    classifier = 'full'
+}
+
+jar {
+    enabled = true
 }
 
 dependencies {
@@ -53,12 +58,14 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
+    archives bootJar
 }
 
 publishing {
     publications {
         qavApp(MavenPublication) {
             from components.java
+            artifact bootJar
             artifact sourcesJar
             artifact javadocJar
 
