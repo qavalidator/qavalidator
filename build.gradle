@@ -14,13 +14,18 @@ sonarqube {
     }
 }
 
-allprojects {
-    apply plugin: 'maven'
+subprojects {
+
     apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'jacoco'
 
     // for publishing via Bintray
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
+
+    // use this everywhere to ease using Lombok
+    apply plugin: 'net.ltgt.apt'
 
     group = 'de.qaware.qav'
 
@@ -66,70 +71,6 @@ allprojects {
             requireBranch = '' // allow releases from any branch
         }
     }
-
-    // bintrayUpload.dependsOn jar
-    // afterReleaseBuild.dependsOn bintrayUpload
-
-    /*
-     * common information for Bintray publishing
-     */
-    ext {
-        pomConfig = {
-
-            inceptionYear '2015'
-
-            scm {
-                connection "scm:git:${project.scmUrl}"
-                developerConnection "scm:git:${project.scmUrl}"
-                url project.websiteUrl
-            }
-
-            issueManagement {
-                system 'GitHub'
-                url project.issueTrackerUrl
-            }
-
-            licenses {
-                license([:]) {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-
-            organization {
-                name 'QAware GmbH'
-                url 'https://www.qaware.de'
-            }
-
-            developers {
-                developer {
-                    id 'lreimer'
-                    name 'Mario-Leander Reimer'
-                    email 'mario-leander.reimer@qaware.de'
-                    organization 'QAware GmbH'
-                    organizationUrl 'https://www.qaware.de'
-                    roles {role 'Developer'}
-                }
-                developer {
-                    id 'tilmanseifert'
-                    name 'Tilman Seifert'
-                    email 'tilman.seifert@qaware.de'
-                    organization 'QAware GmbH'
-                    organizationUrl 'https://www.qaware.de'
-                    roles {role 'Developer'}
-                }
-            }
-        }
-    }
-}
-
-subprojects {
-
-    apply plugin: 'jacoco'
-
-    // use this everywhere to ease using Lombok
-    apply plugin: 'net.ltgt.apt'
 
     ext {
         // Version numbers
@@ -197,48 +138,59 @@ subprojects {
             options.addStringOption('Xdoclint:none', '-quiet')
         }
     }
-}
 
-publishing {
-    publications {
-        qavMain(MavenPublication) {
-            artifact jar
+    /*
+     * common information for Bintray publishing
+     */
+    ext {
+        pomConfig = {
 
-            pom.withXml {
-                asNode().appendNode('name', "QAvalidator :: ${project.name}")
-                asNode().appendNode('description', project.description)
-                asNode().appendNode('url', project.websiteUrl)
+            inceptionYear '2015'
 
-                asNode().children().last() + project.pomConfig
+            scm {
+                connection "scm:git:${project.scmUrl}"
+                developerConnection "scm:git:${project.scmUrl}"
+                url project.websiteUrl
+            }
+
+            issueManagement {
+                system 'GitHub'
+                url project.issueTrackerUrl
+            }
+
+            licenses {
+                license([:]) {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            organization {
+                name 'QAware GmbH'
+                url 'https://www.qaware.de'
+            }
+
+            developers {
+                developer {
+                    id 'lreimer'
+                    name 'Mario-Leander Reimer'
+                    email 'mario-leander.reimer@qaware.de'
+                    organization 'QAware GmbH'
+                    organizationUrl 'https://www.qaware.de'
+                    roles {role 'Developer'}
+                }
+                developer {
+                    id 'tilmanseifert'
+                    name 'Tilman Seifert'
+                    email 'tilman.seifert@qaware.de'
+                    organization 'QAware GmbH'
+                    organizationUrl 'https://www.qaware.de'
+                    roles {role 'Developer'}
+                }
             }
         }
     }
 }
 
-bintray {
-    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
-    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
-    publications = ['qavMain']
-    dryRun = false
-    publish = true
-    pkg {
-        repo = project.bintrayRepo
-        name = project.name
-        desc = project.description
-        licenses = ['Apache-2.0']
-        labels = ['qaware', 'architecture', 'validation']
-        websiteUrl = project.websiteUrl
-        issueTrackerUrl = project.issueTrackerUrl
-        vcsUrl = project.scmUrl
-        publicDownloadNumbers = true
-        version {
-            name = project.version
-            desc = project.description
-            released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
-            vcsTag = "v${project.version}"
-            mavenCentralSync {
-                sync = false
-            }
-        }
-    }
-}
+task build(description: "no-op task, needed for the release plugin") {}
