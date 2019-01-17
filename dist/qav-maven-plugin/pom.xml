@@ -17,7 +17,7 @@
 
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <maven-release-plugin.version>2.5.2</maven-release-plugin.version>
-        <maven-plugin-plugin.version>3.4</maven-plugin-plugin.version>
+        <maven-plugin-plugin.version>3.6.0</maven-plugin-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
         <maven-plugin-testing-harness.version>3.3.0</maven-plugin-testing-harness.version>
@@ -288,14 +288,12 @@
                         <goals>
                             <goal>descriptor</goal>
                         </goals>
-                        <phase>process-classes</phase>
                     </execution>
                     <execution>
                         <id>help-descriptor</id>
                         <goals>
                             <goal>helpmojo</goal>
                         </goals>
-                        <phase>process-classes</phase>
                     </execution>
                 </executions>
             </plugin>
