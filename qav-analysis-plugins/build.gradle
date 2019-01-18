@@ -1,3 +1,8 @@
+plugins {
+    // provides configurations for annotation processing, and passes the annotation processor to
+    // the javac "-processorpath" option:
+    id "net.ltgt.apt" version "0.19"
+}
 
 apply plugin: 'groovy'
 
