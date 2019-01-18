@@ -12,5 +12,5 @@ include "util:qav-util", "util:qav-doc-generator",
         "qav-runner",
         "qav-ui",
         "dist:qav-app", "dist:qav-gradle-plugin",
-        "qav-doc", "qav-sonar-plugin"
+        "qav-doc"
 
