@@ -2,7 +2,7 @@
 [[release-notes]]
 = Release Notes
 
-== Release 1.2.8 -- (16.01.2019)
+== Release 1.2.9 -- (16.01.2019)
 
 Breaking Changes::
 * removed deprecated commands:
@@ -16,6 +16,7 @@ New Features::
 Changes::
 * Library upgrades, UI upgrade.
 
+_Release 1.2.8: Skipped._
 
 == Release 1.2.7 -- 31.01.2018
 
