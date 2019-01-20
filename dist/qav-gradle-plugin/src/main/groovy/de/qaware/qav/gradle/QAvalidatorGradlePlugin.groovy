@@ -1,5 +1,6 @@
 package de.qaware.qav.gradle
 
+import de.qaware.qav.app.server.QavServerConfiguration
 import de.qaware.qav.runner.QAvalidator
 import de.qaware.qav.runner.QAvalidatorConfig
 import de.qaware.qav.runner.QAvalidatorResult
