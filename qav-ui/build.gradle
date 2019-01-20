@@ -28,7 +28,18 @@ node {
     nodeModulesDir = file("${project.projectDir}")
 }
 
-processResources.dependsOn(npm_install, npm_run_buildProd)
+// Define inputs and outputs explicitly so that Gradle knows when (not) to execute them.
+npmInstall {
+  inputs.file 'package.json'
+  outputs.dir 'node_modules'
+}
+
+npm_run_buildProd {
+  inputs.dir 'src'
+  outputs.dir 'dist'
+}
+
+processResources.dependsOn(npmInstall, npm_run_buildProd)
 
 sourceSets.main.resources.srcDirs = ["${project.projectDir}/dist"]
 
