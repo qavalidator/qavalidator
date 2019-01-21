@@ -27,15 +27,15 @@ class ComponentTest {
         child1.parent = component
         child2.parent = component
 
-        assert component.toString() == "Component[name=C1,parent.name=<null>," +
-                "children=[" +
-                "Component[name=child1,parent.name=C1,children=[],api={},impl={},usesAPI={},usesImpl={},pathSeparator=<null>], " +
-                "Component[name=child2,parent.name=C1,children=[],api={},impl={},usesAPI={},usesImpl={},pathSeparator=<null>]]," +
-                "api={A.api=ClassSet[name=A,patterns=[a.*, b]]}," +
-                "impl={A.impl=ClassSet[name=B,patterns=[a.impl.*]]}," +
-                "usesAPI={}," +
-                "usesImpl={}," +
-                "pathSeparator=/]"
+        assert component.toString() == "Component(name:C1, " +
+                "children:[" +
+                "Component(name:child1, children:[], api:[:], impl:[:], usesAPI:[:], usesImpl:[:], pathSeparator:/), " +
+                "Component(name:child2, children:[], api:[:], impl:[:], usesAPI:[:], usesImpl:[:], pathSeparator:/)], " +
+                "api:[A.api:ClassSet(name:A, patterns:[a.*, b])], " +
+                "impl:[A.impl:ClassSet(name:B, patterns:[a.impl.*])], " +
+                "usesAPI:[:], " +
+                "usesImpl:[:], " +
+                "pathSeparator:/)"
     }
 
     // --- getApiName()

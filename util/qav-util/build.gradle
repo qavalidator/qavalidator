@@ -4,17 +4,13 @@
 apply plugin: 'java-library'
 
 dependencies {
-    compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "ch.qos.logback:logback-core:${logbackVersion}"
-    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    implementation "com.google.guava:guava:${guavaVersion}"
 
-    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
-    compile "com.google.guava:guava:${guavaVersion}"
+    implementation "org.springframework:spring-core:${springVersion}"
+    implementation "org.apache.ant:ant:${antVersion}"
 
-    compile "org.springframework:spring-core:${springVersion}"
-    compile "org.apache.ant:ant:${antVersion}"
-
-    compile "org.antlr:stringtemplate:${stringtemplateVersion}"
+    api "org.antlr:stringtemplate:${stringtemplateVersion}"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

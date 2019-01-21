@@ -1,7 +1,6 @@
 package de.qaware.qav.architecture.dsl.model
 
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
+import groovy.transform.ToString
 
 /**
  * This class represents a Component in an architecture view.
@@ -12,6 +11,8 @@ import org.apache.commons.lang3.builder.ToStringStyle
  *
  * @author QAware GmbH
  */
+@ToString(includeNames = true, includePackage = false,
+        includes = ['name', 'children', 'api', 'impl', 'usesAPI', 'usesImpl', 'pathSeparator'])
 class Component {
 
     String name
@@ -22,20 +23,6 @@ class Component {
     Map<String, ClassSet> usesAPI = [:]
     Map<String, ClassSet> usesImpl = [:]
     String pathSeparator = null
-
-    @Override
-    String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("name", name)
-                .append("parent.name", parent?.name)
-                .append("children", children)
-                .append("api", api)
-                .append("impl", impl)
-                .append("usesAPI", usesAPI)
-                .append("usesImpl", usesImpl)
-                .append("pathSeparator", pathSeparator)
-                .toString()
-    }
 
     /**
      * return the name of the API the given class name belongs to, or null if none matches.

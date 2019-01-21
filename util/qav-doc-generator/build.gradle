@@ -4,11 +4,12 @@
 apply plugin: 'java-library'
 
 dependencies {
-    compile project(':util:qav-util')
+    implementation project(':util:qav-util')
 
-    compile group: 'org.antlr', name: 'stringtemplate', version: stringtemplateVersion
+    implementation "com.google.guava:guava:${guavaVersion}"
+    implementation group: 'org.antlr', name: 'stringtemplate', version: stringtemplateVersion
 
-    testCompile group: 'com.google.testing.compile', name: 'compile-testing', version: googleTestingCompileVersion
+    testImplementation group: 'com.google.testing.compile', name: 'compile-testing', version: googleTestingCompileVersion
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

@@ -8,10 +8,7 @@ apply plugin: 'groovy'
 
 dependencies {
     compile gradleApi()
-    compile(project(":qav-runner")) {
-        exclude group: "ch.qos.logback" // Gradle has its own logging, based on SLF4J.
-        exclude group: "commons-logging" // Gradle has its own logging, based on SLF4J.
-    }
+
     compile(project(":dist:qav-app")) {
         exclude group: "ch.qos.logback" // Gradle has its own logging, based on SLF4J.
         exclude group: "commons-logging" // Gradle has its own logging, based on SLF4J.

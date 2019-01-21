@@ -6,10 +6,6 @@ dependencies {
 
     testCompile project(':qav-visualization')
 
-    compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
-    compile "ch.qos.logback:logback-core:${project.ext.logbackVersion}"
-    compile "ch.qos.logback:logback-classic:${project.ext.logbackVersion}"
-
     compile "org.codehaus.groovy:groovy-all:${project.ext.groovyVersion}"
 }
 

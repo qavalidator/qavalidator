@@ -2,16 +2,12 @@
 apply plugin: 'java-library'
 
 dependencies {
-    compile project(':qav-architecture-dsl')
-    compile project(':qav-graph')
-    compile project(':util:qav-util')
+    api project(':qav-architecture-dsl')
+    api project(':qav-graph')
+    implementation project(':util:qav-util')
 
-    compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "ch.qos.logback:logback-core:${logbackVersion}"
-    compile "ch.qos.logback:logback-classic:${logbackVersion}"
-
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: commonsLang3Version
-    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: commonsLang3Version
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

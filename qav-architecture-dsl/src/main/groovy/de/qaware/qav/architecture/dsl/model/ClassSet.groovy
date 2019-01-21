@@ -1,14 +1,14 @@
 package de.qaware.qav.architecture.dsl.model
 
+import com.google.common.base.Strings
 import de.qaware.qav.util.QavNameMatcher
-import org.apache.commons.lang3.StringUtils
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
+import groovy.transform.ToString
 
 /**
  *
  * @author QAware GmbH
  */
+@ToString(includeNames=true, includePackage = false, includes = ['name', 'patterns'])
 class ClassSet {
 
     private final String name
@@ -76,7 +76,7 @@ class ClassSet {
      * @return true if it matches any of the include patterns
      */
     boolean matches(String className) {
-        if (StringUtils.isBlank(className)) {
+        if (Strings.isNullOrEmpty(className)) {
             return false
         }
         for (String p : patterns) {
@@ -120,13 +120,5 @@ class ClassSet {
         result = (name != null ? name.hashCode() : 0)
         result = 31 * result + (patterns != null ? patterns.hashCode() : 0)
         return result
-    }
-
-    @Override
-    String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("name", name)
-                .append("patterns", patterns)
-                .toString()
     }
 }

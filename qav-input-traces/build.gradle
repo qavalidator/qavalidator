@@ -2,17 +2,14 @@
 apply plugin: 'java-library'
 
 dependencies {
-    compile project(':qav-graph')
+    api project(':qav-graph')
+    implementation project(':util:qav-util')
 
-    compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "ch.qos.logback:logback-core:${logbackVersion}"
-    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
 
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
-
-    testCompile group: "org.assertj", name: "assertj-core", version: assertjVersion
-    testCompile project(':qav-visualization')
+    testImplementation project(':qav-visualization')
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

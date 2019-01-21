@@ -2,17 +2,12 @@
 apply plugin: 'java-library'
 
 dependencies {
-    compile project(':qav-architecture-dsl')
-    compile project(':qav-graph')
+    api project(':qav-architecture-dsl')
+    api project(':qav-graph')
 
-    compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "ch.qos.logback:logback-core:${logbackVersion}"
-    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: jacksonVersion
 
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: jacksonVersion
-
-    testCompile group: "org.assertj", name: "assertj-core", version: assertjVersion
-    testCompile project(':qav-visualization')
+    testImplementation project(':qav-visualization')
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

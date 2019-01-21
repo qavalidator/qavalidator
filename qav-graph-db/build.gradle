@@ -2,14 +2,12 @@
 apply plugin: 'java-library'
 
 dependencies {
-    compile project(':qav-graph')
+    api project(':qav-graph')
 
-    compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "ch.qos.logback:logback-core:${logbackVersion}"
-    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation "com.google.guava:guava:${guavaVersion}"
 
-    compile "org.neo4j:neo4j-ogm-core:${springDataOgmVersion}"
-    runtime "org.neo4j:neo4j-ogm-bolt-driver:${springDataOgmVersion}"
+    api "org.neo4j:neo4j-ogm-core:${springDataOgmVersion}"
+    runtimeOnly "org.neo4j:neo4j-ogm-bolt-driver:${springDataOgmVersion}"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

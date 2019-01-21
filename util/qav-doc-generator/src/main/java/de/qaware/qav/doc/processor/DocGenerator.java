@@ -1,5 +1,6 @@
 package de.qaware.qav.doc.processor;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import de.qaware.qav.doc.model.CommandDoc;
 import de.qaware.qav.doc.model.ParameterDoc;
@@ -7,7 +8,6 @@ import de.qaware.qav.doc.model.PluginDoc;
 import de.qaware.qav.util.StringTemplateUtil;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -82,7 +82,7 @@ public class DocGenerator {
             commandST.setAttribute(PARAMETERS_ATT, getParameters(qavCommand));
 
             String resultText = trimDesc(qavCommand.getResult());
-            if (!StringUtils.isBlank(resultText)) {
+            if (!Strings.isNullOrEmpty(resultText)) {
                 commandST.setAttribute(RESULT_ATT, resultText);
             }
             result.add(commandST);

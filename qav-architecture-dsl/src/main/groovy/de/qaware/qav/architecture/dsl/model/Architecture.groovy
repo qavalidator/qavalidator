@@ -1,8 +1,7 @@
 package de.qaware.qav.architecture.dsl.model
 
 import com.google.common.collect.Maps
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
+import groovy.transform.ToString
 
 import static com.google.common.base.Preconditions.checkNotNull
 
@@ -14,6 +13,7 @@ import static com.google.common.base.Preconditions.checkNotNull
  *
  * @author QAware GmbH
  */
+@ToString(includeNames=true, includePackage = false, includes = ['prefix', 'reflexMLversion', 'includes', 'excludes'])
 class Architecture extends Component {
 
     String prefix
@@ -31,17 +31,6 @@ class Architecture extends Component {
      * Cache for class names
      */
     private Map<String, Component> nameToParentComponentCache = Maps.newHashMap()
-
-    @Override
-    String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .appendSuper(Object.toString())
-                .append("prefix", prefix)
-                .append("reflexMLversion", reflexMLversion)
-                .append("includes", includes)
-                .append("excludes", excludes)
-                .toString()
-    }
 
     /**
      * Return the name of the parent component, or null if not included or no parent.

@@ -27,20 +27,22 @@ jar {
 }
 
 dependencies {
-    compile project(':qav-runner')
-    compile project(':qav-ui')
+    api project(':qav-runner')
+    api project(':qav-ui')
 
-    compile ("org.springframework.boot:spring-boot-starter:${springBootVersion}") {
+    api ("org.springframework.boot:spring-boot-starter:${springBootVersion}") {
         exclude(group: "org.slf4j", module: "log4j-over-slf4j")
         exclude(group: "org.slf4j", module: "jul-to-slf4j")
     }
-    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
+    api("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
         exclude(group: "org.slf4j", module: "log4j-over-slf4j")
         exclude(group: "org.slf4j", module: "jul-to-slf4j")
     }
-    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '2.1.2.RELEASE'
+    api group: 'org.springframework.data', name: 'spring-data-commons', version: '2.1.2.RELEASE'
 
-    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
 bintrayUpload.dependsOn bootJar

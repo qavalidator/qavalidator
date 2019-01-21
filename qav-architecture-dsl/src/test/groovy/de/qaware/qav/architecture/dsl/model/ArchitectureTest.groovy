@@ -27,9 +27,9 @@ class ArchitectureTest {
         architecture.includes = [ "api" : new ClassSet("api", ["com.my.**"])]
         architecture.excludes = [ "unwanted" : new ClassSet("api", ["com.my.util.**"])]
 
-        assert architecture.toString() == "Architecture[prefix=T,reflexMLversion=1.0," +
-                "includes={api=ClassSet[name=api,patterns=[com.my.**]]}," +
-                "excludes={unwanted=ClassSet[name=api,patterns=[com.my.util.**]]}]"
+        assert architecture.toString() == "Architecture(prefix:T, reflexMLversion:1.0, " +
+                "includes:[api:ClassSet(name:api, patterns:[com.my.**])], " +
+                "excludes:[unwanted:ClassSet(name:api, patterns:[com.my.util.**])])"
     }
 
     // --- getParentComponent()

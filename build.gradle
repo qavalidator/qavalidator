@@ -88,6 +88,11 @@ subprojects {
     }
 
     dependencies {
+        // Logging with Slf4j and Logback
+        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+        implementation "ch.qos.logback:logback-core:${logbackVersion}"
+        implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+
         // Lombok
         annotationProcessor "org.projectlombok:lombok:${project.ext.lombokVersion}"
         compileOnly "org.projectlombok:lombok:${project.ext.lombokVersion}"
@@ -97,10 +102,10 @@ subprojects {
         testCompileOnly "org.projectlombok:lombok:${project.ext.lombokVersion}"
 
         // Tests
-        testCompile "junit:junit:${project.ext.junitVersion}"
-        testCompile group: "org.assertj", name: "assertj-core", version: assertjVersion
-        testCompile "org.mockito:mockito-core:${project.ext.mockitoVersion}"
-        testCompile "org.hamcrest:hamcrest-integration:${project.ext.hamcrestVersion}"
+        testImplementation "junit:junit:${project.ext.junitVersion}"
+        testImplementation "org.assertj:assertj-core:${project.ext.assertjVersion}"
+        testImplementation "org.mockito:mockito-core:${project.ext.mockitoVersion}"
+        testImplementation "org.hamcrest:hamcrest-integration:${project.ext.hamcrestVersion}"
     }
 
     jacoco {

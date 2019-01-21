@@ -2,22 +2,18 @@
 apply plugin: 'java-library'
 
 dependencies {
-    compile project(':util:qav-util')
+    implementation project(':util:qav-util')
 
-    compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "ch.qos.logback:logback-core:${logbackVersion}"
-    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: commonsLang3Version
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
 
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: commonsLang3Version
-    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
-
-    compile group: 'org.jgrapht', name: 'jgrapht-core', version: jgraphtVersion
-    compile group: 'org.apache.lucene', name: 'lucene-core', version: luceneVersion
-    compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: luceneVersion
+    api group: 'org.jgrapht', name: 'jgrapht-core', version: jgraphtVersion
+    implementation group: 'org.apache.lucene', name: 'lucene-core', version: luceneVersion
+    implementation group: 'org.apache.lucene', name: 'lucene-queryparser', version: luceneVersion
 
     // For Graph I/O:
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
