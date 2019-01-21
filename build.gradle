@@ -61,7 +61,7 @@ subprojects {
         springDataOgmVersion = "3.1.5"
 
         jgraphtVersion = "1.3.0"
-        groovyVersion = "2.4.15" // upgrading must be done in sync with the Gradle version to avoid problems in the build process
+        groovyVersion = "2.5.4" // upgrading must be done in sync with the Gradle version to avoid problems in the build process
 
         asmVersion = "7.0"
         luceneVersion = "7.5.0"

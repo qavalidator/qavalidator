@@ -29,14 +29,9 @@ node {
 }
 
 // Define inputs and outputs explicitly so that Gradle knows when (not) to execute them.
-npmInstall {
-  inputs.file 'package.json'
-  outputs.dir 'node_modules'
-}
-
 npm_run_buildProd {
-  inputs.dir 'src'
-  outputs.dir 'dist'
+    inputs.dir "${project.projectDir}/src"
+    outputs.dir "${project.projectDir}/dist"
 }
 
 processResources.dependsOn(npmInstall, npm_run_buildProd)
@@ -57,7 +52,7 @@ veryClean.dependsOn(clean)
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from 'src'
-    include '**/*.ts', '**/*.html', '**/*.html', '**/*.css', '**/*.ico'
+    include '**/*.ts', '**/*.html', '**/*.css', '**/*.ico'
 }
 
 artifacts {
