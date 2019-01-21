@@ -50,7 +50,7 @@ veryClean.dependsOn(clean)
 
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = 'sources'
+    archiveClassifier.set 'sources'
     from 'src'
     include '**/*.ts', '**/*.html', '**/*.css', '**/*.ico'
 }

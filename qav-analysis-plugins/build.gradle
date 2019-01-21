@@ -40,12 +40,12 @@ task deleteGeneratedDoc(type: Delete) {
 clean.dependsOn deleteGeneratedDoc
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = 'sources'
+    archiveClassifier.set 'sources'
     from sourceSets.main.allSource
 }
 
 task groovydocJar(type: Jar, dependsOn: groovydoc) {
-    archiveClassifier = 'javadoc'
+    archiveClassifier.set 'javadoc'
     from groovydoc.destinationDir
 }
 
