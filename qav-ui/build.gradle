@@ -28,7 +28,7 @@ node {
     nodeModulesDir = file("${project.projectDir}")
 }
 
-// Define inputs and outputs explicitly so that Gradle knows when (not) to execute them.
+// Define inputs and outputs explicitly so that Gradle knows when (not) to execute the task.
 npm_run_buildProd {
     inputs.dir "${project.projectDir}/src"
     outputs.dir "${project.projectDir}/dist"
@@ -50,7 +50,7 @@ veryClean.dependsOn(clean)
 
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     from 'src'
     include '**/*.ts', '**/*.html', '**/*.css', '**/*.ico'
 }
