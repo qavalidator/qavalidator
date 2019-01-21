@@ -1,22 +1,19 @@
 package de.qaware.qav.app;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assume;
 import org.junit.Test;
-import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * This is not a unit test, but a test run on the complete source.
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class QavIntegrationTest {
-
-    private static final Logger LOGGER = getLogger(QavIntegrationTest.class);
 
     /**
      * This is a sample to run on QAvalidator.
@@ -27,7 +24,7 @@ public class QavIntegrationTest {
         Assume.assumeTrue("Directory " + codebase + " doesn't exist.", new File(codebase).exists());
 
         QavMain.main("--analysis=classpath:/default_analysis.groovy", "--outputDir=build/results-self",
-                codebase + "/qav-core/build/classes/main");
+                codebase + "/qav-app/build/classes/java/main");
     }
 
     private String getCodebaseDir() {

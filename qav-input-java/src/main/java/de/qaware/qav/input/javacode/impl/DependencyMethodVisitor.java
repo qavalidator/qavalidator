@@ -53,7 +53,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
      * @param collapseInnerClasses <tt>true</tt> to collapse inner classes onto the outer class
      */
     public DependencyMethodVisitor(DependencyGraph dependencyGraph, String className, String methodName, boolean collapseInnerClasses) {
-        super(Opcodes.ASM5);
+        super(Opcodes.ASM7);
         this.className = className;
         this.methodName = methodName;
         this.dependencyGraph = dependencyGraph;

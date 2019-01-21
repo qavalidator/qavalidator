@@ -28,7 +28,7 @@ public class MethodFieldSignatureVisitor extends SignatureVisitor {
      *                             True: Use the outer class; false means deal with the full name
      */
     public MethodFieldSignatureVisitor(boolean collapseInnerClasses) {
-        super(Opcodes.ASM5);
+        super(Opcodes.ASM7);
         this.collapseInnerClasses = collapseInnerClasses;
     }
 

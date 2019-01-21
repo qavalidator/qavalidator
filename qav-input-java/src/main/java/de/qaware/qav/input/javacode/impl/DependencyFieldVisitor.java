@@ -30,7 +30,7 @@ public class DependencyFieldVisitor extends FieldVisitor {
      * @param lineNo               the lin number
      */
     public DependencyFieldVisitor(DependencyGraph dependencyGraph, boolean collapseInnerClasses, String className, int lineNo) {
-        super(Opcodes.ASM5);
+        super(Opcodes.ASM7);
         this.dependencyGraph = dependencyGraph;
         this.collapseInnerClasses = collapseInnerClasses;
         this.classNode = dependencyGraph.getNode(className);

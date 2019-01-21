@@ -58,7 +58,7 @@ public class DependencyClassVisitor extends ClassVisitor {
      *                             with the full name
      */
     public DependencyClassVisitor(DependencyGraph dependencyGraph, boolean collapseInnerClasses) {
-        super(Opcodes.ASM5);
+        super(Opcodes.ASM7);
         this.dependencyGraph = dependencyGraph;
         this.collapseInnerClasses = collapseInnerClasses;
     }
