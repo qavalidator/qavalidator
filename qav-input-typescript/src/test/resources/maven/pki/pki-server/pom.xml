@@ -14,7 +14,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.mycompany.pki</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>pki-api</artifactId>
         </dependency>
         <dependency>
@@ -25,6 +25,12 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testtools</groupId>
+            <artifactId>tester</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
