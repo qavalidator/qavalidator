@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.fail;
 public class MavenInputReaderTest {
 
     private static final String ROOT_DIR = "src/test/resources/maven/pki";
+    private static final String ROOT_DIR_SIMPLE = "src/test/resources/maven/simple";
     private static final String ROOT_WRONG_INPUT = "src/test/resources/maven/wrong";
     private static final String ROOT_NOT_EXISTING_INPUT = "src/test/resources/maven";
     private static final String OUTPUT_DIR = "build/maven-test";
@@ -58,6 +59,25 @@ public class MavenInputReaderTest {
         assertEdge(pkiServer, tester, DependencyType.TEST);
 
         GraphExporter.export(dependencyGraph, OUTPUT_DIR + "/mavenTest", new Architecture(), new ArrayList<>(), false);
+    }
+
+    @Test
+    public void testSimple() {
+        reader.readPom(ROOT_DIR_SIMPLE);
+
+        assertThat(dependencyGraph.getAllNodes()).hasSize(5);
+        Node abc = assertNode("com.mycompany.abc:abc");
+        Node abcApi = assertNode("com.mycompany.abc:abc-api");
+        Node common = assertNode("com.mycompany.common:common-util");
+        Node guava = assertNode("com.google.guava:guava");
+        Node tester = assertNode("org.testtools:tester");
+
+        assertThat(dependencyGraph.getAllEdges()).hasSize(4);
+
+        assertEdge(abc, abcApi, DependencyType.COMPILE);
+        assertEdge(abc, common, DependencyType.COMPILE);
+        assertEdge(abc, guava, DependencyType.COMPILE);
+        assertEdge(abc, tester, DependencyType.TEST);
     }
 
     private Node assertNode(String name) {
