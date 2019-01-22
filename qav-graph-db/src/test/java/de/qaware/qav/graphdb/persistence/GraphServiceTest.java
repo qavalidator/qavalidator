@@ -5,12 +5,14 @@ import de.qaware.qav.graph.io.GraphReaderWriter;
 import de.qaware.qav.graphdb.model.AbstractNode;
 import de.qaware.qav.graphdb.model.ArchitectureNode;
 import de.qaware.qav.graphdb.model.ClassNode;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.neo4j.ogm.cypher.ComparisonOperator;
+import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.transaction.Transaction;
-import org.slf4j.Logger;
 
 import java.util.Collection;
 
@@ -21,20 +23,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Tests for {@link GraphService}
  */
+@Slf4j
 public class GraphServiceTest {
-
-    private static final Logger LOGGER = getLogger(GraphServiceTest.class);
 
     private static DependencyGraph graph;
 
     private Session sessionMock;
-    private Transaction tx;
+    private Transaction txMock;
     private GraphService graphService;
 
     @BeforeClass
@@ -45,8 +46,8 @@ public class GraphServiceTest {
     @Before
     public void init() {
         sessionMock = mock(Session.class);
-        tx = mock(Transaction.class);
-        when(sessionMock.beginTransaction()).thenReturn(tx);
+        txMock = mock(Transaction.class);
+        when(sessionMock.beginTransaction()).thenReturn(txMock);
 
         graphService = new GraphService(sessionMock);
     }
@@ -58,7 +59,7 @@ public class GraphServiceTest {
         verify(sessionMock).beginTransaction();
         verify(sessionMock, times(graph.getAllNodes().size())).save(any(AbstractNode.class), eq(1));
         verifyNoMoreInteractions(sessionMock);
-        verify(tx).commit();
+        verify(txMock).commit();
     }
 
     @Test
@@ -70,7 +71,26 @@ public class GraphServiceTest {
         verify(sessionMock).deleteAll(ArchitectureNode.class);
 
         verifyNoMoreInteractions(sessionMock);
-        verify(tx).commit();
+        verify(txMock).commit();
+    }
+
+    @Test
+    public void findByProperty() {
+        graphService.findByProperty("key", "value");
+
+        verify(sessionMock).loadAll(eq(ClassNode.class), any(Filter.class));
+        verifyNoMoreInteractions(sessionMock);
+        verifyZeroInteractions(txMock);
+    }
+
+    @Test
+    public void findByFilter() {
+        Filter filter = new Filter("key", ComparisonOperator.EQUALS, "value");
+        graphService.findByFilter(filter);
+
+        verify(sessionMock).loadAll(ClassNode.class, filter);
+        verifyNoMoreInteractions(sessionMock);
+        verifyZeroInteractions(txMock);
     }
 
     // @Test

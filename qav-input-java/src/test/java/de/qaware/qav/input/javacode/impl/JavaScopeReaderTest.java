@@ -287,6 +287,26 @@ public class JavaScopeReaderTest {
         assertRelation(c, a, DependencyType.REFERENCE);
     }
 
+    @Test
+    public void testWrongInputDir() {
+        dependencyGraph = DependencyGraphFactory.createGraph();
+        Map<String, String> parameters = Maps.newHashMap();
+        parameters.put("baseDir", "not-existing");
+        new JavaScopeReader(dependencyGraph, true).read(parameters);
+
+        assertThat(dependencyGraph.getAllNodes(), hasSize(0));
+    }
+
+    @Test
+    public void testNoInputDir() {
+        dependencyGraph = DependencyGraphFactory.createGraph();
+        Map<String, String> parameters = Maps.newHashMap();
+        parameters.put("baseDir", "src/test/resources/something.txt");
+        new JavaScopeReader(dependencyGraph, true).read(parameters);
+
+        assertThat(dependencyGraph.getAllNodes(), hasSize(0));
+    }
+
     private DependencyGraph initJavaScopeReader(Class<?> startClass, boolean collapseInnerClasses) {
         DependencyGraph dependencyGraph = DependencyGraphFactory.createGraph();
 
