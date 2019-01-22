@@ -35,6 +35,12 @@ public class MavenInputReader {
         this.dependencyGraph = dependencyGraph;
     }
 
+    /**
+     * Read the pom.xml files from the given directory. Descends recursively if modules are defined.
+     *
+     * @param dirname the directory name
+     * @return the {@link Node} representing the found pom.xml
+     */
     public Node readPom(String dirname) {
         LOGGER.debug("Read pom file in directory: {}", dirname);
         FileSystemUtil.assertFileOrResourceExists(dirname);

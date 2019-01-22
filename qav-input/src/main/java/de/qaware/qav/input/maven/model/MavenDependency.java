@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Data;
 
 /**
- *
+ * Represents a Maven dependency, with groupId, artifactId, and scope.
  */
 @Data
 @JacksonXmlRootElement(localName = "project")
