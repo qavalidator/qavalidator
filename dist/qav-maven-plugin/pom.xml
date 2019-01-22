@@ -104,17 +104,12 @@
             </dependency>
             <dependency>
                 <groupId>de.qaware.qav</groupId>
-                <artifactId>qav-input-maven</artifactId>
+                <artifactId>qav-input</artifactId>
                 <version>${qav.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.qaware.qav</groupId>
                 <artifactId>qav-input-traces</artifactId>
-                <version>${qav.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.qaware.qav</groupId>
-                <artifactId>qav-input-typescript</artifactId>
                 <version>${qav.version}</version>
             </dependency>
 
@@ -349,15 +344,11 @@
         </dependency>
         <dependency>
             <groupId>de.qaware.qav</groupId>
-            <artifactId>qav-input-maven</artifactId>
+            <artifactId>qav-input</artifactId>
         </dependency>
         <dependency>
             <groupId>de.qaware.qav</groupId>
             <artifactId>qav-input-traces</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.qaware.qav</groupId>
-            <artifactId>qav-input-typescript</artifactId>
         </dependency>
         <dependency>
             <groupId>de.qaware.qav</groupId>

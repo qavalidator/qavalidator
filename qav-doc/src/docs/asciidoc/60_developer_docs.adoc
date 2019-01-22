@@ -60,9 +60,7 @@ From bottom to top, these are the modules:
 * Processing:
   ** Input:
      *** _qav-input-java_: reads Java `.class` files and `.jar` files.
-     *** _qav-input-maven_: reads `pom.xml` files.
-     *** _qav-input-typescript_: reads input produced by the TypeScript analyzer (work in progress).
-     *** _qav-input-gradle_: reads gradle project structure _(planned)_.
+     *** _qav-input_: reads Maven `pom.xml` files, input produced by the TypeScript analyzer, and Zipkin Traces.
   ** Transformation & Validation:
      *** _qav-architecture-dsl_: This is the data model for representing an `Architecture`. Also contains the DSL to read an architecture definition from a QAvalidator Architecture DSL file.
      *** _qav-architecture_: Contains factories, validators, and transformations to work with architectures, architecture components, and architecture sub-graphs.
