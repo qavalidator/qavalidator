@@ -1,5 +1,0 @@
-= Input Zipkin Traces
-
-This module contains the importer for Zipkin traces.
-
-The goal is to combine static and dynamic analysis.

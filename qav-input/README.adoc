@@ -1,0 +1,15 @@
+= Input
+
+== Input Maven POMs
+
+This module contains the importer for Maven POMs (on the basis of reading the XML files; this is no evaluation of the project model).
+
+== Input Zipkin Traces
+
+This module contains the importer for Zipkin traces.
+
+The goal is to combine static and dynamic analysis.
+
+== Input Typescript Analysis
+
+Read the analysis results written by the Typescript dependency analysis tool (separate tool).

@@ -47,7 +47,7 @@ public class TraceReaderTest {
     @Test
     public void testNoJsonFile() {
         try {
-            traceReader.read("src/test/resources/noJsonFile.txt");
+            traceReader.read("src/test/resources/traces/noJsonFile.txt");
             fail("Should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertThat(e.getCause()).isInstanceOf(IOException.class);
@@ -57,7 +57,7 @@ public class TraceReaderTest {
 
     @Test
     public void testBasics() {
-        traceReader.read("src/test/resources/basicTrace.json");
+        traceReader.read("src/test/resources/traces/basicTrace.json");
         assertThat(dependencyGraph.getAllNodes()).hasSize(2);
 
         Node n1 = dependencyGraph.getNode("__EMPTY__");
@@ -77,7 +77,7 @@ public class TraceReaderTest {
 
     @Test
     public void testTrace2() {
-        traceReader.read("src/test/resources/trace2.json");
+        traceReader.read("src/test/resources/traces/trace2.json");
         assertThat(dependencyGraph.getAllNodes()).hasSize(6);
 
         Node n1 = dependencyGraph.getNode("__EMPTY__");
@@ -92,7 +92,7 @@ public class TraceReaderTest {
 
     @Test
     public void testTraceDegeneratedTrace1() {
-        traceReader.read("src/test/resources/degeneratedTrace1.json");
+        traceReader.read("src/test/resources/traces/degeneratedTrace1.json");
         assertThat(dependencyGraph.getAllNodes()).hasSize(2);
 
         Node n1 = dependencyGraph.getNode("__EMPTY__");
@@ -101,7 +101,7 @@ public class TraceReaderTest {
 
     @Test
     public void testTraceDegeneratedTrace2() {
-        traceReader.read("src/test/resources/degeneratedTrace2.json");
+        traceReader.read("src/test/resources/traces/degeneratedTrace2.json");
         assertThat(dependencyGraph.getAllNodes()).hasSize(2);
 
         Node n1 = dependencyGraph.getNode("__EMPTY__");

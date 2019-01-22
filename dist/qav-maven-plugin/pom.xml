@@ -107,11 +107,6 @@
                 <artifactId>qav-input</artifactId>
                 <version>${qav.version}</version>
             </dependency>
-            <dependency>
-                <groupId>de.qaware.qav</groupId>
-                <artifactId>qav-input-traces</artifactId>
-                <version>${qav.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>de.qaware.qav</groupId>
@@ -345,10 +340,6 @@
         <dependency>
             <groupId>de.qaware.qav</groupId>
             <artifactId>qav-input</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.qaware.qav</groupId>
-            <artifactId>qav-input-traces</artifactId>
         </dependency>
         <dependency>
             <groupId>de.qaware.qav</groupId>

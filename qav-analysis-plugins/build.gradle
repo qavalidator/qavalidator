@@ -19,7 +19,6 @@ dependencies {
     compile project(':qav-graph-db')
     compile project(':qav-input-java')
     compile project(':qav-input')
-    compile project(':qav-input-traces')
     compile project(':util:qav-util')
     compile project(':qav-visualization')
 
@@ -28,7 +27,6 @@ dependencies {
 
     compile "org.codehaus.groovy:groovy-all:${project.ext.groovyVersion}"
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
-
 }
 
 // since this project's build run creates these files using qav-doc-generator, we're responsible for cleanup as well

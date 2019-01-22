@@ -52,7 +52,6 @@ From bottom to top, these are the modules:
 * Utilities:
   ** _qav-doc-generator_: Generates the QAvalidator Analysis DSL documentation; this is done using annotation processing at compile time.
   ** _qav-util_: Code that is used both by most parts of QAvalidator; utilities to work with strings or files etc.
-  ** _qav-test-util_: Little helpers that are only used for testing.
 * Documentation:
   ** _qav-doc_: This documentation.
 * Main Model:
@@ -66,17 +65,16 @@ From bottom to top, these are the modules:
      *** _qav-architecture_: Contains factories, validators, and transformations to work with architectures, architecture components, and architecture sub-graphs.
   ** Output:
      *** _qav-visualization_: Exporters to `.dot` (for GraphViz) and to `.graphml` (for yEd).
+     *** _qav-graph-db_: Exports the `DependencyGraph` to Neo4j.
   ** Analysis: DSL & Orchestration:
      *** _qav-analysis-dsl_: This is the DSL to define analysis runs, and to compose analysis steps.
      *** _qav-analysis-plugins_: Contains the plugins which define language constructs of the QAvalidator Analysis DSL.
      *** The former is the technical framework to set up the DSL, and the latter is the actual commands; they use the steps provided in input, transformation & validation, and output.
-* Runners:
-  ** _qav-runner_: provides an API to start analysis runs. I.e. it combines everything so that the following runner options are small and easy to implement.
+     *** _qav-runner_: provides an API to start analysis runs. I.e. it combines everything so that the following QAvalidator start options are small and easy to implement.
+* Distribution:
   ** _qav-gradle-plugin_: start QAvalidator from a Gradle run.
   ** _qav-maven-plugin_: start QAvalidator from a Maven run.
-  ** _qav-app_: start QAvalidator standalone, from command line.
+  ** _qav-app_: start QAvalidator standalone, from command line, including a web application to view graphs.
+  ** _qav-ui_: The Angular-2 web app, served via _qav-app_.
 * Result Reading:
-  ** _qav-server_: A web application server to view graphs.
   ** _qav-sonar-plugin_: The SonarQube plugin which reads `qav-sonar.log` files and offers the results as metrics.
-  ** _qav-ui_: The Angular-2 web app, served via _qav-server_.
-
