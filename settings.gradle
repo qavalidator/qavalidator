@@ -2,15 +2,15 @@
 // (would be 'workspace' otherwise)
 rootProject.name = 'qavalidator'
 include "util:qav-util", "util:qav-doc-generator",
-        "qav-graph", "qav-visualization", "qav-graph-db",
-        // input:
-        "qav-input-java", "qav-input",
+        // model:
+        "qav-graph", "qav-architecture-dsl",
         // processing:
-        "qav-architecture-dsl", "qav-architecture",
+        "qav-visualization", "qav-graph-db",
+        // processing:
+        "qav-architecture",
+        "qav-input", "qav-input-java",
         "qav-analysis-dsl", "qav-analysis-plugins",
         "qav-runner",
         // distribution:
-        "qav-ui",
-        "dist:qav-app", "dist:qav-gradle-plugin",
+        "dist:qav-ui", "dist:qav-app", "dist:qav-gradle-plugin",
         "qav-doc"
-

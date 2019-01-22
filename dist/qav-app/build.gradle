@@ -28,7 +28,7 @@ jar {
 
 dependencies {
     api project(':qav-runner')
-    api project(':qav-ui')
+    api project(':dist:qav-ui')
 
     api ("org.springframework.boot:spring-boot-starter:${springBootVersion}") {
         exclude(group: "org.slf4j", module: "log4j-over-slf4j")
