@@ -10,8 +10,10 @@ analysis("Step 1: Analyze Package Architecture") {
     printNodes(packageCycleGraph, "packageCycleNodes.txt")
 
     // write DOT only in the end in order to include the red "cycle" markers
-    writeDot(packageGraph, "packageGraph", architecture("Package"))
-    writeDot(packageGraphOnInput, "packageGraphOnInput", architecture("Package"))
+    writeDot(packageGraph, "packageGraph", architecture("Package")) // all packages
+    writeDot(packageGraphOnInput, "packageGraphOnInput", architecture("Package")) // all packages which are part of the input
+    writeDot(packageCycleGraph, "packageCycleGraph", architecture("Package")) // all packages which are part of a package cycle
+    writeGraphLegend()
 
     writeFile(dependencyGraph, "dependencyGraph.json")
     writeFile(packageGraph, "packageGraph.json")

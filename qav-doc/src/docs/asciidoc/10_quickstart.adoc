@@ -28,7 +28,7 @@ Just include the Maven plugin into your pom.xml:
 [source,xml]
 -----
 <properties>
-    <qav.version>1.2.7</qav.version>
+    <qav.version>1.2.10</qav.version>
 </properties>
 
 <build>
@@ -81,6 +81,9 @@ Put this file in `qa/analysis.groovy`.
 apply "de.qaware.qav.analysis.plugins.ShortcutQavPlugin"                 // <1>
 
 analysis("Step 1: Analyze Package Architecture") {                       // <2>
+    // Prepare input: analyze the graph and create an architecture tree, based on the package hierarchy:
+    // packageGraph is a filtered graph which only contains those nodes which belong to the package architecture
+    // (i.e. it does not contain the class nodes).
     def packageGraph = createPackageArchitectureView(inputClassesGraph)  // <3>
 
     def packageCycleGraph = findCycles(packageGraph, "Package")          // <4>
@@ -88,7 +91,10 @@ analysis("Step 1: Analyze Package Architecture") {                       // <2>
     // output:
     printNodes(packageCycleGraph, "packageCycleNodes.txt")               // <5>
     writeDot(packageGraph, "packageGraph", architecture("Package"))      // <6>
-    writeFile(dependencyGraph, "dependencyGraph.json")                   // <7>
+    writeDot(packageCycleGraph, "packageCycleGraph", architecture("Package")) // <7>
+    writeGraphLegend()                                                   // <8>
+
+    writeFile(dependencyGraph, "dependencyGraph.json")                   // <9>
 }
 -----
 
@@ -99,12 +105,14 @@ Here is what happens:
    and tries to recover from errors in each step.
 3. The command `createPackageArchitectureView` creates an architecture tree based on the package hierarchy. In this case, it works on the `inputClassesGraph` which is a graph that represents all classes in the input scope, and no external classes referenced by them.
  `packageGraph` is now a _filtered graph_ which only contains those nodes which belong to the package architecture (i.e. it does not contain nodes representing the classes).
-4. Finds cycles on the given graph.
-5. Writes out all cycles, i.e. all nodes which belong to a cycle.
+4. Find cycles on the given graph.
+5. Prints out all nodes which belong to a cycle into a text file.
 6. Writes out the package graph as DOT file, and tries to generate a `.png` and a `.svg` file by calling `dot`,
-   if graphviz is installed (See <<GraphViz>>). Fails if graphviz is not installed.
+   if `graphviz` is installed (See <<GraphViz>>). Fails if `graphviz` is not installed.
    Also exports a `.graphml` file which can be used with <<yEd>>.
-7. Writes out the graph as JSON file, to be loaded e.g. in the Web UI.
+7. Do the same with only those packages which are part of a cycle.
+8. Writes out a legend which explains which arrows represent which dependency type.
+9. Writes out the graph as JSON file, to be loaded e.g. in the Web UI.
 
 Step 4 will mark the step as "failed" if there are any cycles.
 
