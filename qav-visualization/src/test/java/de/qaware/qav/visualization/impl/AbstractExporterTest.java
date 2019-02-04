@@ -1,4 +1,4 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.impl;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.factory.DefaultPackageArchitectureFactory;

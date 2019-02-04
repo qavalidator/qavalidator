@@ -37,7 +37,7 @@ public final class StringTemplateUtil {
         } catch(IOException e) {
             LOGGER.error("Error reading resource {}", templateName, e);
         }
-        return null;
+        throw new IllegalArgumentException("Resource not found: " + templateName);
     }
 
     /**
@@ -52,7 +52,7 @@ public final class StringTemplateUtil {
             return new StringTemplateGroup(reader, DefaultTemplateLexer.class);
         } catch(IOException e) {
             LOGGER.error("Error reading resource {}", templateName, e);
-            return null;
+            throw new IllegalArgumentException("Resource not found: " + templateName);
         }
     }
 

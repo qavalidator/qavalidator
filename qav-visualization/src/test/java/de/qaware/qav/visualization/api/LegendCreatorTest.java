@@ -1,9 +1,9 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.api;
 
 import de.qaware.qav.util.FileSystemUtil;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
@@ -17,6 +17,6 @@ public class LegendCreatorTest {
         new LegendCreator().export(filenameBase);
 
         String filename = filenameBase + ".dot";
-        assertThat("Output missing: " + filename, FileSystemUtil.checkFileOrResourceExists(filename));
+        assertThat(FileSystemUtil.checkFileOrResourceExists(filename)).isTrue();
     }
 }

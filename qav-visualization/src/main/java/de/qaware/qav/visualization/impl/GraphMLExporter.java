@@ -1,4 +1,4 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.impl;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.dsl.model.Component;
@@ -10,9 +10,10 @@ import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.util.FileNameUtil;
 import de.qaware.qav.util.FileSystemUtil;
 import de.qaware.qav.util.StringTemplateUtil;
+import de.qaware.qav.visualization.model.Abbreviation;
+import lombok.extern.slf4j.Slf4j;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,19 +21,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 /**
  * Export the given {@link DependencyGraph} into a GraphML file.
  * <p>
  * The file is meant for yEd.
  * It does not contain layout information. To see the graph, use yEd and use the Auto-Layout feature.
  *
- * @author QAware GmbH
+ * Transforms {@link DependencyType#CONTAINS} relations to clusters i.e. to nested nodes.
  */
+@Slf4j
 public class GraphMLExporter {
-
-    private static final Logger LOGGER = getLogger(GraphMLExporter.class);
 
     // identifiers to find the StringTemplates in the .stg file
     // *_ST are the StringTemplates in the file.

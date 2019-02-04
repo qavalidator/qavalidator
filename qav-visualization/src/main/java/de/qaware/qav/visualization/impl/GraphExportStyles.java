@@ -1,8 +1,9 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.impl;
 
 import com.google.common.collect.Maps;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyType;
+import de.qaware.qav.visualization.model.Abbreviation;
 
 import java.util.List;
 import java.util.Map;

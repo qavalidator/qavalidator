@@ -1,4 +1,4 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.impl;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -13,10 +13,10 @@ import de.qaware.qav.util.FileNameUtil;
 import de.qaware.qav.util.FileSystemUtil;
 import de.qaware.qav.util.ProcessUtil;
 import de.qaware.qav.util.StringTemplateUtil;
+import de.qaware.qav.visualization.model.Abbreviation;
+import lombok.extern.slf4j.Slf4j;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,12 +27,12 @@ import java.util.Set;
 
 /**
  * Export the given {@link DependencyGraph} into a dot file.
- *
- * @author QAware GmbH
+ * <p>
+ * Loads the {@link StringTemplate}s it needs, iterates the graph with its nodes and edges, and transforms {@link
+ * DependencyType#CONTAINS} relations to clusters, i.e. to nested nodes.
  */
+@Slf4j
 public class DotExporter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DotExporter.class);
 
     /**
      * DOT has problems creating large graphs. We only call dot if the number of nodes allows the creation of a PNG.

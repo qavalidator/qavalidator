@@ -1,4 +1,4 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.impl;
 
 import de.qaware.qav.util.FileSystemUtil;
 import org.junit.Test;

@@ -4,7 +4,7 @@ import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
-import de.qaware.qav.visualization.GraphExporter;
+import de.qaware.qav.visualization.api.GraphExporter;
 import org.junit.Before;
 import org.junit.Test;
 

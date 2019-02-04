@@ -7,7 +7,7 @@ import de.qaware.qav.graph.api.DependencyGraph
 import de.qaware.qav.graph.api.DependencyType
 import de.qaware.qav.graph.factory.DependencyGraphFactory
 import de.qaware.qav.util.FileSystemUtil
-import de.qaware.qav.visualization.Abbreviation
+import de.qaware.qav.visualization.model.Abbreviation
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

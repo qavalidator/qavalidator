@@ -1,4 +1,4 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

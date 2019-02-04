@@ -20,8 +20,8 @@ import de.qaware.qav.test.instructions.MyInstructions;
 import de.qaware.qav.test.methods.MyMethods;
 import de.qaware.qav.test.primitives.MyPrimitives;
 import de.qaware.qav.test.reference.MyReference;
-import de.qaware.qav.visualization.Abbreviation;
-import de.qaware.qav.visualization.GraphExporter;
+import de.qaware.qav.visualization.api.GraphExporter;
+import de.qaware.qav.visualization.model.Abbreviation;
 import org.junit.Test;
 
 import java.io.File;

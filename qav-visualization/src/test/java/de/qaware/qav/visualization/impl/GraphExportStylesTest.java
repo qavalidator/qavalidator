@@ -1,9 +1,10 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.impl;
 
 import com.google.common.collect.Lists;
 import de.qaware.qav.graph.api.Dependency;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
+import de.qaware.qav.visualization.model.Abbreviation;
 import org.junit.Test;
 
 import java.util.ArrayList;

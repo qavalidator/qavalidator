@@ -1,7 +1,10 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.api;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.graph.api.DependencyGraph;
+import de.qaware.qav.visualization.impl.DotExporter;
+import de.qaware.qav.visualization.impl.GraphMLExporter;
+import de.qaware.qav.visualization.model.Abbreviation;
 
 import java.util.List;
 

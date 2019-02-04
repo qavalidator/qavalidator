@@ -1,4 +1,4 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.impl;
 
 import de.qaware.qav.graph.alg.api.CycleFinder;
 import de.qaware.qav.graph.api.Dependency;

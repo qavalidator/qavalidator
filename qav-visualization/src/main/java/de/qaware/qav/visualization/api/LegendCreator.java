@@ -1,4 +1,4 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.api;
 
 import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.graph.api.Constants;
@@ -7,6 +7,8 @@ import de.qaware.qav.graph.api.DependencyGraph;
 import de.qaware.qav.graph.api.DependencyType;
 import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graph.factory.DependencyGraphFactory;
+import de.qaware.qav.visualization.impl.DotExporter;
+import de.qaware.qav.visualization.impl.GraphMLExporter;
 
 import java.util.ArrayList;
 import java.util.Arrays;

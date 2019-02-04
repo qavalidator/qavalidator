@@ -1,4 +1,4 @@
-package de.qaware.qav.visualization;
+package de.qaware.qav.visualization.model;
 
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertThat;
 public class AbbreviationTest {
 
     @Test
-    public void testAbbreviate() throws Exception {
+    public void testAbbreviate() {
         Abbreviation abbreviation = new Abbreviation("de.qaware", "Q");
 
         assertThat(abbreviation.abbreviate("com.something"), is("com.something"));
@@ -25,7 +25,7 @@ public class AbbreviationTest {
     }
 
     @Test
-    public void testAbbreviateWithRegExp() throws Exception {
+    public void testAbbreviateWithRegExp() {
         Abbreviation abbreviation = new Abbreviation(".*\\.qaware", "Q");
 
         assertThat(abbreviation.abbreviate("de.qaware"), is("Q"));

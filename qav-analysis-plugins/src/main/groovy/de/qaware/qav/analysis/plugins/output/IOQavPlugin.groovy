@@ -13,9 +13,9 @@ import de.qaware.qav.graph.io.NodePrinter
 import de.qaware.qav.graphdb.persistence.GraphService
 import de.qaware.qav.util.FileNameUtil
 import de.qaware.qav.util.FileSystemUtil
-import de.qaware.qav.visualization.Abbreviation
-import de.qaware.qav.visualization.GraphExporter
-import de.qaware.qav.visualization.LegendCreator
+import de.qaware.qav.visualization.api.GraphExporter
+import de.qaware.qav.visualization.api.LegendCreator
+import de.qaware.qav.visualization.model.Abbreviation
 import groovy.util.logging.Slf4j
 
 /**
