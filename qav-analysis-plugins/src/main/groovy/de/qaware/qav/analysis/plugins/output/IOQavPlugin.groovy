@@ -3,6 +3,9 @@ package de.qaware.qav.analysis.plugins.output
 import de.qaware.qav.analysis.dsl.model.Analysis
 import de.qaware.qav.analysis.plugins.base.BasePlugin
 import de.qaware.qav.analysis.plugins.output.impl.SonarLogUtil
+import de.qaware.qav.analysis.result.api.AnalysisResultWriter
+import de.qaware.qav.analysis.result.model.Result
+import de.qaware.qav.analysis.result.model.ResultType
 import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
@@ -31,6 +34,7 @@ class IOQavPlugin extends BasePlugin {
     private String outputDir = './'
     private boolean outputDirDefined = false
     private List abbreviations = []
+    private AnalysisResultWriter analysisResultWriter = new AnalysisResultWriter()
 
     @Override
     void apply(Analysis analysis) {
@@ -89,6 +93,7 @@ class IOQavPlugin extends BasePlugin {
     void printNodes(DependencyGraph dependencyGraph, String filename, boolean printIfEmpty = true) {
         if (!dependencyGraph.getAllNodes().isEmpty() || printIfEmpty) {
             new NodePrinter(dependencyGraph, this.outputDir + "/" + filename).printNodes()
+            analysisResultWriter.addResult(new Result(ResultType.TEXT, filename, dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size()))
         }
     }
 
@@ -107,6 +112,7 @@ class IOQavPlugin extends BasePlugin {
             ])
     void writeFile(DependencyGraph dependencyGraph, String filename) {
         GraphReaderWriter.write(dependencyGraph, this.outputDir + "/" + filename)
+        analysisResultWriter.addResult(new Result(ResultType.GRAPH, filename, dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size()))
     }
 
     /**
@@ -189,6 +195,7 @@ class IOQavPlugin extends BasePlugin {
             ])
     void writeDot(DependencyGraph dependencyGraph, String filenameBase, Architecture architecture, boolean createEdgeLabels = true) {
         GraphExporter.export(dependencyGraph, this.outputDir + "/" + filenameBase, architecture, this.abbreviations, createEdgeLabels)
+        analysisResultWriter.addResult(new Result(ResultType.IMAGE, filenameBase, dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size()))
     }
 
     /**
@@ -213,6 +220,7 @@ class IOQavPlugin extends BasePlugin {
             ])
     void writeGraphLegend(String filenameBase = "legend") {
         new LegendCreator().export(this.outputDir + "/" + filenameBase)
+        analysisResultWriter.addResult(new Result(ResultType.IMAGE_LEGEND, filenameBase))
     }
 
     /**
@@ -297,6 +305,7 @@ class IOQavPlugin extends BasePlugin {
             }
 
             outputDirDefined = true
+            analysisResultWriter.setOutputDir(dir.canonicalPath)
             SonarLogUtil.setOutputDir(dir.canonicalPath) // may throw runtime exception if file can't be created.
         }
     }

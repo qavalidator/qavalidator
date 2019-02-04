@@ -27,6 +27,11 @@ dependencies {
 
     compile "org.codehaus.groovy:groovy-all:${project.ext.groovyVersion}"
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+
+    // for Analysis Result I/O:
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonVersion
 }
 
 // since this project's build run creates these files using qav-doc-generator, we're responsible for cleanup as well
