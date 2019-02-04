@@ -1,7 +1,6 @@
 package de.qaware.qav.app.server.model;
 
 import lombok.Data;
-import lombok.ToString;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import java.util.Map;
  * @author QAware GmbH
  */
 @Data
-@ToString
 public class DependencyDTO {
 
     private String sourceName;

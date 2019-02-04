@@ -1,7 +1,6 @@
 package de.qaware.qav.app.server.model;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * DTO with infos about the Graph.
@@ -9,7 +8,6 @@ import lombok.ToString;
  * Infos to be displayed at in the QAvalidator Web UI.
  */
 @Data
-@ToString
 public class GraphInfoDTO {
 
     private String info;

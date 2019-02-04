@@ -1,0 +1,29 @@
+{
+  "analysisId" : "qav-result-2",
+  "analysisStart" : "2019-02-04T15:52:12.774",
+  "baseDir" : "/var/data/qav/analysis-results",
+  "items" : [ {
+    "resultType" : "IMAGE",
+    "filename" : "packageGraph",
+    "noNodes" : 11,
+    "noEdges" : 14
+  }, {
+    "resultType" : "IMAGE",
+    "filename" : "packageCycleGraph",
+    "noNodes" : 0,
+    "noEdges" : 0
+  }, {
+    "resultType" : "IMAGE_LEGEND",
+    "filename" : "legend"
+  }, {
+    "resultType" : "TEXT",
+    "filename" : "packageCycleNodes.txt",
+    "noNodes" : 0,
+    "noEdges" : 0
+  }, {
+    "resultType" : "GRAPH",
+    "filename" : "dependencyGraph.json",
+    "noNodes" : 71,
+    "noEdges" : 120
+  } ]
+}

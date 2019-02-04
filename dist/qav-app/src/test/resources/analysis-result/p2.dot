@@ -1,0 +1,29 @@
+digraph G {
+
+/* =========================================================================
+ * Layout information
+ * ====================================================================== */
+
+compound = true;
+// rankdir = LR;
+
+fontname = "Helvetica";
+fontsize = 11;
+ranksep = "1.0 equally"
+
+node [  shape    = box,
+        color    = "blue",
+        fontname = "Helvetica",
+        fontsize = 11,
+        height   = 0.25 ];
+
+edge [  arrowsize = 1.25,
+        fontname = "Helvetica",
+        fontsize = 9 ];
+
+P1 -> P2;
+P2 -> P3;
+P3 -> P4;
+P4 -> P1;
+
+}

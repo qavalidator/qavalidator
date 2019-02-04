@@ -1,0 +1,29 @@
+{
+  "analysisId" : "qav-d3df7259-f41b-4139-bebc-46be03f85a0a",
+  "analysisStart" : "2019-02-04T15:52:12.774",
+  "baseDir" : "src/test/resources/analysis-result",
+  "items" : [ {
+    "resultType" : "IMAGE",
+    "filename" : "packageGraph",
+    "noNodes" : 11,
+    "noEdges" : 14
+  }, {
+    "resultType" : "IMAGE",
+    "filename" : "packageCycleGraph",
+    "noNodes" : 0,
+    "noEdges" : 0
+  }, {
+    "resultType" : "IMAGE_LEGEND",
+    "filename" : "legend"
+  }, {
+    "resultType" : "TEXT",
+    "filename" : "packageCycleNodes.txt",
+    "noNodes" : 0,
+    "noEdges" : 0
+  }, {
+    "resultType" : "GRAPH",
+    "filename" : "dependencyGraph.json",
+    "noNodes" : 71,
+    "noEdges" : 120
+  } ]
+}
