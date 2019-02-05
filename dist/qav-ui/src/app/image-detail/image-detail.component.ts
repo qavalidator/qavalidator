@@ -14,6 +14,8 @@ export class ImageDetailComponent implements OnInit {
 
   imageUrl: string;
 
+  showScaled: boolean = true;
+
   constructor(private resultsService: ResultsService,
               private route: ActivatedRoute) {
   }
