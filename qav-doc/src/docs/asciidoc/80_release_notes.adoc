@@ -8,6 +8,7 @@ Breaking Changes::
 * none.
 
 New Features::
+* https://github.com/qavalidator/qavalidator/issues/17[#17]: Add images to the Web UI. All results of a QAvalidator run can now be viewed in the Web UI. And it's possible to navigate from the image to the detail view: The SVG images contain links to the respective pages.
 * https://github.com/qavalidator/qavalidator/issues/16[#16]: Enhance the output of the default analysis.
 * https://github.com/qavalidator/qavalidator/issues/14[#14]: Java Input reader: Add support for newer Java versions
 

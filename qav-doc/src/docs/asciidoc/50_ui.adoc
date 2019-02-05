@@ -110,7 +110,7 @@ Clicking on a node navigates to that node's detail views.
 
 == The dependency detail view
 
-Clicking on the dependency type in the incomonig and outgoing dependencies part
+Clicking on the dependency type in the incoming and outgoing dependencies part
 navigates to the dependency detail view.
 
 It shows:
@@ -119,3 +119,10 @@ It shows:
 * Edge properties. One property, if available, is `lineNo`; it tells the line number in the source file where the class of the target node is referenced.
 * Base dependencies, if applicable: For dependencies on architecture level, the underlying dependencies (the base dependencies) are shown. Again, the "Source" and "Target" nodes are links to their node detail pages, whereas the "Dependency Type" is a link to the edge detail page.
 
+== The images view
+
+The menu item "Images" opens a dialog displaying a list of all images of that analysis run. It offers to show the detail page with a PNG or an SVG image, as well as a download link of the GraphML file.
+
+The detail view shows the image; there is a button to toggle between a downscaled size (which fits the screen) and a 100% size of the image.
+
+TIP: Right-clicking on the image and "View image" opens the image in full size, and allows to use the links embedded in the image. This allows to navigate directly to the node detail view.
