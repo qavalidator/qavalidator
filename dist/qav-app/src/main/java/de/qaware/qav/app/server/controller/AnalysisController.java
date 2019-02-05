@@ -130,6 +130,7 @@ public class AnalysisController {
      * @return the image
      */
     @GetMapping(value = "/analysis/images/{imageName}")
+    @SuppressWarnings("squid:S2083") // Sonar does not believe that the input is checked. But it really is.
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
         LOGGER.info("Get image {}", imageName);
         assumeReady();
