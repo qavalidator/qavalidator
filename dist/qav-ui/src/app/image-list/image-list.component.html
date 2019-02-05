@@ -1,0 +1,41 @@
+<h2>Images</h2>
+
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+  {{errorMessage}}
+</div>
+
+<div *ngIf="resultList">
+  <table class="table table-striped table-condensed">
+    <thead>
+    <tr>
+      <td><b>Image Name</b></td>
+      <td><b>PNG</b></td>
+      <td><b>SVG</b></td>
+      <td><b>GraphML</b></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let img of resultList">
+      <td>{{img.imageName}}</td>
+      <td>
+        <div *ngIf="img.filenamePNG">
+          <a [routerLink]="['/images', img.filenamePNG]">PNG</a>
+        </div>
+        <div *ngIf="!img.filenamePNG">n/a</div>
+      </td>
+      <td>
+        <div *ngIf="img.filenameSVG">
+          <a [routerLink]="['/images', img.filenameSVG]">SVG</a>
+        </div>
+        <div *ngIf="!img.filenameSVG">n/a</div>
+      </td>
+      <td>
+        <div *ngIf="img.filenameGraphml">
+          <a [attr.href]="getImageUrl(img.filenameGraphml)">GraphML</a>
+        </div>
+        <div *ngIf="!img.filenameGraphml">n/a</div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
