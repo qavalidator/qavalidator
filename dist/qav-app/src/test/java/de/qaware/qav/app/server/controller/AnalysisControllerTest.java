@@ -155,24 +155,4 @@ public class AnalysisControllerTest {
             assertThat(e.getMessage()).isEqualTo("Image not found: not-found.png");
         }
     }
-
-    @Test
-    public void testValidateImageName() {
-        AnalysisController ac = new AnalysisController();
-        ac.validateImageName("xx.png");
-        ac.validateImageName("xx.svg");
-        ac.validateImageName("xx");
-        ac.validateImageName("xx.v1.png");
-        ac.validateImageName("xx_v1.png");
-        ac.validateImageName("xx-v1.png");
-        ac.validateImageName("dir/xx.png");
-        ac.validateImageName("dir//xx.png");
-
-        try {
-            ac.validateImageName("dir/../xx.png");
-            fail("IllegalArgumentException expected");
-        } catch(IllegalArgumentException e) {
-            assertThat(e.getMessage()).isEqualTo("invalid image name: dir/../xx.png");
-        }
-    }
 }
