@@ -18,7 +18,8 @@ public final class ImageMapper {
     /**
      * Maps a {@link Result} into a {@link ImageDTO}.
      *
-     * @param image the {@link Result}. May not be null.
+     * @param baseDir the base directory of the image file
+     * @param image   the {@link Result}. May not be null.
      * @return the {@link ImageDTO}
      */
     public static ImageDTO toDTO(String baseDir, Result image) {
