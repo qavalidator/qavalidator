@@ -10,6 +10,7 @@ import de.qaware.qav.architecture.dsl.model.Architecture
 import de.qaware.qav.doc.QavCommand
 import de.qaware.qav.doc.QavPluginDoc
 import de.qaware.qav.graph.api.DependencyGraph
+import de.qaware.qav.graph.api.DependencyType
 import de.qaware.qav.graph.factory.DependencyGraphFactory
 import de.qaware.qav.graph.io.GraphReaderWriter
 import de.qaware.qav.graph.io.NodePrinter
@@ -220,7 +221,7 @@ class IOQavPlugin extends BasePlugin {
             ])
     void writeGraphLegend(String filenameBase = "legend") {
         new LegendCreator().export(this.outputDir + "/" + filenameBase)
-        analysisResultWriter.addResult(new Result(ResultType.IMAGE_LEGEND, filenameBase))
+        analysisResultWriter.addResult(new Result(ResultType.IMAGE_LEGEND, filenameBase, DependencyType.values().size() * 2, DependencyType.values().size()))
     }
 
     /**

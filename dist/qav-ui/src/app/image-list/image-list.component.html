@@ -9,6 +9,7 @@
     <thead>
     <tr>
       <td><b>Image Name</b></td>
+      <td><b>Size</b> (Nodes | Edges)</td>
       <td><b>PNG</b></td>
       <td><b>SVG</b></td>
       <td><b>GraphML</b></td>
@@ -17,6 +18,7 @@
     <tbody>
     <tr *ngFor="let img of resultList">
       <td>{{img.imageName}}</td>
+      <td>{{img.noNodes || 0}} | {{img.noEdges || 0}}</td>
       <td>
         <div *ngIf="img.filenamePNG">
           <a [routerLink]="['/images', img.filenamePNG]">PNG</a>
