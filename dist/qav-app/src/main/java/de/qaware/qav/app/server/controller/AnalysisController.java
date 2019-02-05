@@ -134,14 +134,14 @@ public class AnalysisController {
         LOGGER.info("Get image {}", imageName);
         assumeReady();
 
-        validateImageName(imageName);
+        String sanitizedName = validateImageName(imageName);
 
-        File file = new File(analysisResult.getBaseDir(), imageName);
+        File file = new File(analysisResult.getBaseDir(), sanitizedName);
         if (!file.exists()) {
-            throw new NotFoundException("Image not found: " + imageName);
+            throw new NotFoundException("Image not found: " + sanitizedName);
         }
 
-        HttpHeaders httpHeaders = getHeaders(imageName);
+        HttpHeaders httpHeaders = getHeaders(sanitizedName);
         return new ResponseEntity<>(new FileSystemResource(file), httpHeaders, HttpStatus.OK);
     }
 
@@ -149,13 +149,15 @@ public class AnalysisController {
      * Validate the input param for the imageName.
      *
      * @param imageName the image name
+     * @return the sanitized name
      * @throws IllegalArgumentException if the image name violates a naming convention
      */
-    /* package */ void validateImageName(String imageName) {
-        if (!imageName.matches("[a-zA-Z0-9./\\-]++")
+    /* package */ String validateImageName(String imageName) {
+        if (!imageName.matches("[a-zA-Z0-9./\\-_]++")
                 || imageName.matches(".*\\.\\..*")) {
             throw new IllegalArgumentException("invalid image name: " + imageName);
         }
+        return imageName;
     }
 
     private HttpHeaders getHeaders(String imageName) {

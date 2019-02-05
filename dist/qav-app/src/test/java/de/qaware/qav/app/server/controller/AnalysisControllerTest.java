@@ -163,7 +163,10 @@ public class AnalysisControllerTest {
         ac.validateImageName("xx.svg");
         ac.validateImageName("xx");
         ac.validateImageName("xx.v1.png");
+        ac.validateImageName("xx_v1.png");
+        ac.validateImageName("xx-v1.png");
         ac.validateImageName("dir/xx.png");
+        ac.validateImageName("dir//xx.png");
 
         try {
             ac.validateImageName("dir/../xx.png");
