@@ -127,6 +127,19 @@ public class AnalysisControllerTest {
         assertThat(img.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(img.getBody()).isNotNull();
         assertThat(img.getBody().contentLength()).isEqualTo(4679L);
+
+        img = ac.getImage("p1.svg");
+        assertThat(img).isNotNull();
+        assertThat(img.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(img.getBody()).isNotNull();
+        assertThat(img.getBody().contentLength()).isEqualTo(2248L);
+
+        img = ac.getImage("p1.graphml");
+        assertThat(img).isNotNull();
+        assertThat(img.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(img.getBody()).isNotNull();
+        assertThat(img.getBody().contentLength()).isEqualTo(0L); // because it's a fake file.
+        assertThat(img.getHeaders().getFirst("Content-Disposition")).isEqualTo("attachment; filename=\"p1.graphml\"");
     }
 
     @Test

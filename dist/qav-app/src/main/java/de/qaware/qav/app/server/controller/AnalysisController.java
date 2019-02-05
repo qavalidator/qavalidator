@@ -152,7 +152,7 @@ public class AnalysisController {
      * @throws IllegalArgumentException if the image name violates a naming convention
      */
     /* package */ void validateImageName(String imageName) {
-        if (!imageName.matches("[a-zA-Z0-9./]++")
+        if (!imageName.matches("[a-zA-Z0-9./\\-]++")
                 || imageName.matches(".*\\.\\..*")) {
             throw new IllegalArgumentException("invalid image name: " + imageName);
         }
