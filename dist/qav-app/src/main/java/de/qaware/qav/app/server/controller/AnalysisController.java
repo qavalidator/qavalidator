@@ -134,6 +134,8 @@ public class AnalysisController {
         LOGGER.info("Get image {}", imageName);
         assumeReady();
 
+        validateImageName(imageName);
+
         File file = new File(analysisResult.getBaseDir(), imageName);
         if (!file.exists()) {
             throw new NotFoundException("Image not found: " + imageName);
@@ -141,6 +143,19 @@ public class AnalysisController {
 
         HttpHeaders httpHeaders = getHeaders(imageName);
         return new ResponseEntity<>(new FileSystemResource(file), httpHeaders, HttpStatus.OK);
+    }
+
+    /**
+     * Validate the input param for the imageName.
+     *
+     * @param imageName the image name
+     * @throws IllegalArgumentException if the image name violates a naming convention
+     */
+    /* package */ void validateImageName(String imageName) {
+        if (!imageName.matches("[a-zA-Z0-9./]++")
+                || imageName.matches(".*\\.\\..*")) {
+            throw new IllegalArgumentException("invalid image name: " + imageName);
+        }
     }
 
     private HttpHeaders getHeaders(String imageName) {
