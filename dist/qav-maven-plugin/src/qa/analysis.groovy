@@ -1,4 +1,4 @@
-apply "de.qaware.qav.core.analysis.dsl.plugins.ShortcutQavPlugin"
+apply "de.qaware.qav.analysis.plugins.ShortcutQavPlugin"
 
 analysis("Step 1: Analyze Package Architecture") {
     createPackageArchitectureView allClassesGraph

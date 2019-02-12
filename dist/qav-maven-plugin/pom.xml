@@ -23,8 +23,10 @@
         <maven-plugin-testing-harness.version>3.3.0</maven-plugin-testing-harness.version>
         <maven-compat.version>3.3.9</maven-compat.version>
 
+        <groovy.version>2.5.4</groovy.version>
+
         <!-- this is the QAvalidator Runner version that this plugin depends on. -->
-        <qav.version>1.2.10</qav.version>
+        <qav.version>1.2.11</qav.version>
 
         <!-- this is the QAvalidator Maven Plugin version to be used for mvn -Pself qav:qav -->
         <qav-plugin-on-self.version>1.2.11-SNAPSHOT</qav-plugin-on-self.version>
@@ -52,6 +54,13 @@
             </dependency>
 
             <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
                 <groupId>de.qaware.qav</groupId>
                 <artifactId>qav-runner</artifactId>
                 <version>${qav.version}</version>
@@ -71,11 +80,23 @@
                 <groupId>de.qaware.qav</groupId>
                 <artifactId>qav-analysis-dsl</artifactId>
                 <version>${qav.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>de.qaware.qav</groupId>
                 <artifactId>qav-analysis-plugins</artifactId>
                 <version>${qav.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>de.qaware.qav</groupId>
@@ -86,6 +107,12 @@
                 <groupId>de.qaware.qav</groupId>
                 <artifactId>qav-architecture-dsl</artifactId>
                 <version>${qav.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>de.qaware.qav</groupId>
@@ -193,30 +220,15 @@
 
         <profile>
             <id>bintray</id>
-
-            <distributionManagement>
-                <repository>
-                    <id>publish-bintray</id>
-                    <url>https://api.bintray.com/maven/qa-tse/qavalidator/qav-maven-plugin/;publish=1</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-
-        <profile>
-            <id>qaware</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
 
             <distributionManagement>
                 <repository>
-                    <id>qaware-internal</id>
-                    <url>https://www.qaware.de/nexus/content/repositories/qaware-internal</url>
+                    <id>publish-bintray</id>
+                    <url>https://api.bintray.com/maven/qa-tse/qavalidator/qav-maven-plugin/;publish=1</url>
                 </repository>
-                <snapshotRepository>
-                    <id>qaware-internal-snapshots</id>
-                    <url>https://www.qaware.de/nexus/content/repositories/qaware-internal-snapshots</url>
-                </snapshotRepository>
             </distributionManagement>
         </profile>
     </profiles>
@@ -306,6 +318,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
             <groupId>de.qaware.qav</groupId>
             <artifactId>qav-app</artifactId>
         </dependency>
@@ -380,35 +398,11 @@
 
     <repositories>
         <repository>
-            <id>Central</id>
-            <url>http://repo1.maven.org/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
+            <id>central</id>
+            <name>bintray</name>
+            <url>http://jcenter.bintray.com</url>
             <snapshots>
                 <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>qaware-internal</id>
-            <url>https://www.qaware.de/nexus/content/repositories/qaware-internal</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>qaware-internal-snapshots</id>
-            <url>https://www.qaware.de/nexus/content/repositories/qaware-internal-snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>
