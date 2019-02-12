@@ -2,7 +2,7 @@
 [[release-notes]]
 = Release Notes
 
-== Release 1.2.11 -- (work in progress)
+== Release 1.2.11 -- 12.02.2019
 
 Breaking Changes::
 * none.
