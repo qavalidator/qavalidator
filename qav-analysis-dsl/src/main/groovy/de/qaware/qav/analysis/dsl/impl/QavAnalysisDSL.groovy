@@ -111,12 +111,14 @@ abstract class QavAnalysisDSL extends Script implements Analysis {
     void error(Throwable throwable) {
         throw new IllegalStateException(throwable)
     }
+
     /**
      * Reports a violation by noting it in the context of the analysis.
      * Does not throw an exception, so that the analysis can go on.
      *
      * @param msg the message
      */
+    @Override
     void violation(String msg) {
         log.error(msg)
         getViolations().add(msg)

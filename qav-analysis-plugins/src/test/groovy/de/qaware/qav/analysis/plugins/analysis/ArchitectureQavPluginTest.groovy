@@ -123,8 +123,7 @@ class ArchitectureQavPluginTest {
 
         DependencyGraph view = architectureQavPlugin.createArchitectureView(graph, architecture)
 
-        assert analysis.calledMethods[0] == "violation"
-        assert analysis.calledMethodsArgs["violation"] == ["There are unmapped classes in architecture T-View: [org.other.Y]"]
+        assert analysis.violationMessages == ["There are unmapped classes in architecture T-View: [org.other.Y]"]
         assert view.allNodes.size() == 4
         assert view.hasNode("V")
         assert view.hasNode("Unwanted")

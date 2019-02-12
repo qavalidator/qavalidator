@@ -16,6 +16,7 @@ class TestAnalysis implements Analysis {
     final errorMessages = []
     final calledMethods = []
     final calledMethodsArgs = [:]
+    final violationMessages = []
 
     @Override
     Closure register(String name, Closure closure) {
@@ -36,6 +37,11 @@ class TestAnalysis implements Analysis {
     @Override
     void error(Throwable throwable) {
         this.error(throwable.message)
+    }
+
+    @Override
+    void violation(String msg) {
+        this.violationMessages << msg
     }
 
     @Override

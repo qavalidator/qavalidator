@@ -59,12 +59,12 @@ class AnalysisQavPluginTest {
 
         analysisQavPlugin.checkArchitectureRules(architectureGraph, architecture)
 
-        assert analysis.calledMethods.size() == 2
-        assert analysis.calledMethodsArgs["violation"] == [
-                "Architecture Checker found violations: DependencyChecker: 1 VIOLATIONS in architecture view T-View: 1 uncovered dependencies: [V --[READ_ONLY]--> Unwanted]"
-        ]
+        assert analysis.calledMethods.size() == 1
         assert analysis.calledMethodsArgs["sonarError"] == [
                 "DependencyChecker: 1 VIOLATIONS in architecture view T-View: 1 uncovered dependencies: [V --[READ_ONLY]--> Unwanted]"
+        ]
+        assert analysis.violationMessages == [
+                "Architecture Checker found violations: DependencyChecker: 1 VIOLATIONS in architecture view T-View: 1 uncovered dependencies: [V --[READ_ONLY]--> Unwanted]"
         ]
     }
 
@@ -79,12 +79,12 @@ class AnalysisQavPluginTest {
 
         analysisQavPlugin.checkDependencyRules(architectureGraph, architecture)
 
-        assert analysis.calledMethods.size() == 2
-        assert analysis.calledMethodsArgs["violation"] == [
-                "Architecture Checker found violations: DependencyChecker: 1 VIOLATIONS in architecture view T-View: 1 uncovered dependencies: [V --[READ_ONLY]--> Unwanted]"
-        ]
+        assert analysis.calledMethods.size() == 1
         assert analysis.calledMethodsArgs["sonarError"] == [
                 "DependencyChecker: 1 VIOLATIONS in architecture view T-View: 1 uncovered dependencies: [V --[READ_ONLY]--> Unwanted]"
+        ]
+        assert analysis.violationMessages == [
+                "Architecture Checker found violations: DependencyChecker: 1 VIOLATIONS in architecture view T-View: 1 uncovered dependencies: [V --[READ_ONLY]--> Unwanted]"
         ]
     }
 

@@ -34,4 +34,12 @@ interface Analysis {
      * @param throwable the cause
      */
     void error(Throwable throwable)
+
+    /**
+     * Reports a violation by noting it in the context of the analysis.
+     * Does not throw an exception, so that the analysis can go on.
+     *
+     * @param msg the message
+     */
+    void violation(String msg)
 }
