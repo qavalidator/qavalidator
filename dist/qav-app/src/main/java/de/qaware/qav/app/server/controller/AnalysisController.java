@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  * Reads the analysis result JSON file and keeps it in memory.
  */
 @RestController
+@RequestMapping("/api")
 @Slf4j
 public class AnalysisController {
 
