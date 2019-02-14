@@ -1,0 +1,23 @@
+{
+  "/node": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/edge": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/info": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "logLevel": "debug"
+  },
+
+  "/analysis": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}
