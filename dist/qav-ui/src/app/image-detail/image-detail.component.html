@@ -1,12 +1,17 @@
 <h2>{{imageId}}</h2>
 
-<img [attr.src]="imageUrl" [ngClass]="{'img-fluid': showScaled}" [attr.alt]="imageId">
+<div *ngIf="isSvg">
+  <div class="svg" [innerHTML]="rawSvgAsHtml"></div>
+</div>
+<div *ngIf="!isSvg">
+  <img [attr.src]="imageUrl" [ngClass]="{'img-fluid': showScaled}" [attr.alt]="imageId">
+</div>
 
 <div class="mt-1">
   <div *ngIf="showScaled">
-    <button type="button" class="btn btn-primary" (click)="showScaled = false">Scale up</button>
+    <button type="button" class="btn btn-primary" (click)="toggleScaled()">Scale up</button>
   </div>
   <div *ngIf="!showScaled">
-    <button type="button" class="btn btn-secondary" (click)="showScaled = true">Scale down</button>
+    <button type="button" class="btn btn-secondary" (click)="toggleScaled()">Scale down</button>
   </div>
 </div>

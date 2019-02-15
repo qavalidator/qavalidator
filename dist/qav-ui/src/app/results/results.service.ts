@@ -32,6 +32,19 @@ export class ResultsService {
     return `${this.apiUrl}/analysis/images/${imageId}`
   }
 
+  /**
+   * Get the SVG image as HTML string.
+   *
+   * @param imageId id of the image to load
+   */
+  getImageSvg(imageId: string): Promise<string> {
+    const options = {responseType: 'text' as 'text'};
+    return this.http.get(this.getImageUrl(imageId), options)
+      .toPromise()
+      .then(response => response)
+      .catch(this.handleError);
+}
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
