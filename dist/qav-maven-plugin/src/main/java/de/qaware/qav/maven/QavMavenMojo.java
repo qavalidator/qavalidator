@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -42,8 +41,11 @@ public class QavMavenMojo extends AbstractMojo {
     private String outputDir;
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoFailureException {
         QAvalidatorConfig config = createConfig();
+
+        analyzeMavenProject(config);
+
         QAvalidatorResult result = new QAvalidator().runAnalysis(config);
         reportResult(result);
     }
@@ -87,6 +89,18 @@ public class QavMavenMojo extends AbstractMojo {
         logConfig(config);
 
         return config;
+    }
+
+    /**
+     * Analyze the current {@link MavenProject} and write out the project and its dependencies as a {@link
+     * de.qaware.qav.graph.api.DependencyGraph}.
+     *
+     * @param config the {@link QAvalidatorConfig}, to find the output directory
+     */
+    private void analyzeMavenProject(QAvalidatorConfig config) {
+        MavenDependencyFinder mavenDependencyFinder = new MavenDependencyFinder();
+        mavenDependencyFinder.findDependencies(this.project);
+        mavenDependencyFinder.writeDependencyGraph(config.getOutputDir() + "/mavenDependencyGraph.json");
     }
 
     private List<String> getInputDirs() {
