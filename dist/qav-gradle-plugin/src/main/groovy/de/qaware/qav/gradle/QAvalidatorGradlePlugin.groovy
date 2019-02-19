@@ -36,6 +36,7 @@ class QAvalidatorGradlePlugin implements Plugin<Project> {
 
             doLast {
                 QAvalidatorConfig config = createConfig(project)
+                analyzeGradleProject(project, config)
                 QAvalidatorResult result = new QAvalidator().runAnalysis(config)
                 reportResult(result)
             }
@@ -84,6 +85,18 @@ class QAvalidatorGradlePlugin implements Plugin<Project> {
     }
 
     /**
+     * Analyze the current {@link Project} and write out the project and its dependencies as a {@link
+     * de.qaware.qav.graph.api.DependencyGraph}.
+     *
+     * @param config the {@link QAvalidatorConfig}, to find the output directory
+     */
+    private void analyzeGradleProject(Project project, QAvalidatorConfig config) {
+        GradleDependencyFinder gradleDependencyFinder = new GradleDependencyFinder()
+        gradleDependencyFinder.findDependencies(project)
+        gradleDependencyFinder.writeDependencyGraph(config.getOutputDir() + "/gradleDependencyGraph.json")
+    }
+
+    /**
      * Sets the analysis file.
      */
     private String getAnalysisFile() {
@@ -113,9 +126,9 @@ class QAvalidatorGradlePlugin implements Plugin<Project> {
      */
     private static ArrayList<String> getClassesDirs(Project project) {
         List<String> classesDirs = []
-        addClassesDir(classesDirs, new File(project.getBuildDir(), "classes/main"))
+        addClassesDir(classesDirs, new File(project.getBuildDir(), "classes/java/main"))
         project.subprojects.each {
-            addClassesDir(classesDirs, new File(it.getBuildDir(), "classes/main"))
+            addClassesDir(classesDirs, new File(it.getBuildDir(), "classes/java/main"))
         }
         classesDirs
     }
