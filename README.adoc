@@ -40,14 +40,6 @@ To create the release, use this command:
 
   gradlew --console plain clean build release -Prelease.useAutomaticVersion=true
 
-Maven Plugin::
-To release the Maven plugin, edit the `pom.xml` and set the new version number.
-Use the standard release plugin:
-
-  cd dist/qav-maven-plugin
-  mvn release:prepare
-  mvn release:perform
-
 Publish to bintray::
 To publish that version to bintray, edit the file `gradle.properties`, set the `version` property back to the just
 released version, and rebuild and upload everything.
@@ -56,11 +48,14 @@ Use this command:
 
   gradlew --console plain clean build bintrayUpload -PbintrayUsername=BINTRAY_USER -PbintrayApiKey=BINRAY_API_KEY
 
-To publish the Maven plugin to Bintray, set the `version` property back to the just released version, and use this command;
-don't commit that file, just revert it afterwards.
+Maven Plugin::
+To release the Maven plugin, edit the `pom.xml` and set the new version number.
+This also publishes the Maven plugin to bintray.
+Use the standard release plugin:
 
-  cd qav-maven-plugin
-  mvn deploy -P bintray
+  cd dist/qav-maven-plugin
+  mvn release:prepare
+  mvn release:perform
 
 Update the Documentation::
 To publish the latest documentation at https://qavalidator.github.io,
