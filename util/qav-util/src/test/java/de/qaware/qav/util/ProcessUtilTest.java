@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link ProcessUtil}.
@@ -40,6 +40,9 @@ public class ProcessUtilTest {
     }
 
     @Test
+    // Sonar asks for at least one assertion -- which is a good idea. Here, however, we just want to show that there
+    // are no side effects.
+    @SuppressWarnings("squid:S2699")
     public void execProcessInBackground() {
         List<String> commandLine = Lists.newArrayList("java", "-version");
         ProcessUtil.execProcessInBackground(".", commandLine);
@@ -47,6 +50,9 @@ public class ProcessUtilTest {
     }
 
     @Test
+    // Sonar asks for at least one assertion -- which is a good idea. Here, however, we just want to show that there
+    // are no side effects.
+    @SuppressWarnings("squid:S2699")
     public void execProcessInBackgroundTwoCommands() {
         List<String> commandLine = Lists.newArrayList("java", "-version");
 

@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * This is not a unit test, but a test run on the complete source.
  *
@@ -25,6 +27,8 @@ public class QavIntegrationTest {
 
         QavMain.main("--analysis=classpath:/default_analysis.groovy", "--outputDir=build/results-self",
                 codebase + "/qav-app/build/classes/java/main");
+
+        assertThat(new File("build/results-self").exists()).isTrue();
     }
 
     private String getCodebaseDir() {
@@ -32,7 +36,7 @@ public class QavIntegrationTest {
             String result = new File(".").getCanonicalFile().getParentFile().getAbsolutePath();
             LOGGER.info("Trying directory {}", result);
             return result;
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new IllegalStateException("Can't get canonical path", e);
         }
     }
@@ -43,6 +47,7 @@ public class QavIntegrationTest {
     @Test
     public void testTypescript() {
         QavMain.main("--analysis=src/test/qa/analysis-typescript.groovy", "--outputDir=build/results-typescript");
+        assertThat(new File("build/results-typescript").exists()).isTrue();
     }
 
     /**
@@ -50,6 +55,7 @@ public class QavIntegrationTest {
      */
     @Test
     public void testErrorHandling() {
-        QavMain.main("--analysis=classpath:/error_architecture.groovy", "--outputDir=build/result-error");
+        QavMain.main("--analysis=classpath:/error_architecture.groovy", "--outputDir=build/results-error");
+        assertThat(new File("build/results-error").exists()).isTrue();
     }
 }
