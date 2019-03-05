@@ -2,6 +2,18 @@
 [[release-notes]]
 = Release Notes
 
+== Release 1.2.12 -- 05.03.2019
+
+Breaking Changes::
+* none.
+
+New Features::
+* https://github.com/qavalidator/qavalidator/issues/17[#17]: Improve navigation from SVG images to the detail pages.
+
+Changes::
+* https://github.com/qavalidator/qavalidator/issues/18[#18]: Improve UI build process, use NPM proxy to avoid CORS issues etc.
+
+
 == Release 1.2.11 -- 12.02.2019
 
 Breaking Changes::

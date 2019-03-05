@@ -26,7 +26,7 @@
         <groovy.version>2.5.4</groovy.version>
 
         <!-- this is the QAvalidator Runner version that this plugin depends on. -->
-        <qav.version>1.2.11</qav.version>
+        <qav.version>1.2.12-SNAPSHOT</qav.version>
 
         <!-- this is the QAvalidator Maven Plugin version to be used for mvn -Pself qav:qav -->
         <qav-plugin-on-self.version>1.2.12-SNAPSHOT</qav-plugin-on-self.version>
