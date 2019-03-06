@@ -119,6 +119,8 @@ public class GradleDependencyFinder {
      * @return the{@link DependencyType} which matches the type given in the dependency scope, or {@link
      * DependencyType#REFERENCE} if the scope can't be mapped to a known type.
      */
+    // Sonar does not like System.out.println. Here, it's a good way to write output in a Gradle build.
+    @SuppressWarnings("squid:S106")
     private DependencyType getDependencyType(String configurationName) {
         if (dependencyTypeMap.containsKey(configurationName)) {
             return dependencyTypeMap.get(configurationName);
