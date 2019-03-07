@@ -67,6 +67,11 @@ If it doesn't, QAvalidator runs the default analysis which performs the followin
 * It checks for package cycles.
 * It writes its results into the directory `target/qav-report`.
 
+[TIP]
+=====
+In any case, before calling a QAvalidator analysis, the plugin analyzes the Maven project and its dependencies, and writes out the dependency graph in `target/qav-report/mavenDependencyGraph.json`. A QAvalidator analysis may read this file, if it is interested. It can be filtered and visualized.
+=====
+
 [[getting-started-analysis]]
 == Define Your Own Analysis
 
@@ -185,6 +190,10 @@ Call the QAvalidator run with this command:
 
   gradlew qavalidator
 
+[TIP]
+=====
+In any case, before calling a QAvalidator analysis, the Gradle plugin analyzes the Gradle project and its dependencies, and writes out the dependency graph in `build/qav-report/gradleDependencyGraph.json`. A QAvalidator analysis may read this file, if it is interested. It can be filtered and visualized.
+=====
 
 [[usage-cli]]
 == Command Line Usage
