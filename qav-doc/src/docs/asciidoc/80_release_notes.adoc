@@ -2,7 +2,7 @@
 [[release-notes]]
 = Release Notes
 
-== Release 1.2.13 -- (wip)
+== Release 1.2.13 -- 08.03.2019
 
 Breaking Changes::
 * none.
@@ -10,6 +10,9 @@ Breaking Changes::
 New Features::
 * https://github.com/qavalidator/qavalidator/issues/10[#10]: analyze the current Gradle project and write out as dependency graph.
 * https://github.com/qavalidator/qavalidator/issues/11[#11]: analyze the current Maven project and write out as dependency graph.
+
+Changes::
+* Upgrade UI libraries.
 
 
 == Release 1.2.12 -- 05.03.2019
