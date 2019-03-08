@@ -31,22 +31,18 @@ Sometimes, the Node stuff has problems with the console. To avoid those, the wor
 
 == Release
 
+These are the steps to perform and publish a release.
+
 Preparation::
 * Finish the release notes
 * Make sure the example files and i-tests are up-to-date.
 
 Perform the release::
-To create the release, use this command:
+To create the release, use this command; it creates a tag, builds the release, and published to Bintray:
 
-  gradlew --console plain clean build release -Prelease.useAutomaticVersion=true
-
-Publish to bintray::
-To publish that version to bintray, edit the file `gradle.properties`, set the `version` property back to the just
-released version, and rebuild and upload everything.
-Don't commit that file, just revert it afterwards.
-Use this command:
-
-  gradlew --console plain clean build bintrayUpload -PbintrayUsername=BINTRAY_USER -PbintrayApiKey=BINRAY_API_KEY
+  gradlew --console plain clean release \
+          -Prelease.useAutomaticVersion=true \
+          -PbintrayUsername=BINTRAY_USER -PbintrayApiKey=BINRAY_API_KEY
 
 Maven Plugin::
 To release the Maven plugin, edit the `pom.xml` and set the new version number.
