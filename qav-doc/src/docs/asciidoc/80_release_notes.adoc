@@ -2,6 +2,15 @@
 [[release-notes]]
 = Release Notes
 
+== Release 1.2.14 -- 28.03.2019
+
+Breaking Changes::
+* none.
+
+New Features::
+* https://github.com/qavalidator/qavalidator/issues/8[#8]: Add nodes and dependencies on method level.
+
+
 == Release 1.2.13 -- 08.03.2019
 
 Breaking Changes::

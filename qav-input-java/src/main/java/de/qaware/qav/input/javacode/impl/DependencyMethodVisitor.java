@@ -31,6 +31,8 @@ import static de.qaware.qav.input.javacode.impl.DependencyUtil.isIgnorable;
 @Slf4j
 public class DependencyMethodVisitor extends MethodVisitor {
 
+    private static final String METHOD_SEPARATOR = "::";
+
     private final DependencyGraph dependencyGraph;
     private final boolean collapseInnerClasses;
     private final String className;
@@ -228,7 +230,7 @@ public class DependencyMethodVisitor extends MethodVisitor {
      * @return the {@link Node}
      */
     private Node getMethodNode(String className, String methodName) {
-        String fqMethodName = AsmUtil.toClassName(className, false) + "#" + methodName;
+        String fqMethodName = AsmUtil.toClassName(className, false) + METHOD_SEPARATOR + methodName;
         Node result = dependencyGraph.getOrCreateNodeByName(fqMethodName);
         result.setProperty(TYPE, TYPE_METHOD);
 

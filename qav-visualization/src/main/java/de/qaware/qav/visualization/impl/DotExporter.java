@@ -37,7 +37,7 @@ public class DotExporter {
     /**
      * DOT has problems creating large graphs. We only call dot if the number of nodes allows the creation of a PNG.
      */
-    public static final int MAX_NODES_FOR_DOT_CREATION = 65;
+    public static final int MAX_NODES_FOR_DOT_CREATION = 60;
 
     public static final String DOT_STG = "/visualization/DOT.stg";
     public static final String FILE_ST = "file";
