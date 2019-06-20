@@ -2,7 +2,7 @@
 #
 # run integration tests
 
-QAV_HOME=${QAV_HOME:-v:/codebase/qavalidator}
+QAV_HOME=${QAV_HOME:-v:/codebase}/qavalidator
 QAV_ITEST_DIR=$QAV_HOME/itest
 QAV_APP_DIR=$QAV_HOME/dist/qav-app
 
