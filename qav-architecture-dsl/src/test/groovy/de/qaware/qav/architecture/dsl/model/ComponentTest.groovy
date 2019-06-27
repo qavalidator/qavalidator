@@ -43,8 +43,8 @@ class ComponentTest {
     @Test
     void testGetApiName() {
         Component component = new Component()
-        component.api["A"] = new ClassSet("A", ["a.*", "b"])
-        component.api["B"] = new ClassSet("B", ["c.*", "d.*", "e"])
+        component.api["A"] = new ClassSet("A", ["a.**", "b"])
+        component.api["B"] = new ClassSet("B", ["c.**", "d.*", "e"])
 
         assert component.getApiName("a.my.example.Class") == "A"
         assert component.getApiName("b") == "A"
@@ -57,8 +57,8 @@ class ComponentTest {
     @Test
     void getImplName() {
         Component component = new Component()
-        component.impl["A"] = new ClassSet("A", ["a.*", "b"])
-        component.impl["B"] = new ClassSet("B", ["c.*", "d.*", "e"])
+        component.impl["A"] = new ClassSet("A", ["a.**", "b"])
+        component.impl["B"] = new ClassSet("B", ["c.**", "d.*", "e"])
 
         assert component.getImplName("a.my.example.Class") == "A"
         assert component.getImplName("b") == "A"

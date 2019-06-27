@@ -5,11 +5,10 @@ import de.qaware.qav.architecture.dsl.model.Architecture;
 import de.qaware.qav.architecture.dsl.model.ClassSet;
 import de.qaware.qav.architecture.dsl.model.Component;
 import de.qaware.qav.graph.api.DependencyGraph;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Create an {@link Architecture} from a given {@link DependencyGraph}.
@@ -19,11 +18,10 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public final class DefaultPackageArchitectureFactory {
 
-    private static final Logger LOGGER = getLogger(DefaultPackageArchitectureFactory.class);
-
-    public static final String ROOT_NAME = "Package";
+    private static final String ROOT_NAME = "Package";
 
     private final DependencyGraph dependencyGraph;
     private String architectureName = ROOT_NAME;
@@ -146,7 +144,7 @@ public final class DefaultPackageArchitectureFactory {
         LOGGER.debug("Creating Component {}", componentName);
         Component result = new Component();
         result.setName(componentName);
-        ClassSet apiDefinition = new ClassSet(componentName, Lists.newArrayList(componentName + pathSeparator + "*"));
+        ClassSet apiDefinition = new ClassSet(componentName, Lists.newArrayList(componentName + pathSeparator + "**"));
         apiDefinition.setPathSeparator(pathSeparator);
         result.getApi().put(componentName, apiDefinition);
 

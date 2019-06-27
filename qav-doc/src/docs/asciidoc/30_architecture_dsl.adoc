@@ -185,9 +185,6 @@ It works like this:
 
 * "*" is one package name, i.e. any number of characters except a "."
 * "**" is one or more package names, i.e. any number of characters including a "."
-* If "\*" is the last package names, it's handled like "**".
-  ** _Deprecated rule. This will be removed in one of the next releases, so change your Architecture definition and replace_
-     `my.prefix.\*` _by_ `my.prefix.**`
 * "." in the pattern is a dot, it's not "any character" as in regular expressions.
 
 This is very similar to Ant path matching (in fact, that's the implementation we use; with the "." as default path

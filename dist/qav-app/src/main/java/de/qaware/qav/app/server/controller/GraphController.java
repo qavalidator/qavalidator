@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -88,7 +87,7 @@ public class GraphController {
      */
     @GetMapping(value = "/info")
     public GraphInfoDTO getInfo() {
-        String info = MessageFormat.format("Graph with: {0} nodes and {1} edges. Filename: {2}",
+        String info = String.format("Graph with: %d nodes and %d edges. Filename: %s",
                 dependencyGraph.getAllNodes().size(), dependencyGraph.getAllEdges().size(),
                 FileNameUtil.getCanonicalPath(filename));
 
@@ -116,7 +115,7 @@ public class GraphController {
     private Node findNode(String name) {
         Node result = dependencyGraph.getNode(name);
         if (result == null) {
-            String message = MessageFormat.format("Node {0} not found", name);
+            String message = String.format("Node %s not found", name);
             LOGGER.error(message);
             throw new NotFoundException(message);
         }
@@ -141,7 +140,7 @@ public class GraphController {
 
         Dependency edge = dependencyGraph.getEdge(fromNode, toNode);
         if (edge == null) {
-            String message = MessageFormat.format("No edge from {0} to {1}", from, to);
+            String message = String.format("No edge from %s to %s", from, to);
             LOGGER.error(message);
             throw new NotFoundException(message);
         }

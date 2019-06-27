@@ -2,8 +2,8 @@ package de.qaware.qav.util;
 
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link QavNameMatcher}.
@@ -18,7 +18,7 @@ public class QavNameMatcherTest {
     @Test
     public void testShortNames() {
         assertThat(qavNameMatcher.matches("xy.**", "xy"), is(true));
-        assertThat(qavNameMatcher.matches("xy.*", "xy"), is(true));
+        assertThat(qavNameMatcher.matches("xy.*", "xy"), is(false));
         assertThat(qavNameMatcher.matches("xy", "xy"), is(true));
 
         assertThat(qavNameMatcher.matches("v*", "v1"), is(true));
@@ -27,22 +27,24 @@ public class QavNameMatcherTest {
 
     @Test
     public void testOneFinalPackage() {
-        assertThat(qavNameMatcher.matches("com.my.project.module.*", "com.my.project.module.a.A1"), is(true));
-        assertThat(qavNameMatcher.matches("com.my.project.module.*", "com.my.project.module.a.b.c.A1"), is(true));
         assertThat(qavNameMatcher.matches("com.my.project.module.*", "com.my.project.module.A1"), is(true));
+        assertThat(qavNameMatcher.matches("com.my.project.module.*", "com.my.project.module.a.A1"), is(false));
         assertThat(qavNameMatcher.matches("com.my.project.module.*", "com.my.project.util.A1"), is(false));
+        assertThat(qavNameMatcher.matches("com.my.project.module.**", "com.my.project.module.a.A1"), is(true));
+        assertThat(qavNameMatcher.matches("com.my.project.module.**", "com.my.project.module.a.b.c.A1"), is(true));
 
-        assertThat(qavNameMatcher.matches("com.my.project.module.*", "com.my.project.module"), is(true));
+        assertThat(qavNameMatcher.matches("com.my.project.module.*", "com.my.project.module"), is(false));
+        assertThat(qavNameMatcher.matches("com.my.project.module.**", "com.my.project.module"), is(true));
         assertThat(qavNameMatcher.matches("com.my.project.module.*", "com.my.project.module."), is(true));
     }
 
     @Test
     public void testMultipleWildcards() {
-        assertThat(qavNameMatcher.matches("com.my.*.module.*", "com.my.project.module.a.A1"), is(true));
+        assertThat(qavNameMatcher.matches("com.my.*.module.**", "com.my.project.module.a.A1"), is(true));
         assertThat(qavNameMatcher.matches("com.my.*.module.a.*", "com.my.project.module.a.A1"), is(true));
         assertThat(qavNameMatcher.matches("com.my.*.module.**", "com.my.project.module.a.A1"), is(true));
         assertThat(qavNameMatcher.matches("com.my.*.module.*", "com.my.p2.subprj.module.a.A1"), is(false));
-        assertThat(qavNameMatcher.matches("com.my.**.module.*", "com.my.p2.subprj.module.a.A1"), is(true));
+        assertThat(qavNameMatcher.matches("com.my.**.module.**", "com.my.p2.subprj.module.a.A1"), is(true));
     }
 
     @Test
@@ -54,7 +56,7 @@ public class QavNameMatcherTest {
         assertThat(qavNameMatcher.matches("**.*3**", "org.apache.commons.lang3"), is(true));
         assertThat(qavNameMatcher.matches("**.*3.**", "org.apache.commons.lang3.ArrayUtils"), is(true));
 
-        assertThat(qavNameMatcher.matches("*", "org.apache.commons.lang3.ArrayUtils"), is(true));
+        assertThat(qavNameMatcher.matches("**", "org.apache.commons.lang3.ArrayUtils"), is(true));
     }
 
     @Test
@@ -75,7 +77,8 @@ public class QavNameMatcherTest {
     @Test
     public void testFinalPackage() {
         assertThat(qavNameMatcher.matches("org.slf4j.*", "org.slf4j.Logger"), is(true));
-        assertThat(qavNameMatcher.matches("org.slf4j.*", "org.slf4j"), is(true));
+        assertThat(qavNameMatcher.matches("org.slf4j.*", "org.slf4j"), is(false));
+        assertThat(qavNameMatcher.matches("org.slf4j.**", "org.slf4j"), is(true));
         assertThat(qavNameMatcher.matches("org.slf4j**", "org.slf4j"), is(true)); // without package dot
         assertThat(qavNameMatcher.matches("org.slf4j**", "org.slf4jOrSo"), is(true)); // without package dot
         assertThat(qavNameMatcher.matches("org.slf4j**", "org.slf4j.Logger"), is(false)); // package dot is missing
@@ -95,7 +98,7 @@ public class QavNameMatcherTest {
     @Test
     public void testOtherSeparators() {
         assertThat(hashMatcher.matches("my/dir/file#class#*", "my/dir/file#class#method"), is(true));
-        assertThat(hashMatcher.matches("my/dir/file#*", "my/dir/file#class#method"), is(true));
+        assertThat(hashMatcher.matches("my/dir/file#**", "my/dir/file#class#method"), is(true));
         assertThat(hashMatcher.matches("my/dir/file#**", "my/dir/file#class#method"), is(true));
 
         assertThat(hashMatcher.matches("my/dir/file*", "my/dir/file#class#method"), is(false));

@@ -1,5 +1,6 @@
 package de.qaware.qav.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -11,13 +12,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author QAware GmbH
  */
+@Slf4j
 public class QavNameMatcher {
 
-    private final String pathSeparator;
     private final AntPathMatcher antPathMatcher;
 
     /**
-     * Constructor. Use the default {@link #pathSeparator} with "."
+     * Constructor. Use the default <tt>pathSeparator</tt> with "."
      */
     public QavNameMatcher() {
         this(".");
@@ -29,7 +30,6 @@ public class QavNameMatcher {
      * @param pathSeparator the path separator
      */
     public QavNameMatcher(String pathSeparator) {
-        this.pathSeparator = pathSeparator;
         this.antPathMatcher = new AntPathMatcher(pathSeparator);
     }
 
@@ -45,10 +45,6 @@ public class QavNameMatcher {
     public boolean matches(String pattern, String name) {
         checkNotNull(pattern, "pattern");
         checkNotNull(name, "name");
-
-        if ("*".equals(pattern) || pattern.endsWith(pathSeparator + "*")) {
-            pattern += "*";
-        }
 
         return antPathMatcher.match(pattern, name);
     }

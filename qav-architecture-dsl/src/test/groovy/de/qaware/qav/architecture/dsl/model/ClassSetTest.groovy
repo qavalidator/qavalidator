@@ -12,7 +12,7 @@ class ClassSetTest {
 
     @Test
     void testOnePackage() {
-        ClassSet classSet = new ClassSet("t1", Lists.newArrayList("playground.*"))
+        ClassSet classSet = new ClassSet("t1", Lists.newArrayList("playground.**"))
 
         assert classSet.matches("playground.my.Clazz")
         assert classSet.matches("playground.Clazz")
@@ -56,7 +56,7 @@ class ClassSetTest {
 
     @Test
     void testOtherSeparators() {
-        ClassSet classSet = new ClassSet("t1", Lists.newArrayList("my#impl#a#*", "my#impl#b#*"))
+        ClassSet classSet = new ClassSet("t1", Lists.newArrayList("my#impl#a#*", "my#impl#b#**"))
         classSet.setPathSeparator("#")
 
         assert classSet.matches("my#impl#a#AbcImpl")

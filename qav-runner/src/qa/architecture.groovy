@@ -4,18 +4,23 @@
 
 architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
 
-    excludes "java.util.**", "java.io.**", "org.slf4j.**"
-
-    uses "Apache Commons", "Guava", "Groovy"
+    excludes "java.util.**", "java.io.**", "javax.**", "org.slf4j.**", "lombok.**"
 
     component("QAV_Runner") {
         api "de.qaware.qav.runner.**"
     }
 
-    component("AnalysisDSL") {
-        api "de.qaware.qav.analysis.dsl.api.**"
-        api "de.qaware.qav.analysis.dsl.model.**"
-        impl "de.qaware.qav.analysis.dsl.impl.**"
+    component("QAV_App") {
+        api "de.qaware.qav.app.**"
+        uses "Spring", "Guava", "Analysis.Result"
+    }
+
+    component("Graph") { api "de.qaware.qav.graph.**" }
+
+    component("Analysis") {
+        component("Analysis.Result") {
+            api "de.qaware.qav.analysis.result.**"
+        }
     }
 
     component("Util") {
@@ -23,8 +28,7 @@ architecture(name: "T-View", prefix: "tview", reflexMLversion: "1.0") {
     }
 
     component("3rdParty") {
-        component("Groovy") {api "org.codehaus.groovy.*", "groovy.lang.*", "groovy.util.*"}
-        component("Apache Commons") {api "org.apache.commons.*"}
-        component("Guava") {api "com.google.common.*"}
+        component("Spring") { api "org.springframework.**" }
+        component("Guava") {api "com.google.common.**"}
     }
 }

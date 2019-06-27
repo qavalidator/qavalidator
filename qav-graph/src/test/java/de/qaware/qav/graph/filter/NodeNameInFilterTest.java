@@ -4,7 +4,7 @@ import de.qaware.qav.graph.api.Node;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Tests for the {@link NodeNameInFilter}
@@ -32,7 +32,7 @@ public class NodeNameInFilterTest {
 
     @Test
     public void testFilterMultipleNames() {
-        NodeNameInFilter filter = new NodeNameInFilter("a.*", "b.*", "c.*");
+        NodeNameInFilter filter = new NodeNameInFilter("a.**", "b.*", "c.*");
 
         assertThat(filter.isAccepted(new Node("a.Clazz")), is(true));
         assertThat(filter.isAccepted(new Node("b.Clazz")), is(true));

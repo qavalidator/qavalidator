@@ -65,7 +65,7 @@ class ShortcutQavPlugin extends BasePlugin {
      * Creates: allClassesGraph, inputClassesGraph, classesCycleGraph
      */
     void initializeAnalysis() {
-        analysis.addFilter("ignoreJavaLang", analysis.nodeNameOutFilter("java.lang.*"))
+        analysis.addFilter("ignoreJavaLang", analysis.nodeNameOutFilter("java.lang.**"))
         analysis.addFilter("classes", analysis.nodePropertyInFilter("type", "class"))
         analysis.addFilter("modules", analysis.nodePropertyInFilter("type", "module"))
         analysis.addFilter("inputScope", analysis.nodePropertyInFilter("scope", "input"))

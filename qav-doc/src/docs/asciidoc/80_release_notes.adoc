@@ -2,6 +2,14 @@
 [[release-notes]]
 = Release Notes
 
+== Release 1.2.15 -- (wip)
+
+Breaking Changes::
+* Architecture DSL: if a pattern ends with `.\*`, QAvalidator had a compatibility rule and used to interpret that as `.**`. This version of QAvalidator removes this legacy rule.
+
+Changes::
+* Upgrade UI libraries.
+
 == Release 1.2.14 -- 28.03.2019
 
 Breaking Changes::

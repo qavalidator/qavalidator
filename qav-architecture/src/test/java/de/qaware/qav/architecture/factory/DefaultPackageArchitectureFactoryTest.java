@@ -47,7 +47,7 @@ public class DefaultPackageArchitectureFactoryTest {
         assertThat(component.getName(), is("com.example.api"));
         ClassSet apiDef = component.getApi().get("com.example.api");
         assertThat(apiDef.getPatterns(), hasSize(1));
-        assertThat(apiDef.getPatterns().get(0), is("com.example.api.*"));
+        assertThat(apiDef.getPatterns().get(0), is("com.example.api.**"));
     }
 
     @Test
@@ -73,13 +73,13 @@ public class DefaultPackageArchitectureFactoryTest {
         assertThat(component.getName(), is("com.example.api"));
         ClassSet apiDef = component.getApi().get("com.example.api");
         assertThat(apiDef.getPatterns(), hasSize(1));
-        assertThat(apiDef.getPatterns().get(0), is("com.example.api.*"));
+        assertThat(apiDef.getPatterns().get(0), is("com.example.api.**"));
 
         Component impl = architecture.getApiNameToComponent().get("com.example.impl");
         assertThat(impl.getName(), is("com.example.impl"));
         ClassSet implDef = impl.getApi().get("com.example.impl");
         assertThat(implDef.getPatterns(), hasSize(1));
-        assertThat(implDef.getPatterns().get(0), is("com.example.impl.*"));
+        assertThat(implDef.getPatterns().get(0), is("com.example.impl.**"));
     }
 
     @Test
@@ -115,13 +115,13 @@ public class DefaultPackageArchitectureFactoryTest {
         assertThat(component.getName(), is("com.example.api"));
         ClassSet apiDef = component.getApi().get("com.example.api");
         assertThat(apiDef.getPatterns(), hasSize(1));
-        assertThat(apiDef.getPatterns().get(0), is("com.example.api.*"));
+        assertThat(apiDef.getPatterns().get(0), is("com.example.api.**"));
 
         Component impl = architecture.getApiNameToComponent().get("com.example.impl.a");
         assertThat(impl.getName(), is("com.example.impl.a"));
         ClassSet implDef = impl.getApi().get("com.example.impl.a");
         assertThat(implDef.getPatterns(), hasSize(1));
-        assertThat(implDef.getPatterns().get(0), is("com.example.impl.a.*"));
+        assertThat(implDef.getPatterns().get(0), is("com.example.impl.a.**"));
     }
 
     @Test
@@ -156,13 +156,13 @@ public class DefaultPackageArchitectureFactoryTest {
         assertThat(component.getName(), is("com.example.api"));
         ClassSet apiDef = component.getApi().get("com.example.api");
         assertThat(apiDef.getPatterns(), hasSize(1));
-        assertThat(apiDef.getPatterns().get(0), is("com.example.api.*"));
+        assertThat(apiDef.getPatterns().get(0), is("com.example.api.**"));
 
         Component impl = architecture.getApiNameToComponent().get("com.example.impl");
         assertThat(impl.getName(), is("com.example.impl"));
         ClassSet implDef = impl.getApi().get("com.example.impl");
         assertThat(implDef.getPatterns(), hasSize(1));
-        assertThat(implDef.getPatterns().get(0), is("com.example.impl.*"));
+        assertThat(implDef.getPatterns().get(0), is("com.example.impl.**"));
     }
 
     @Test
