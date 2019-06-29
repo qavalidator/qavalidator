@@ -1,7 +1,7 @@
 plugins {
     // provides configurations for annotation processing, and passes the annotation processor to
     // the javac "-processorpath" option:
-    id "net.ltgt.apt" version "0.19"
+    id "net.ltgt.apt" version "0.21"
 }
 
 apply plugin: 'groovy'
@@ -9,6 +9,11 @@ apply plugin: 'groovy'
 compileGroovy {
     groovyOptions.javaAnnotationProcessing = true
     aptOptions.processorArgs = [genDocDir: project(':qav-doc').projectDir.absolutePath + "/src-gen/generated-docs"]
+}
+
+compileJava {
+    // this option must be set both for compileGroovy AND for compileJava to avoid a warning about this option being not set.
+    options.compilerArgs += '-AgenDocDir=' + project(':qav-doc').projectDir.absolutePath + '/src-gen/generated-docs'
 }
 
 dependencies {
