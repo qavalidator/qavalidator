@@ -8,6 +8,7 @@ import de.qaware.qav.graph.factory.DependencyGraphFactory;
 import de.qaware.qav.graphdb.model.AbstractNode;
 import de.qaware.qav.graphdb.model.ArchitectureNode;
 import de.qaware.qav.graphdb.model.ClassNode;
+import de.qaware.qav.graphdb.model.MethodNode;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -62,18 +63,34 @@ public class GraphMapperTest {
         Node c2 = graph.getOrCreateNodeByName("c2");
         c2.setProperty("type", "class");
 
+        Node m1 = graph.getOrCreateNodeByName("m1");
+        m1.setProperty("type", "method");
+
+        Node m2 = graph.getOrCreateNodeByName("m2");
+        m2.setProperty("type", "method");
+
+        Node m3 = graph.getOrCreateNodeByName("m3");
+        m3.setProperty("type", "method");
+
         graph.addDependency(c1, c2, DependencyType.READ_WRITE);
         graph.addDependency(a1, c1, DependencyType.CONTAINS);
         graph.addDependency(a1, c2, DependencyType.CONTAINS);
         graph.addDependency(a2, a1, DependencyType.CONTAINS);
+
+        graph.addDependency(c1, m1, DependencyType.CONTAINS);
+        graph.addDependency(c1, m2, DependencyType.CONTAINS);
+        graph.addDependency(c2, m3, DependencyType.CONTAINS);
+
+        graph.addDependency(m1, m2, DependencyType.READ_ONLY);
+        graph.addDependency(m1, m3, DependencyType.READ_WRITE);
 
         // do
         GraphMapper graphMapper = new GraphMapper();
         graphMapper.toNeo4j(graph);
 
         // check
-        assertThat(graphMapper.getNodes()).hasSize(4);
-        assertThat(graphMapper.getReferencesRelations()).hasSize(1);
+        assertThat(graphMapper.getNodes()).hasSize(7);
+        assertThat(graphMapper.getReferencesRelations()).hasSize(3);
 
         Map<String, AbstractNode> nodeMap = new HashMap<>();
         graphMapper.getNodes().forEach(node -> nodeMap.put(node.getName(), node));
@@ -82,13 +99,30 @@ public class GraphMapperTest {
         AbstractNode aa2 = nodeMap.get("a2");
         AbstractNode cc1 = nodeMap.get("c1");
         AbstractNode cc2 = nodeMap.get("c2");
+        AbstractNode mm1 = nodeMap.get("m1");
+        AbstractNode mm2 = nodeMap.get("m2");
+        AbstractNode mm3 = nodeMap.get("m3");
 
         assertThat(aa1).isInstanceOf(ArchitectureNode.class);
         assertThat(cc1).isInstanceOf(ClassNode.class);
         assertThat(cc2).isInstanceOf(ClassNode.class);
+        assertThat(mm1).isInstanceOf(MethodNode.class);
+        assertThat(mm2).isInstanceOf(MethodNode.class);
+        assertThat(mm3).isInstanceOf(MethodNode.class);
 
         assertThat(((ClassNode) cc1).getImplementationFor()).contains((ArchitectureNode) aa1);
         assertThat(((ArchitectureNode) aa1).getImplementations()).contains((ClassNode) cc1);
         assertThat(((ArchitectureNode) aa2).getChildren()).contains((ArchitectureNode) aa1);
+
+        assertThat(((MethodNode) mm1).getImplementedIn().getName()).isEqualTo("c1");
+        assertThat(((MethodNode) mm2).getImplementedIn().getName()).isEqualTo("c1");
+        assertThat(((MethodNode) mm3).getImplementedIn().getName()).isEqualTo("c2");
+
+        assertThat(((ClassNode) cc1).getMethods()).hasSize(2);
+        assertThat(((ClassNode) cc2).getMethods()).hasSize(1);
+
+        assertThat(mm1.getReferencesRelations()).hasSize(2);
+        assertThat(mm2.getReferencesRelations()).hasSize(0);
+        assertThat(mm3.getReferencesRelations()).hasSize(0);
     }
 }

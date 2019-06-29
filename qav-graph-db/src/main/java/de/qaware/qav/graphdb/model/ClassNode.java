@@ -16,8 +16,13 @@ import java.util.Set;
 @Setter
 public class ClassNode extends AbstractNode {
 
+    public static final String HAS_METHOD = "HAS_METHOD";
+
     @Relationship(value = ArchitectureNode.IMPLEMENTED_BY_TYPE_NAME, direction = Relationship.INCOMING)
     private Set<ArchitectureNode> implementationFor = new HashSet<>();
+
+    @Relationship(value = HAS_METHOD)
+    private Set<MethodNode> methods = new HashSet<>();
 
     /**
      * Constructor.

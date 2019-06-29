@@ -8,6 +8,7 @@ import de.qaware.qav.graph.api.Node;
 import de.qaware.qav.graphdb.model.AbstractNode;
 import de.qaware.qav.graphdb.model.ArchitectureNode;
 import de.qaware.qav.graphdb.model.ClassNode;
+import de.qaware.qav.graphdb.model.MethodNode;
 import de.qaware.qav.graphdb.model.ReferencesRelation;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,8 +27,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GraphMapper {
 
-    /** Key to the property map in DependencyGraph node properties. */
-    public static final String ARCHITECTURE_KEY = "architecture";
+    /**
+     * Key to the property map in DependencyGraph node properties.
+     */
+    private static final String ARCHITECTURE_KEY = "architecture";
+    private static final String METHOD_KEY = "method";
 
     private final Map<String, AbstractNode> nodeMap = new HashMap<>();
     private final List<ReferencesRelation> referencesRelations = new ArrayList<>();
@@ -74,6 +78,8 @@ public class GraphMapper {
         if (Objects.equals(n.getProperty("type"), ARCHITECTURE_KEY)) {
             result = new ArchitectureNode(n.getName());
             ((ArchitectureNode) result).setArchitectureName(architectureName);
+        } else if (Objects.equals(n.getProperty("type"), METHOD_KEY)) {
+            result = new MethodNode(n.getName());
         } else {
             result = new ClassNode(n.getName());
         }
@@ -100,19 +106,27 @@ public class GraphMapper {
     }
 
     private void mapHierarchy(Dependency dependency) {
-        ArchitectureNode from = (ArchitectureNode) nodeMap.get(dependency.getSource().getName());
+        AbstractNode from = nodeMap.get(dependency.getSource().getName());
         AbstractNode to = nodeMap.get(dependency.getTarget().getName());
 
-        if (to instanceof ArchitectureNode) {
-            ArchitectureNode child = (ArchitectureNode) to;
-            from.getChildren().add(child);
-            child.setParent(from);
+        if (from instanceof ArchitectureNode) {
+            ArchitectureNode fromArch = (ArchitectureNode) from;
+            if (to instanceof ArchitectureNode) {
+                ArchitectureNode child = (ArchitectureNode) to;
+                fromArch.getChildren().add(child);
+                child.setParent(fromArch);
+            } else {
+                ClassNode impl = (ClassNode) to;
+                fromArch.getImplementations().add(impl);
+                impl.getImplementationFor().add(fromArch);
+            }
         } else {
-            ClassNode impl = (ClassNode) to;
-            from.getImplementations().add(impl);
-            impl.getImplementationFor().add(from);
-        }
+            ClassNode fromClass = (ClassNode) from;
+            MethodNode toMethod = (MethodNode) to;
 
+            fromClass.getMethods().add(toMethod);
+            toMethod.setImplementedIn(fromClass);
+        }
     }
 
     private void mapReference(Dependency dependency) {
