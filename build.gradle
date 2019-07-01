@@ -89,9 +89,11 @@ subprojects {
 
     dependencies {
         // Logging with Slf4j and Logback
-        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
-        implementation "ch.qos.logback:logback-core:${logbackVersion}"
-        implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+        if (!project.name.equals("qav-gradle-plugin")) {
+            implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+            implementation "ch.qos.logback:logback-core:${logbackVersion}"
+            implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+        }
 
         // Lombok
         annotationProcessor "org.projectlombok:lombok:${project.ext.lombokVersion}"
