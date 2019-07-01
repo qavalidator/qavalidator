@@ -3,7 +3,7 @@
 
     <groupId>de.qaware.qav</groupId>
     <artifactId>qav-maven-plugin</artifactId>
-    <version>1.2.15-SNAPSHOT</version>
+    <version>1.2.15</version>
     <packaging>maven-plugin</packaging>
 
     <name>QAvalidator :: Maven Plugin</name>
@@ -402,7 +402,7 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/qavalidator/qavalidator</developerConnection>
-        <tag>HEAD</tag>
+        <tag>qav-maven-plugin-1.2.15</tag>
     </scm>
 </project>
 
