@@ -2,13 +2,14 @@
 [[release-notes]]
 = Release Notes
 
-== Release 1.2.15 -- (wip)
+== Release 1.2.15 -- (01.07.2019)
 
 Breaking Changes::
 * Architecture DSL: if a pattern ends with `.\*`, QAvalidator had a compatibility rule and used to interpret that as `.**`. This version of QAvalidator removes this legacy rule.
 
 Changes::
-* Upgrade UI libraries.
+* Upgrade libraries, both in the UI and in the Java backend.
+* Fix a bug in the Neo4j exporter to handle method nodes correctly.
 
 == Release 1.2.14 -- 28.03.2019
 
