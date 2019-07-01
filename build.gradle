@@ -210,6 +210,14 @@ subprojects {
             }
         }
     }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+            }
+        }
+    }
 }
 
 task build(description: "no-op task, needed for the release plugin") {}
