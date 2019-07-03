@@ -5,19 +5,24 @@ buildscript {
         }
         jcenter()
     }
-    dependencies {
-        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.11'
-    }
 }
 
 plugins {
-    id "org.asciidoctor.convert" version "1.5.3"
+    id "org.asciidoctor.jvm.convert" version "2.2.0"
 }
 
-apply plugin: 'org.asciidoctor.convert'
-
 asciidoctor {
-    backends 'html5', 'pdf'
+
+    asciidoctorj {
+        options doctype: 'article'
+        attributes "tools-dir": "${project.projectDir}/src/layout",
+                "revnumber": "${project.version}",
+                "revdate": "${new Date().format('dd.MM.yyyy')}",
+                "allow-uri-read": true
+    }
+
+    baseDir = "${project.projectDir}/src/docs/asciidoc"
+
     resources {
         from('src/docs/asciidoc') {
             include 'img/**/*.png'
@@ -31,11 +36,6 @@ asciidoctor {
     }
 
     outputDir "${project.buildDir}"
-    options doctype: 'article'
-    attributes "tools-dir": "${project.projectDir}/src/layout",
-               "revnumber": "${project.version}",
-               "revdate": "${new Date().format('dd.MM.yyyy')}",
-               "allow-uri-read": true
 }
 
 task packageDocumentation(type: Zip) {
