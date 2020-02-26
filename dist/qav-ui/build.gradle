@@ -2,9 +2,10 @@
 // see: https://github.com/srs/gradle-node-plugin
 // Hints on this build setup found here:
 // https://objectpartners.com/2016/04/14/using-self-contained-node-js-and-npm-instances-with-gradle/
+// changed to `id "com.github.node-gradle.node" version "2.2.2"`, TBE, 2020-02-25
 
 plugins {
-    id "com.moowork.node" version "1.2.0"
+  id "com.github.node-gradle.node" version "2.2.2"
 }
 
 node {
